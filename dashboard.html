@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LESDO - Mi Aprendizaje</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤟</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Skip to content link for accessibility -->
+  <a href="#main" class="skip-link">Ir al contenido principal</a>
+  
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="dashboard.html" class="navbar__logo">🤟 LESDO</a>
+      <div class="navbar__nav">
+        <a href="dashboard.html" class="navbar__link navbar__link--active">Inicio</a>
+        <a href="dictionary.html" class="navbar__link">Diccionario</a>
+      </div>
+      <div class="navbar__user">
+        <span class="navbar__username" id="userName"></span>
+        <button class="btn btn-ghost btn-sm" id="btnLogout">Salir</button>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  
+  <!-- Mobile nav overlay -->
+  <div class="nav-mobile" id="navMobile">
+    <a href="dashboard.html">Inicio</a>
+    <a href="dictionary.html">Diccionario</a>
+    <button id="btnLogoutMobile" class="btn btn-ghost">Cerrar Sesión</button>
+  </div>
+
+  <main id="main" class="main-content">
+    <div class="container">
+      <!-- Hero section with greeting and overall progress -->
+      <section class="hero animate-fade-in">
+        <div class="hero__greeting">
+          <h1>¡Hola, <span id="heroName">Estudiante</span>! 👋</h1>
+          <p class="text-secondary">Continúa tu camino aprendiendo Lengua de Señas Dominicana</p>
+        </div>
+        <div class="hero__stats">
+          <div class="stat">
+            <span class="stat__number" id="statCompleted">0</span>
+            <span class="stat__label">Completadas</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number" id="statTotal">0</span>
+            <span class="stat__label">Lecciones</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number" id="statStreak">0%</span>
+            <span class="stat__label">Progreso</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Continue learning section (show only if there's progress) -->
+      <section class="continue-section animate-slide-up" id="continueSection" style="display:none;">
+        <h2>📚 Continuar aprendizaje</h2>
+        <div class="progress-text">
+          <span>Progreso general</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-bar progress-bar--large">
+          <div class="progress-bar__fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <!-- Card showing next lesson to continue -->
+        <div class="continue-card" id="continueCard"></div>
+      </section>
+
+      <!-- Categories grid -->
+      <section class="categories-section animate-slide-up">
+        <h2>🗂️ Módulos de Aprendizaje</h2>
+        <div class="grid" id="categoriesGrid">
+          <!-- Category cards loaded dynamically -->
+          <!-- Show skeleton loading initially -->
+          <div class="card skeleton" style="height: 200px;"></div>
+          <div class="card skeleton" style="height: 200px;"></div>
+          <div class="card skeleton" style="height: 200px;"></div>
+          <div class="card skeleton" style="height: 200px;"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Toast container -->
+  <div class="toast" id="toastContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LESDO - Aprende Lengua de Señas Dominicana</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤟</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-page">
+  <div id="toast-container"></div>
+  
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-logo">
+        🤟 LESDO
+      </div>
+      
+      <div class="auth-tabs">
+        <div class="auth-tab active" data-tab="login">Iniciar Sesión</div>
+        <div class="auth-tab" data-tab="register">Registrarse</div>
+      </div>
+      
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Usuario o Correo Electrónico</label>
+          <input type="text" id="login-email" class="form-input" required placeholder="ej. demo o tu@correo.com">
+          <span class="form-error" id="login-email-error">Identificador inválido</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Contraseña</label>
+          <input type="password" id="login-password" class="form-input" required placeholder="••••••••">
+          <span class="form-error" id="login-password-error">Contraseña requerida</span>
+        </div>
+        <div id="login-global-error" class="form-error" style="margin-bottom: 1rem;"></div>
+        <button type="submit" class="btn btn-primary btn-block">
+          Ingresar <div class="spinner hidden" id="login-spinner"></div>
+        </button>
+
+        <!-- Demo Account Quick Login Box -->
+        <div style="margin-top: 1.5rem; padding: 0.85rem; background: rgba(30,136,229,0.08); border: 1px solid rgba(30,136,229,0.25); border-radius: 8px; font-size: 0.85rem; text-align: left;">
+          <div style="font-weight: 600; color: var(--secondary); margin-bottom: 0.25rem;">💡 Acceso Rápido / Demo:</div>
+          <div style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+            Usuario: <strong style="color: var(--text-primary);">erick</strong> &bull; Clave: <strong style="color: var(--text-primary);">123456</strong>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-direction: column;">
+            <button type="button" id="btn-fill-demo" class="btn btn-sm btn-secondary btn-block" style="padding: 0.4rem;">
+              ⚡ Cargar usuario Erick
+            </button>
+            <button type="button" id="btn-login-local" class="btn btn-sm btn-accent btn-block" style="padding: 0.4rem;">
+              🚀 Entrar directo (Modo Local / Sin Esperar)
+            </button>
+          </div>
+        </div>
+      </form>
+      
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form hidden">
+        <div class="form-group">
+          <label class="form-label" for="register-name">Nombre Completo</label>
+          <input type="text" id="register-name" class="form-input" required placeholder="Juan Pérez">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="register-email">Usuario o Correo Electrónico</label>
+          <input type="text" id="register-email" class="form-input" required placeholder="ej. juan o tu@correo.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="register-password">Contraseña</label>
+          <input type="password" id="register-password" class="form-input" required placeholder="Mínimo 6 caracteres" minlength="6">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="register-confirm-password">Confirmar Contraseña</label>
+          <input type="password" id="register-confirm-password" class="form-input" required placeholder="Repite tu contraseña">
+        </div>
+        <div id="register-global-error" class="form-error" style="margin-bottom: 1rem;"></div>
+        <button type="submit" class="btn btn-primary btn-block">
+          Crear Cuenta <div class="spinner hidden" id="register-spinner"></div>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Check if already authenticated
+      await Auth.redirectIfAuthenticated();
+
+      const tabs = document.querySelectorAll('.auth-tab');
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      
+      // Toast notification helper
+      const showToast = (message, type = 'info') => {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast toast--${type}`;
+        toast.textContent = message;
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+          toast.style.animation = 'slideInRight 0.3s ease reverse forwards';
+          setTimeout(() => toast.remove(), 300);
+        }, APP_CONFIG.TOAST_DURATION);
+      };
+
+      // Tab switching
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          if (tab.dataset.tab === 'login') {
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+          } else {
+            loginForm.classList.add('hidden');
+            registerForm.classList.remove('hidden');
+          }
+        });
+      });
+
+      // Demo autofill button
+      document.getElementById('btn-fill-demo')?.addEventListener('click', () => {
+        document.getElementById('login-email').value = 'erick';
+        document.getElementById('login-password').value = '123456';
+        showToast('Credenciales de Erick cargadas. Haz clic en Ingresar.', 'info');
+      });
+
+      // Direct local login button (bypasses network/tunnel issues)
+      document.getElementById('btn-login-local')?.addEventListener('click', () => {
+        const identifier = document.getElementById('login-email').value || 'Erick';
+        Auth.loginOffline(identifier);
+        showToast('¡Acceso concedido en Modo Local!', 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 500);
+      });
+
+      // Login handler
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const identifier = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const spinner = document.getElementById('login-spinner');
+        const btn = loginForm.querySelector('button[type="submit"]');
+        const errorEl = document.getElementById('login-global-error');
+        
+        errorEl.textContent = '';
+        errorEl.classList.remove('visible');
+        btn.disabled = true;
+        spinner.classList.remove('hidden');
+        
+        const { user, error } = await Auth.signIn(identifier, password);
+        
+        spinner.classList.add('hidden');
+        btn.disabled = false;
+        
+        if (error) {
+          errorEl.textContent = error;
+          errorEl.style.display = 'block';
+          errorEl.style.padding = '0.75rem';
+          errorEl.style.background = 'rgba(239,68,68,0.1)';
+          errorEl.style.border = '1px solid var(--error)';
+          errorEl.style.borderRadius = '8px';
+          errorEl.classList.add('visible');
+          showToast(error, 'error');
+        } else {
+          showToast('¡Bienvenido de vuelta! Redirigiendo...', 'success');
+          window.location.href = 'dashboard.html';
+        }
+      });
+
+      // Register handler
+      registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('register-name').value;
+        const identifier = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+        const confirmPassword = document.getElementById('register-confirm-password').value;
+        const spinner = document.getElementById('register-spinner');
+        const btn = registerForm.querySelector('button[type="submit"]');
+        const errorEl = document.getElementById('register-global-error');
+        
+        errorEl.textContent = '';
+        errorEl.classList.remove('visible');
+        
+        if (password !== confirmPassword) {
+          errorEl.textContent = 'Las contraseñas no coinciden.';
+          errorEl.classList.add('visible');
+          return;
+        }
+        
+        btn.disabled = true;
+        spinner.classList.remove('hidden');
+        
+        const { user, error } = await Auth.signUp(identifier, password, name);
+        
+        spinner.classList.add('hidden');
+        btn.disabled = false;
+        
+        if (error) {
+          errorEl.textContent = error;
+          errorEl.classList.add('visible');
+          showToast('Error al registrarse', 'error');
+        } else {
+          showToast('Cuenta creada exitosamente', 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1500);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

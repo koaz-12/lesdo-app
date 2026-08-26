@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LESDO - Diccionario</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤟</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .dictionary-search {
+      margin-bottom: 2rem;
+    }
+    .dictionary-search input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    .search-wrapper {
+      position: relative;
+    }
+    .search-wrapper::before {
+      content: '🔍';
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+    }
+    .word-card {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .word-card img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .word-info {
+      flex: 1;
+    }
+    .video-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-modal.active {
+      display: flex;
+    }
+    .video-modal-content {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      max-width: 90%;
+      width: 800px;
+      position: relative;
+    }
+    .video-modal video {
+      width: 100%;
+      border-radius: 4px;
+    }
+    .close-modal {
+      position: absolute;
+      top: -30px;
+      right: 0;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Ir al contenido principal</a>
+  
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="dashboard.html" class="navbar__logo">🤟 LESDO</a>
+      <div class="navbar__nav">
+        <a href="dashboard.html" class="navbar__link">Inicio</a>
+        <a href="dictionary.html" class="navbar__link navbar__link--active">Diccionario</a>
+      </div>
+      <div class="navbar__user">
+        <span class="navbar__username" id="userName"></span>
+        <button class="btn btn-ghost btn-sm" id="btnLogout">Salir</button>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="navMobile">
+    <a href="dashboard.html">Inicio</a>
+    <a href="dictionary.html">Diccionario</a>
+    <button id="btnLogoutMobile" class="btn btn-ghost">Cerrar Sesión</button>
+  </div>
+
+  <main id="main" class="main-content">
+    <div class="container">
+      <h1 class="animate-fade-in">Diccionario LESDO</h1>
+      <p class="text-secondary animate-fade-in">Busca palabras y aprende su seña correspondiente.</p>
+      
+      <div class="dictionary-search animate-slide-up search-wrapper">
+        <input type="text" id="searchInput" placeholder="Escribe una palabra para buscar..." class="search__input">
+      </div>
+
+      <div id="resultsContainer" class="search__results animate-slide-up">
+        <!-- Results will appear here -->
+      </div>
+    </div>
+  </main>
+
+  <div class="video-modal" id="videoModal">
+    <div class="video-modal-content">
+      <button class="close-modal" id="closeModal">×</button>
+      <h3 id="modalTitle" style="margin-bottom: 1rem;"></h3>
+      <video id="modalVideo" controls></video>
+    </div>
+  </div>
+
+  <div class="toast" id="toastContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dictionary.js"></script>
+</body>
+</html>
