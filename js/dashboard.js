@@ -30,6 +30,7 @@ const Dashboard = {
 
       this.renderProgress();
       this.renderCategories();
+      this.renderBadges();
     } catch (error) {
       console.error("Dashboard init error:", error);
       showToast("Error al cargar el panel de control.", "error");
@@ -171,6 +172,73 @@ const Dashboard = {
         console.error("Error finding next lesson", err);
       }
     }
+  },
+
+  renderBadges() {
+    const grid = document.getElementById('badgesGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const completed = this.completedLessons;
+    const total = this.totalLessons || 19;
+
+    const badges = [
+      {
+        id: 'first_step',
+        title: 'Primer Paso',
+        desc: 'Completa tu 1ra lección de señas',
+        icon: '🥉',
+        unlocked: completed >= 1
+      },
+      {
+        id: 'explorer',
+        title: 'Explorador LESDO',
+        desc: 'Completa al menos 5 lecciones',
+        icon: '🥈',
+        unlocked: completed >= 5
+      },
+      {
+        id: 'alphabet',
+        title: 'Maestro del Alfabeto',
+        desc: 'Aprende las letras y vocales',
+        icon: '🤟',
+        unlocked: completed >= 5
+      },
+      {
+        id: 'greetings',
+        title: 'Experto en Saludos',
+        desc: 'Domina los saludos cotidianos',
+        icon: '👋',
+        unlocked: completed >= 10
+      },
+      {
+        id: 'master',
+        title: 'Graduado LESDO',
+        desc: '100% de lecciones dominadas',
+        icon: '👑',
+        unlocked: completed >= total && total > 0
+      }
+    ];
+
+    const unlockedCount = badges.filter(b => b.unlocked).length;
+    const countBadge = document.getElementById('badgesCount');
+    if (countBadge) {
+      countBadge.textContent = `${unlockedCount}/${badges.length} Desbloqueadas`;
+    }
+
+    badges.forEach(b => {
+      const card = document.createElement('div');
+      card.className = `badge-card ${b.unlocked ? 'badge-card--unlocked' : 'badge-card--locked'}`;
+      card.innerHTML = `
+        <div class="badge-icon">${b.icon}</div>
+        <h4 style="margin-bottom: 0.25rem; font-size: 1rem;">${b.title}</h4>
+        <p class="text-small text-secondary" style="font-size: 0.8rem;">${b.desc}</p>
+        <span style="display:inline-block; margin-top: 0.5rem; font-size: 0.75rem; font-weight:700; color:${b.unlocked ? 'var(--success)' : 'var(--text-secondary)'};">
+          ${b.unlocked ? '✓ Desbloqueada' : '🔒 Bloqueada'}
+        </span>
+      `;
+      grid.appendChild(card);
+    });
   },
 
   setupEventListeners() {

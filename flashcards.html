@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LESDO - Tarjetas de Memoria (Flashcards)</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤟</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="dashboard.html" class="navbar__logo">🤟 LESDO</a>
+      <div class="navbar__nav">
+        <a href="dashboard.html" class="navbar__link">Inicio</a>
+        <a href="dictionary.html" class="navbar__link">Diccionario</a>
+        <a href="flashcards.html" class="navbar__link navbar__link--active">Flashcards</a>
+        <a href="certificate.html" class="navbar__link">Certificado</a>
+      </div>
+      <div class="navbar__user">
+        <span class="navbar__username" id="userName"></span>
+        <button class="btn btn-ghost btn-sm" id="btnLogout">Salir</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container flashcards-container">
+      
+      <!-- Header -->
+      <div style="text-align: center; margin-bottom: 1.5rem;" class="animate-fade-in">
+        <h1>🎴 Tarjetas de Memoria LESDO</h1>
+        <p class="text-secondary">Pon a prueba tu retención visual y memoriza el vocabulario de señas</p>
+      </div>
+
+      <!-- Category Filter Chips -->
+      <div class="category-filter" id="categoryFilter">
+        <button class="filter-chip active" data-category="all">🌟 Todos</button>
+        <button class="filter-chip" data-category="Alfabeto">🤟 Alfabeto</button>
+        <button class="filter-chip" data-category="Saludos y Presentaciones">👋 Saludos</button>
+        <button class="filter-chip" data-category="Días y Meses">📅 Días y Meses</button>
+        <button class="filter-chip" data-category="Expresiones Comunes">💬 Expresiones</button>
+      </div>
+
+      <!-- Stats Progress Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.875rem;">
+        <span id="cardCounter" style="font-weight: 600;">Tarjeta 1 de 15</span>
+        <div>
+          <span style="color: var(--success); font-weight: 600; margin-right: 0.75rem;" id="knownCount">✅ 0 dominadas</span>
+          <span style="color: var(--warning); font-weight: 600;" id="reviewCount">🔄 0 por repasar</span>
+        </div>
+      </div>
+      <div class="progress-bar progress-bar--small" style="margin-bottom: 1.5rem;">
+        <div class="progress-bar__fill" id="sessionProgressFill" style="width: 0%;"></div>
+      </div>
+
+      <!-- 3D Interactive Flashcard Scene -->
+      <div class="card-scene" id="cardScene">
+        <div class="flashcard" id="flashcard">
+          <!-- Front of Card -->
+          <div class="flashcard-face flashcard-face--front">
+            <span class="badge" id="cardCategory" style="background: rgba(30,136,229,0.1); color: var(--secondary); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Categoría</span>
+            <div style="margin: auto 0;">
+              <div id="cardIcon" style="font-size: 5rem; margin-bottom: 1rem;">🤟</div>
+              <h2 id="cardWordFront" style="font-size: 2rem; color: var(--primary);">Palabra</h2>
+            </div>
+            <p class="text-small text-secondary">👆 Toca para voltear y ver la seña/definición</p>
+          </div>
+
+          <!-- Back of Card -->
+          <div class="flashcard-face flashcard-face--back">
+            <span style="color: var(--accent); font-weight: 700; font-size: 0.9rem;">✨ SIGNIFICADO Y SEÑA</span>
+            <div style="margin: auto 0;">
+              <h2 id="cardWordBack" style="font-size: 2.2rem; color: var(--primary); margin-bottom: 0.5rem;">Palabra</h2>
+              <p id="cardDefinition" style="font-size: 1.1rem; color: var(--text-primary); max-width: 400px; margin: 0 auto; line-height: 1.5;">Definición de la seña en LESDO</p>
+            </div>
+            <p class="text-small text-secondary">👆 Toca para volver a voltear</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flashcard Control Actions -->
+      <div class="flashcard-actions">
+        <button class="btn btn-secondary" id="btnPrevCard">⬅️ Anterior</button>
+        <button class="btn btn-warning" id="btnReviewCard" style="background: #F59E0B; color: white;">🔄 Repasar</button>
+        <button class="btn btn-accent" id="btnKnownCard" style="background: #10B981; color: white;">✅ ¡Me la sé!</button>
+        <button class="btn btn-secondary" id="btnNextCard">Siguiente ➡️</button>
+      </div>
+
+      <!-- Keyboard Shortcuts Hint -->
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-secondary);">
+        💡 <em>Atajos de teclado:</em> <strong>Espacio</strong> para voltear &bull; <strong>Flechas</strong> para navegar
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toast" id="toastContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/flashcards.js"></script>
+</body>
+</html>

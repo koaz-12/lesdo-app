@@ -682,3 +682,299 @@ h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
   outline: 2px solid var(--secondary);
   outline-offset: 2px;
 }
+
+/* ==========================================================================
+   Herramientas de Video Avanzadas y Modo Espejo (Webcam Mirror)
+   ========================================================================== */
+.video-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: var(--radius-btn);
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+@media (prefers-color-scheme: dark) {
+  .video-tools { border-color: rgba(255,255,255,0.1); }
+}
+
+.video-tools__group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.speed-btn {
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid #d1d5db;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+.speed-btn.active, .speed-btn:hover {
+  background: var(--secondary);
+  color: white;
+  border-color: var(--secondary);
+}
+
+.video-split-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+@media (min-width: 768px) {
+  .video-split-container.split-active {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.webcam-box {
+  position: relative;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  border: 2px solid var(--accent);
+}
+.webcam-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* Efecto espejo */
+}
+.webcam-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 191, 165, 0.9);
+  color: white;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   Modo Flashcards (Tarjetas 3D)
+   ========================================================================== */
+.flashcards-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.category-filter {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+  scrollbar-width: thin;
+}
+.filter-chip {
+  white-space: nowrap;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid #d1d5db;
+  background: var(--surface);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.filter-chip.active {
+  background: var(--secondary);
+  color: white;
+  border-color: var(--secondary);
+}
+
+.card-scene {
+  width: 100%;
+  height: 380px;
+  perspective: 1000px;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+}
+
+.flashcard {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transform-style: preserve-3d;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-base);
+}
+.flashcard.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius-card);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  background: var(--surface);
+}
+
+.flashcard-face--front {
+  border: 2px solid rgba(30,136,229,0.2);
+}
+
+.flashcard-face--back {
+  background: linear-gradient(135deg, rgba(10,36,99,0.03), rgba(0,191,165,0.08));
+  border: 2px solid var(--accent);
+  transform: rotateY(180deg);
+}
+
+.flashcard-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+}
+
+/* ==========================================================================
+   Medallas y Gamificación
+   ========================================================================== */
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.badge-card {
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  padding: 1.25rem;
+  text-align: center;
+  box-shadow: var(--shadow-base);
+  border: 2px solid transparent;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.badge-card--unlocked {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: linear-gradient(180deg, var(--surface) 0%, rgba(245,158,11,0.05) 100%);
+}
+.badge-card--locked {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.badge-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   Certificado Oficial de Finalización
+   ========================================================================== */
+.certificate-wrapper {
+  max-width: 850px;
+  margin: 2rem auto;
+}
+
+.certificate-paper {
+  background: #ffffff;
+  color: #1a1a2e;
+  padding: 3.5rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  position: relative;
+  text-align: center;
+  border: 12px double #0A2463;
+  outline: 4px solid #F59E0B;
+  outline-offset: -8px;
+}
+
+.certificate-header h1 {
+  font-size: 2.2rem;
+  color: #0A2463;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+.certificate-sub {
+  font-size: 1.1rem;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.certificate-recipient {
+  margin: 2rem 0;
+  border-bottom: 2px solid #0A2463;
+  display: inline-block;
+  padding: 0 2rem 0.5rem;
+}
+.certificate-recipient-name {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1E88E5;
+  font-family: Georgia, serif;
+}
+
+.certificate-body {
+  font-size: 1.1rem;
+  color: #374151;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+.certificate-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 2rem;
+  padding-top: 1rem;
+}
+
+.certificate-seal {
+  font-size: 3.5rem;
+  filter: drop-shadow(0 4px 6px rgba(245,158,11,0.3));
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .navbar, .btn, .toast, .no-print {
+    display: none !important;
+  }
+  .certificate-paper, .certificate-paper * {
+    visibility: visible;
+  }
+  .certificate-paper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none;
+    border: 10px double #0A2463;
+  }
+}

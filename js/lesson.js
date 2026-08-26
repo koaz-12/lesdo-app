@@ -191,6 +191,8 @@ const Lesson = {
     }
   },
 
+  webcamStream: null,
+
   renderLesson() {
     const container = document.getElementById('contentArea');
     
@@ -202,18 +204,47 @@ const Lesson = {
       </div>
       
       <div class="card" style="padding: 2rem;">
-        <h1>${this.currentLesson.title}</h1>
-        <p class="text-secondary" style="margin-bottom: 1.5rem;">${this.currentLesson.description}</p>
-        
-        <div class="lesson-video-container">
-          <video src="${this.currentLesson.video_url || ''}" controls poster="${this.currentLesson.thumbnail_url || ''}"></video>
-        </div>
-        
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+          <div>
+            <h1>${this.currentLesson.title}</h1>
+            <p class="text-secondary">${this.currentLesson.description}</p>
+          </div>
           <div id="statusArea">
             ${this.isCompleted 
               ? '<span class="completed-badge" style="font-size:1rem; padding:0.5rem 1rem;">✓ Lección Completada</span>' 
               : `<button class="btn btn-primary" id="btnCompleteLesson">Marcar como completada</button>`}
+          </div>
+        </div>
+        
+        <!-- Video & Webcam Mirror Split Container -->
+        <div class="video-split-container" id="videoSplitContainer">
+          <div class="lesson-video-container" style="margin-bottom:0;">
+            <video id="lessonVideo" src="${this.currentLesson.video_url || ''}" controls poster="${this.currentLesson.thumbnail_url || ''}"></video>
+          </div>
+
+          <div class="webcam-box" id="webcamBox" style="display:none;">
+            <div class="webcam-badge">📷 Tu Cámara (Modo Espejo)</div>
+            <video id="webcamVideo" class="webcam-video" autoplay playsinline muted></video>
+          </div>
+        </div>
+
+        <!-- Video Control Tools -->
+        <div class="video-tools">
+          <div class="video-tools__group">
+            <span class="text-small text-secondary" style="font-weight:600;">Velocidad:</span>
+            <button class="speed-btn" data-speed="0.5">0.5x (Lenta)</button>
+            <button class="speed-btn" data-speed="0.75">0.75x</button>
+            <button class="speed-btn active" data-speed="1.0">1.0x (Normal)</button>
+            <button class="speed-btn" data-speed="1.25">1.25x</button>
+          </div>
+
+          <div class="video-tools__group">
+            <button class="btn btn-ghost btn-sm" id="btnLoopToggle">
+              🔁 Bucle: <span id="loopStatus" style="font-weight:700;">Desactivado</span>
+            </button>
+            <button class="btn btn-secondary btn-sm" id="btnWebcamToggle">
+              📷 Activar Modo Espejo
+            </button>
           </div>
         </div>
       </div>
@@ -232,13 +263,79 @@ const Lesson = {
       document.getElementById('btnCompleteLesson')?.addEventListener('click', () => this.markCompleted());
     }
 
-    // Setup navigation (naive, assumes we can find prev/next by querying all lessons in category)
+    this.setupVideoTools();
     this.setupNavigation();
 
     if (this.quizzes.length > 0) {
       this.currentQuizIndex = 0;
       this.renderQuiz();
     }
+  },
+
+  setupVideoTools() {
+    const video = document.getElementById('lessonVideo');
+    if (!video) return;
+
+    // Speed buttons
+    const speedButtons = document.querySelectorAll('.speed-btn');
+    speedButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        speedButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const speed = parseFloat(btn.dataset.speed);
+        video.playbackRate = speed;
+        this.showToast(`Velocidad de video: ${speed}x`, 'info');
+      });
+    });
+
+    // Loop toggle
+    const btnLoop = document.getElementById('btnLoopToggle');
+    const loopStatus = document.getElementById('loopStatus');
+    btnLoop?.addEventListener('click', () => {
+      video.loop = !video.loop;
+      loopStatus.textContent = video.loop ? 'Activado' : 'Desactivado';
+      loopStatus.style.color = video.loop ? 'var(--success)' : 'inherit';
+      this.showToast(video.loop ? 'Bucle activado para práctica continua' : 'Bucle desactivado', 'info');
+    });
+
+    // Webcam mirror toggle
+    const btnWebcam = document.getElementById('btnWebcamToggle');
+    const webcamBox = document.getElementById('webcamBox');
+    const videoSplitContainer = document.getElementById('videoSplitContainer');
+    const webcamVideo = document.getElementById('webcamVideo');
+
+    btnWebcam?.addEventListener('click', async () => {
+      if (this.webcamStream) {
+        // Stop stream
+        this.webcamStream.getTracks().forEach(track => track.stop());
+        this.webcamStream = null;
+        webcamBox.style.display = 'none';
+        videoSplitContainer.classList.remove('split-active');
+        btnWebcam.textContent = '📷 Activar Modo Espejo';
+        btnWebcam.classList.remove('btn-primary');
+        btnWebcam.classList.add('btn-secondary');
+        this.showToast('Cámara desactivada', 'info');
+      } else {
+        // Start stream
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' }, 
+            audio: false 
+          });
+          this.webcamStream = stream;
+          webcamVideo.srcObject = stream;
+          webcamBox.style.display = 'flex';
+          videoSplitContainer.classList.add('split-active');
+          btnWebcam.textContent = '🛑 Desactivar Espejo';
+          btnWebcam.classList.remove('btn-secondary');
+          btnWebcam.classList.add('btn-primary');
+          this.showToast('¡Modo Espejo activado! Compara tus señas con el video.', 'success');
+        } catch (err) {
+          console.error("Webcam error:", err);
+          this.showToast('No se pudo acceder a la cámara. Permite el acceso en tu navegador.', 'error');
+        }
+      }
+    });
   },
 
   async setupNavigation() {

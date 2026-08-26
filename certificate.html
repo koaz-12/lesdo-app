@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LESDO - Certificado de Finalización</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤟</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navbar (hidden during print) -->
+  <nav class="navbar no-print">
+    <div class="container navbar__container">
+      <a href="dashboard.html" class="navbar__logo">🤟 LESDO</a>
+      <div class="navbar__nav">
+        <a href="dashboard.html" class="navbar__link">Inicio</a>
+        <a href="dictionary.html" class="navbar__link">Diccionario</a>
+        <a href="flashcards.html" class="navbar__link">Flashcards</a>
+        <a href="certificate.html" class="navbar__link navbar__link--active">Certificado</a>
+      </div>
+      <div class="navbar__user">
+        <span class="navbar__username" id="userName"></span>
+        <button class="btn btn-ghost btn-sm" id="btnLogout">Salir</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- Top Action Bar (hidden on print) -->
+      <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; max-width: 850px; margin: 0 auto 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <a href="dashboard.html" class="btn btn-secondary">← Volver al Panel</a>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-ghost" id="btnShareCert">🔗 Compartir</button>
+          <button class="btn btn-primary" id="btnPrintCert">🖨️ Imprimir / Guardar en PDF</button>
+        </div>
+      </div>
+
+      <!-- Printable Certificate Paper -->
+      <div class="certificate-wrapper">
+        <div class="certificate-paper animate-fade-in" id="certificatePaper">
+          
+          <div class="certificate-header">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🤟</div>
+            <h1>Certificado de Finalización</h1>
+            <p class="certificate-sub">Plataforma Educativa de Lengua de Señas Dominicana</p>
+          </div>
+
+          <div style="margin: 1.5rem 0; font-size: 1rem; color: #4B5563;">
+            Por cuanto se certifica que:
+          </div>
+
+          <div class="certificate-recipient">
+            <div class="certificate-recipient-name" id="certStudentName">Erick</div>
+          </div>
+
+          <div class="certificate-body">
+            Ha completado satisfactoriamente los módulos de formación práctica en <strong>Lengua de Señas Dominicana (LESDO)</strong>, demostrando dominio del alfabeto dactilológico, vocabulario esencial, saludos, expresiones cotidianas y evaluación práctica.
+          </div>
+
+          <div class="certificate-footer">
+            <div style="text-align: left; font-size: 0.85rem; color: #6B7280;">
+              <div><strong>Fecha de Emisión:</strong> <span id="certDate">26 de Agosto de 2026</span></div>
+              <div><strong>Código de Verificación:</strong> <span id="certCode" style="font-family: monospace;">LESDO-2026-DO8974</span></div>
+              <div style="margin-top: 0.25rem;">Emitido por: <strong>LESDO Learning Platform</strong></div>
+            </div>
+
+            <div class="certificate-seal">
+              🎖️
+            </div>
+
+            <div style="text-align: right; font-size: 0.85rem; color: #6B7280;">
+              <div style="font-family: 'Brush Script MT', cursive, Georgia, serif; font-size: 1.8rem; color: #0A2463; line-height: 1;">LESDO Dominicana</div>
+              <div style="border-top: 1px solid #9CA3AF; width: 140px; margin-left: auto; margin-top: 0.25rem; padding-top: 0.25rem;">
+                Firma Autorizada
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toast" id="toastContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/certificate.js"></script>
+</body>
+</html>
