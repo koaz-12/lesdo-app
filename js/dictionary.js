@@ -75,42 +75,74 @@ const Dictionary = {
       const card = document.createElement('div');
       card.className = 'card word-card';
       
-      const thumb = word.thumbnail_url || 'https://via.placeholder.com/100?text=LESDO';
+      const icon = word.icon || '🤟';
+      const catName = word.category || word.categories?.name || 'Vocabulario General';
       
       card.innerHTML = `
-        <img src="${thumb}" alt="${word.word}" class="word-thumb">
-        <div class="word-info">
-          <h2>${word.word}</h2>
-          ${word.categories ? `<p class="text-small text-secondary">${word.categories.icon} ${word.categories.name}</p>` : ''}
-          <p>${word.definition || ''}</p>
+        <div style="font-size: 2.5rem; width: 80px; height: 80px; background: rgba(30,136,229,0.08); border-radius: 8px; display:flex; align-items:center; justify-content:center; cursor:pointer;" class="word-thumb">
+          ${icon}
+        </div>
+        <div class="word-info" style="flex: 1;">
+          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">${word.word}</h2>
+          <span style="font-size: 0.75rem; background: rgba(30,136,229,0.1); color: var(--secondary); padding: 2px 8px; border-radius: 12px; font-weight: 600; display: inline-block; margin-bottom: 0.5rem;">
+            ${catName}
+          </span>
+          <p class="text-secondary" style="font-size: 0.9rem;">${word.definition || ''}</p>
         </div>
         <button class="btn btn-primary btn-play">Ver Seña ▶</button>
       `;
       
       card.querySelector('.btn-play').addEventListener('click', () => {
-        this.playVideo(word.video_url, word.word);
+        this.playVideo(word.video_url, word);
       });
       card.querySelector('.word-thumb').addEventListener('click', () => {
-        this.playVideo(word.video_url, word.word);
+        this.playVideo(word.video_url, word);
       });
       
       container.appendChild(card);
     });
   },
 
-  playVideo(videoUrl, word) {
+  playVideo(videoUrl, wordData) {
     const modal = document.getElementById('videoModal');
     const video = document.getElementById('modalVideo');
     const title = document.getElementById('modalTitle');
+    const word = typeof wordData === 'string' ? { word: wordData, definition: '' } : wordData;
     
-    title.textContent = word;
-    video.src = videoUrl || ''; // Assign URL or handle missing
+    title.textContent = `Seña LESDO: ${word.word}`;
+    
+    let descEl = document.getElementById('modalDesc');
+    if (!descEl) {
+      descEl = document.createElement('div');
+      descEl.id = 'modalDesc';
+      descEl.style.marginTop = '1rem';
+      descEl.style.padding = '1.25rem';
+      descEl.style.background = 'rgba(30,136,229,0.05)';
+      descEl.style.borderRadius = '8px';
+      descEl.style.border = '1px solid rgba(30,136,229,0.2)';
+      descEl.style.textAlign = 'center';
+      video.parentNode.appendChild(descEl);
+    }
+    
+    descEl.innerHTML = `
+      <div style="font-size: 4rem; margin-bottom: 0.5rem;">${word.icon || '🤟'}</div>
+      <h2 style="color: var(--primary); margin-bottom: 0.5rem;">${word.word}</h2>
+      <p style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.75rem; max-width: 450px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+        <strong>Cómo se hace:</strong> ${word.definition || 'Gesto representativo en Lengua de Señas Dominicana.'}
+      </p>
+      <span style="font-size: 0.8rem; background: var(--secondary); color: white; padding: 4px 12px; border-radius: 12px; font-weight:600;">
+        ${word.category || word.categories?.name || 'Vocabulario Oficial'}
+      </span>
+    `;
+
     modal.classList.add('active');
     
     if (videoUrl) {
+      video.style.display = 'block';
+      video.src = videoUrl;
       video.play().catch(e => console.log("Autoplay prevented", e));
     } else {
-      alert("Video no disponible");
+      video.style.display = 'none';
     }
   },
 

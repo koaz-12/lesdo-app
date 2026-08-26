@@ -247,6 +247,31 @@ const Lesson = {
             </button>
           </div>
         </div>
+
+        <!-- Step-by-Step Sign Execution Guide -->
+        ${this.currentLesson.guide && this.currentLesson.guide.length > 0 ? `
+          <div style="margin-top: 1.5rem; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 1.5rem;">
+            <h3 style="display:flex; align-items:center; gap:0.5rem; margin-bottom: 1rem;">
+              <span>✋</span> Guía de Ejecución de las Señas:
+            </h3>
+            <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+              ${this.currentLesson.guide.map(item => `
+                <div style="background: rgba(30,136,229,0.04); border: 1px solid rgba(30,136,229,0.2); border-radius: 8px; padding: 1rem; text-align: left;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+                    <span style="font-size: 1.25rem; font-weight: 700; color: var(--primary);">${item.sign}</span>
+                    <span style="font-size: 0.75rem; background: var(--secondary); color: white; padding: 2px 8px; border-radius: 12px; font-weight: 600;">LESDO</span>
+                  </div>
+                  <p style="font-size: 0.9rem; color: var(--text-primary); margin-bottom: 0.5rem; line-height: 1.4;">
+                    <strong>Posición de mano:</strong> ${item.hand}
+                  </p>
+                  <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.3;">
+                    💡 <em>${item.tip}</em>
+                  </p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
       </div>
       
       <div id="quizArea"></div>
