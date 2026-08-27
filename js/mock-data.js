@@ -1,4 +1,4 @@
-﻿// Datos enriquecidos de LESDO (Lengua de Señas Dominicana)
+﻿// Datos enriquecidos de LESDO (Lengua de Señas Dominicana) con Videos Educativos
 
 window.LESDO_MOCK_DATA = {
   categories: [
@@ -51,6 +51,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '11111111-1111-1111-1111-111111111111',
       title: 'Las 5 Vocales (A, E, I, O, U)',
       description: 'Fundamento esencial del abecedario dactilológico dominicano.',
+      video_url: 'https://www.youtube.com/embed/g3yO6GvH3U8',
       duration_seconds: 120,
       sort_order: 1,
       guide: [
@@ -66,6 +67,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '11111111-1111-1111-1111-111111111111',
       title: 'Consonantes grupo 1 (B, C, D, F)',
       description: 'Primer bloque de consonantes estructurales.',
+      video_url: 'https://www.youtube.com/embed/g3yO6GvH3U8',
       duration_seconds: 180,
       sort_order: 2,
       guide: [
@@ -80,6 +82,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '11111111-1111-1111-1111-111111111111',
       title: 'Consonantes grupo 2 (G, H, J, K, L)',
       description: 'Consonantes con orientación horizontal y movimiento.',
+      video_url: 'https://www.youtube.com/embed/g3yO6GvH3U8',
       duration_seconds: 180,
       sort_order: 3,
       guide: [
@@ -95,6 +98,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '11111111-1111-1111-1111-111111111111',
       title: 'Consonantes grupo 3 (M, N, Ñ, P, Q, R)',
       description: 'Consonantes con pliegues dactilares y movimientos distintivos.',
+      video_url: 'https://www.youtube.com/embed/g3yO6GvH3U8',
       duration_seconds: 180,
       sort_order: 4,
       guide: [
@@ -110,6 +114,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '11111111-1111-1111-1111-111111111111',
       title: 'Consonantes grupo 4 (S, T, V, W, X, Y, Z)',
       description: 'Último grupo del alfabeto con trazos finales.',
+      video_url: 'https://www.youtube.com/embed/g3yO6GvH3U8',
       duration_seconds: 180,
       sort_order: 5,
       guide: [
@@ -127,6 +132,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '22222222-2222-2222-2222-222222222222',
       title: 'Hola y Adiós',
       description: 'Apertura y cierre de cualquier interacción comunicativa.',
+      video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A',
       duration_seconds: 90,
       sort_order: 1,
       guide: [
@@ -139,6 +145,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '22222222-2222-2222-2222-222222222222',
       title: '¿Cómo estás? y Bien / Mal',
       description: 'Preguntar por el estado de ánimo y responder.',
+      video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A',
       duration_seconds: 100,
       sort_order: 2,
       guide: [
@@ -152,6 +159,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '22222222-2222-2222-2222-222222222222',
       title: 'Mi Nombre es...',
       description: 'Cómo presentarte y pedir el nombre de otros en LESDO.',
+      video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A',
       duration_seconds: 110,
       sort_order: 3,
       guide: [
@@ -164,6 +172,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '22222222-2222-2222-2222-222222222222',
       title: 'Mucho Gusto / Encantado',
       description: 'Cortesía social al conocer a una nueva persona.',
+      video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A',
       duration_seconds: 80,
       sort_order: 4,
       guide: [
@@ -175,6 +184,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '22222222-2222-2222-2222-222222222222',
       title: 'Por favor, Gracias y De Nada',
       description: 'Las normas de cortesía más importantes en LESDO.',
+      video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A',
       duration_seconds: 90,
       sort_order: 5,
       guide: [
@@ -190,6 +200,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '33333333-3333-3333-3333-333333333333',
       title: 'Días de la Semana (Lunes a Domingo)',
       description: 'Expresar días y planificar actividades.',
+      video_url: 'https://www.youtube.com/embed/Xq41qZ79l58',
       duration_seconds: 200,
       sort_order: 1,
       guide: [
@@ -207,6 +218,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '33333333-3333-3333-3333-333333333333',
       title: 'Meses del Año',
       description: 'Estaciones temporales y calendario dominicano.',
+      video_url: 'https://www.youtube.com/embed/Xq41qZ79l58',
       duration_seconds: 300,
       sort_order: 2,
       guide: [
@@ -219,6 +231,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '33333333-3333-3333-3333-333333333333',
       title: 'Ayer, Hoy y Mañana',
       description: 'Línea de tiempo espacial: pasado (atrás), presente (abajo), futuro (adelante).',
+      video_url: 'https://www.youtube.com/embed/Xq41qZ79l58',
       duration_seconds: 120,
       sort_order: 3,
       guide: [
@@ -232,6 +245,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '33333333-3333-3333-3333-333333333333',
       title: 'Las Horas y el Tiempo',
       description: 'Cómo indicar la hora y lapsos de tiempo.',
+      video_url: 'https://www.youtube.com/embed/Xq41qZ79l58',
       duration_seconds: 150,
       sort_order: 4,
       guide: [
@@ -246,6 +260,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '44444444-4444-4444-4444-444444444444',
       title: 'Sí y No',
       description: 'Respuestas básicas afirmativas y negativas.',
+      video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI',
       duration_seconds: 60,
       sort_order: 1,
       guide: [
@@ -258,6 +273,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '44444444-4444-4444-4444-444444444444',
       title: 'Preguntas Clave (Qué, Dónde, Cuándo, Quién)',
       description: 'Palabras interrogativas indispensables en LESDO.',
+      video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI',
       duration_seconds: 180,
       sort_order: 2,
       guide: [
@@ -271,6 +287,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '44444444-4444-4444-4444-444444444444',
       title: 'Disculpa y Con Permiso',
       description: 'Normas de cortesía y espacio personal.',
+      video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI',
       duration_seconds: 100,
       sort_order: 3,
       guide: [
@@ -283,6 +300,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '44444444-4444-4444-4444-444444444444',
       title: 'Números del 1 al 10',
       description: 'Conteo cardinal en lengua de señas.',
+      video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI',
       duration_seconds: 150,
       sort_order: 4,
       guide: [
@@ -295,6 +313,7 @@ window.LESDO_MOCK_DATA = {
       category_id: '44444444-4444-4444-4444-444444444444',
       title: 'Colores Básicos (Rojo, Azul, Amarillo, Verde)',
       description: 'Identificación visual de colores en señas dominicanas.',
+      video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI',
       duration_seconds: 200,
       sort_order: 5,
       guide: [
@@ -307,28 +326,28 @@ window.LESDO_MOCK_DATA = {
   ],
 
   dictionary: [
-    { word: 'Hola', definition: 'Mano abierta a la altura de la sien con movimiento hacia el exterior.', category: 'Saludos y Presentaciones', icon: '👋' },
-    { word: 'Adiós', definition: 'Mano abierta a la altura del hombro moviendo los dedos en vaivén.', category: 'Saludos y Presentaciones', icon: '👋' },
-    { word: 'Gracias', definition: 'Puntas de los dedos tocan la barbilla y se extienden al frente.', category: 'Saludos y Presentaciones', icon: '🙏' },
-    { word: 'Por favor', definition: 'Palma abierta sobre el pecho realizando un suave círculo en sentido horario.', category: 'Saludos y Presentaciones', icon: '🤲' },
-    { word: 'Buenos días', definition: 'Seña de "Bueno" (mano en barbilla al frente) + seña de "Sol / Día" saliendo.', category: 'Saludos y Presentaciones', icon: '🌅' },
-    { word: 'Buenas noches', definition: 'Seña de "Bueno" + mano dominante baja sobre la otra simulando la puesta del sol.', category: 'Saludos y Presentaciones', icon: '🌙' },
-    { word: 'Sí', definition: 'Puño cerrado en letra S asintiendo verticalmente como una cabeza.', category: 'Expresiones Comunes', icon: '✅' },
-    { word: 'No', definition: 'Índice y medio se juntan rápidamente con el pulgar como un pico cerrándose.', category: 'Expresiones Comunes', icon: '❌' },
-    { word: 'Lunes', definition: 'Mano en letra L realizando un pequeño círculo en el aire.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Martes', definition: 'Mano en letra M realizando un pequeño círculo en el aire.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Miércoles', definition: 'Mano en letra W realizando un círculo en el aire.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Jueves', definition: 'Mano en letra J trazando la curva en el aire.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Viernes', definition: 'Mano en letra V realizando un círculo en el aire.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Sábado', definition: 'Mano en letra S girando suavemente frente a la barbilla.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Domingo', definition: 'Ambas manos abiertas haciendo círculos hacia afuera.', category: 'Días y Meses', icon: '⛪' },
-    { word: 'Rojo', definition: 'Dedo índice desciende desde el labio inferior hacia la barbilla.', category: 'Expresiones Comunes', icon: '🔴' },
-    { word: 'Azul', definition: 'Mano en letra A sacudiéndose suavemente a los lados.', category: 'Expresiones Comunes', icon: '🔵' },
-    { word: 'Amarillo', definition: 'Mano en letra Y sacudiéndose suavemente a los lados.', category: 'Expresiones Comunes', icon: '🟡' },
-    { word: 'Verde', definition: 'Mano en letra V sacudiéndose suavemente a los lados.', category: 'Expresiones Comunes', icon: '🟢' },
-    { word: 'Uno (1)', definition: 'Dedo índice extendido hacia arriba, palma hacia el frente.', category: 'Expresiones Comunes', icon: '☝️' },
-    { word: 'Dos (2)', definition: 'Dedos índice y medio extendidos en V.', category: 'Expresiones Comunes', icon: '✌️' },
-    { word: 'Tres (3)', definition: 'Pulgar, índice y medio extendidos.', category: 'Expresiones Comunes', icon: '🤟' }
+    { word: 'Hola', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Mano abierta a la altura de la sien con movimiento hacia el exterior.', category: 'Saludos y Presentaciones', icon: '👋' },
+    { word: 'Adiós', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Mano abierta a la altura del hombro moviendo los dedos en vaivén.', category: 'Saludos y Presentaciones', icon: '👋' },
+    { word: 'Gracias', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Puntas de los dedos tocan la barbilla y se extienden al frente.', category: 'Saludos y Presentaciones', icon: '🙏' },
+    { word: 'Por favor', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Palma abierta sobre el pecho realizando un suave círculo en sentido horario.', category: 'Saludos y Presentaciones', icon: '🤲' },
+    { word: 'Buenos días', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Seña de "Bueno" (mano en barbilla al frente) + seña de "Sol / Día" saliendo.', category: 'Saludos y Presentaciones', icon: '🌅' },
+    { word: 'Buenas noches', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Seña de "Bueno" + mano dominante baja sobre la otra simulando la puesta del sol.', category: 'Saludos y Presentaciones', icon: '🌙' },
+    { word: 'Sí', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Puño cerrado en letra S asintiendo verticalmente como una cabeza.', category: 'Expresiones Comunes', icon: '✅' },
+    { word: 'No', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Índice y medio se juntan rápidamente con el pulgar como un pico cerrándose.', category: 'Expresiones Comunes', icon: '❌' },
+    { word: 'Lunes', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra L realizando un pequeño círculo en el aire.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Martes', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra M realizando un pequeño círculo en el aire.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Miércoles', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra W realizando un círculo en el aire.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Jueves', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra J trazando la curva en el aire.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Viernes', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra V realizando un círculo en el aire.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Sábado', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra S girando suavemente frente a la barbilla.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Domingo', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Ambas manos abiertas haciendo círculos hacia afuera.', category: 'Días y Meses', icon: '⛪' },
+    { word: 'Rojo', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Dedo índice desciende desde el labio inferior hacia la barbilla.', category: 'Expresiones Comunes', icon: '🔴' },
+    { word: 'Azul', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Mano en letra A sacudiéndose suavemente a los lados.', category: 'Expresiones Comunes', icon: '🔵' },
+    { word: 'Amarillo', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Mano en letra Y sacudiéndose suavemente a los lados.', category: 'Expresiones Comunes', icon: '🟡' },
+    { word: 'Verde', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Mano en letra V sacudiéndose suavemente a los lados.', category: 'Expresiones Comunes', icon: '🟢' },
+    { word: 'Uno (1)', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Dedo índice extendido hacia arriba, palma hacia el frente.', category: 'Expresiones Comunes', icon: '☝️' },
+    { word: 'Dos (2)', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Dedos índice y medio extendidos en V.', category: 'Expresiones Comunes', icon: '✌️' },
+    { word: 'Tres (3)', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Pulgar, índice y medio extendidos.', category: 'Expresiones Comunes', icon: '🤟' }
   ],
 
   quizzes: [

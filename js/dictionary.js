@@ -135,15 +135,38 @@ const Dictionary = {
       </span>
     `;
 
-    modal.classList.add('active');
+    const videoContainer = document.getElementById('modalVideoContainer') || video.parentElement;
     
-    if (videoUrl) {
+    // Check if iframe already exists, remove or update
+    let iframe = document.getElementById('modalIframe');
+    if (iframe) iframe.remove();
+
+    if (videoUrl && (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be'))) {
+      video.style.display = 'none';
+      let videoId = '';
+      if (videoUrl.includes('embed/')) videoId = videoUrl.split('embed/')[1].split('?')[0];
+      else if (videoUrl.includes('watch?v=')) videoId = videoUrl.split('watch?v=')[1].split('&')[0];
+      else if (videoUrl.includes('youtu.be/')) videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
+      
+      const newIframe = document.createElement('iframe');
+      newIframe.id = 'modalIframe';
+      newIframe.style.width = '100%';
+      newIframe.style.height = '320px';
+      newIframe.style.border = 'none';
+      newIframe.style.borderRadius = '8px';
+      newIframe.src = `https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`;
+      newIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      newIframe.allowFullscreen = true;
+      videoContainer.insertBefore(newIframe, video);
+    } else if (videoUrl) {
       video.style.display = 'block';
       video.src = videoUrl;
       video.play().catch(e => console.log("Autoplay prevented", e));
     } else {
       video.style.display = 'none';
     }
+
+    modal.classList.add('active');
   },
 
   setupEventListeners() {
@@ -175,6 +198,8 @@ const Dictionary = {
     const closeModal = () => {
       modal.classList.remove('active');
       video.pause();
+      const iframe = document.getElementById('modalIframe');
+      if (iframe) iframe.remove();
       video.src = '';
     };
 

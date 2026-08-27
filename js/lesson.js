@@ -218,8 +218,8 @@ const Lesson = {
         
         <!-- Video & Webcam Mirror Split Container -->
         <div class="video-split-container" id="videoSplitContainer">
-          <div class="lesson-video-container" style="margin-bottom:0;">
-            <video id="lessonVideo" src="${this.currentLesson.video_url || ''}" controls poster="${this.currentLesson.thumbnail_url || ''}"></video>
+          <div class="lesson-video-container" style="margin-bottom:0; background:transparent;">
+            ${this.renderVideoMarkup(this.currentLesson.video_url, this.currentLesson.thumbnail_url)}
           </div>
 
           <div class="webcam-box" id="webcamBox" style="display:none;">
@@ -295,6 +295,29 @@ const Lesson = {
       this.currentQuizIndex = 0;
       this.renderQuiz();
     }
+  },
+
+  renderVideoMarkup(url, poster) {
+    if (!url) {
+      return `
+        <div style="background:#111827; color:white; padding:3rem 1.5rem; text-align:center; border-radius:8px;">
+          <div style="font-size:3rem; margin-bottom:0.5rem;">🎬</div>
+          <h3>Video Demostrativo</h3>
+          <p class="text-secondary" style="color:#9ca3af; font-size:0.9rem; max-width:400px; margin:0 auto;">Sigue la guía detallada de señas a continuación.</p>
+        </div>`;
+    }
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      let videoId = '';
+      if (url.includes('embed/')) {
+        videoId = url.split('embed/')[1].split('?')[0];
+      } else if (url.includes('watch?v=')) {
+        videoId = url.split('watch?v=')[1].split('&')[0];
+      } else if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0];
+      }
+      return `<iframe id="lessonVideoIframe" style="width:100%; height:400px; border:none; border-radius:8px;" src="https://www.youtube.com/embed/${videoId}?rel=0&enablejsapi=1" title="LESDO Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    }
+    return `<video id="lessonVideo" src="${url}" controls poster="${poster || ''}" style="width:100%; max-height:400px; border-radius:8px;"></video>`;
   },
 
   setupVideoTools() {
