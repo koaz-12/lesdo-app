@@ -1,4 +1,4 @@
-﻿// Datos enriquecidos de LESDO (Lengua de Señas Dominicana) con Videos Educativos
+// Datos enriquecidos de LESDO (Lengua de Señas Dominicana) con Videos Educativos
 
 window.LESDO_MOCK_DATA = {
   categories: [
@@ -326,28 +326,58 @@ window.LESDO_MOCK_DATA = {
   ],
 
   dictionary: [
-    { word: 'Hola', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Mano abierta a la altura de la sien con movimiento hacia el exterior.', category: 'Saludos y Presentaciones', icon: '👋' },
-    { word: 'Adiós', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Mano abierta a la altura del hombro moviendo los dedos en vaivén.', category: 'Saludos y Presentaciones', icon: '👋' },
-    { word: 'Gracias', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Puntas de los dedos tocan la barbilla y se extienden al frente.', category: 'Saludos y Presentaciones', icon: '🙏' },
-    { word: 'Por favor', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Palma abierta sobre el pecho realizando un suave círculo en sentido horario.', category: 'Saludos y Presentaciones', icon: '🤲' },
-    { word: 'Buenos días', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Seña de "Bueno" (mano en barbilla al frente) + seña de "Sol / Día" saliendo.', category: 'Saludos y Presentaciones', icon: '🌅' },
-    { word: 'Buenas noches', video_url: 'https://www.youtube.com/embed/2uV04Q1lI8A', definition: 'Seña de "Bueno" + mano dominante baja sobre la otra simulando la puesta del sol.', category: 'Saludos y Presentaciones', icon: '🌙' },
-    { word: 'Sí', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Puño cerrado en letra S asintiendo verticalmente como una cabeza.', category: 'Expresiones Comunes', icon: '✅' },
-    { word: 'No', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Índice y medio se juntan rápidamente con el pulgar como un pico cerrándose.', category: 'Expresiones Comunes', icon: '❌' },
-    { word: 'Lunes', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra L realizando un pequeño círculo en el aire.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Martes', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra M realizando un pequeño círculo en el aire.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Miércoles', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra W realizando un círculo en el aire.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Jueves', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra J trazando la curva en el aire.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Viernes', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra V realizando un círculo en el aire.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Sábado', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Mano en letra S girando suavemente frente a la barbilla.', category: 'Días y Meses', icon: '📅' },
-    { word: 'Domingo', video_url: 'https://www.youtube.com/embed/Xq41qZ79l58', definition: 'Ambas manos abiertas haciendo círculos hacia afuera.', category: 'Días y Meses', icon: '⛪' },
-    { word: 'Rojo', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Dedo índice desciende desde el labio inferior hacia la barbilla.', category: 'Expresiones Comunes', icon: '🔴' },
-    { word: 'Azul', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Mano en letra A sacudiéndose suavemente a los lados.', category: 'Expresiones Comunes', icon: '🔵' },
-    { word: 'Amarillo', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Mano en letra Y sacudiéndose suavemente a los lados.', category: 'Expresiones Comunes', icon: '🟡' },
-    { word: 'Verde', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Mano en letra V sacudiéndose suavemente a los lados.', category: 'Expresiones Comunes', icon: '🟢' },
-    { word: 'Uno (1)', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Dedo índice extendido hacia arriba, palma hacia el frente.', category: 'Expresiones Comunes', icon: '☝️' },
-    { word: 'Dos (2)', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Dedos índice y medio extendidos en V.', category: 'Expresiones Comunes', icon: '✌️' },
-    { word: 'Tres (3)', video_url: 'https://www.youtube.com/embed/6i2Y3e7u9hI', definition: 'Pulgar, índice y medio extendidos.', category: 'Expresiones Comunes', icon: '🤟' }
+    // Saludos y Cortesía
+    { word: 'Hola', definition: 'Mano abierta a la altura de la sien con movimiento hacia el exterior.', category: 'Saludos y Presentaciones', icon: '👋' },
+    { word: 'Adiós', definition: 'Mano abierta a la altura del hombro moviendo los dedos en vaivén.', category: 'Saludos y Presentaciones', icon: '👋' },
+    { word: 'Gracias', definition: 'Puntas de los dedos tocan la barbilla y se extienden al frente.', category: 'Saludos y Presentaciones', icon: '🙏' },
+    { word: 'Por favor', definition: 'Palma abierta sobre el pecho realizando un suave círculo en sentido horario.', category: 'Saludos y Presentaciones', icon: '🤲' },
+    { word: 'Buenos días', definition: 'Seña de "Bueno" (mano en barbilla al frente) + seña de "Sol / Día" saliendo.', category: 'Saludos y Presentaciones', icon: '🌅' },
+    { word: 'Buenas noches', definition: 'Seña de "Bueno" + mano dominante baja sobre la otra simulando la puesta del sol.', category: 'Saludos y Presentaciones', icon: '🌙' },
+    { word: 'Mucho gusto', definition: 'Mano derecha abierta plana sobre el pecho realizando un círculo suave.', category: 'Saludos y Presentaciones', icon: '🤝' },
+    { word: 'Nombre', definition: 'Dedos índice y medio de ambas manos en H se tocan en cruz dos veces.', category: 'Saludos y Presentaciones', icon: '🏷️' },
+
+    // Familia y Personas
+    { word: 'Mamá / Madre', definition: 'Mano abierta con el pulgar tocando dos veces la barbilla.', category: 'Familia', icon: '👩' },
+    { word: 'Papá / Padre', definition: 'Mano abierta con el pulgar tocando dos veces la frente.', category: 'Familia', icon: '👨' },
+    { word: 'Hermano / Hermana', definition: 'Dedos índices de ambas manos se tocan y bajan juntos.', category: 'Familia', icon: '🧑‍🤝‍🧑' },
+    { word: 'Hijo / Hija', definition: 'Mano en el pecho que se desplaza hacia adelante como meciendo a un bebé.', category: 'Familia', icon: '👶' },
+    { word: 'Abuelo / Abuela', definition: 'Pulgar en la frente (abuelo) o barbilla (abuela) dando dos pequeños saltos al frente.', category: 'Familia', icon: '👵' },
+    { word: 'Familia', definition: 'Ambas manos en letra F juntas que hacen un círculo hacia afuera uniéndose al final.', category: 'Familia', icon: '👨‍👩‍👧‍👦' },
+    { word: 'Amigo / Amiga', definition: 'Dedos índices entrelazados como dos ganchos que se intercambian.', category: 'Familia', icon: '🤝' },
+
+    // Alimentos y Bebidas
+    { word: 'Agua', definition: 'Mano en letra W tocando tres veces el labio inferior con el índice.', category: 'Alimentos', icon: '💧' },
+    { word: 'Café', definition: 'Puño derecho gira sobre el puño izquierdo como moliendo granos de café.', category: 'Alimentos', icon: '☕' },
+    { word: 'Comer / Comida', definition: 'Puntas de los dedos unidas al pulgar tocan la boca repetidamente.', category: 'Alimentos', icon: '🍽️' },
+    { word: 'Plátano', definition: 'Mano izquierda en puño hacia arriba; mano derecha simula pelar una cáscara.', category: 'Alimentos', icon: '🍌' },
+    { word: 'Arroz', definition: 'Mano en letra A o simulación de comer con cuchara desde la palma.', category: 'Alimentos', icon: '🍚' },
+
+    // Salud y Emergencias
+    { word: 'Doctor / Médico', definition: 'Puntas de los dedos de la mano dominante tocan el pulso en la muñeca contraria.', category: 'Salud', icon: '🩺' },
+    { word: 'Hospital', definition: 'Dedos índice y medio forman una cruz sobre el hombro izquierdo.', category: 'Salud', icon: '🏥' },
+    { word: 'Ayuda / Ayudar', definition: 'Puño con pulgar arriba descansando sobre la palma plana que se eleva hacia arriba.', category: 'Salud', icon: '🆘' },
+    { word: 'Medicina', definition: 'Dedo medio gira sobre la palma abierta de la otra mano.', category: 'Salud', icon: '💊' },
+    { word: 'Dolor', definition: 'Dedos índices apuntándose entre sí realizando giros de torsión en la zona adolorida.', category: 'Salud', icon: '⚡' },
+
+    // Educación y Escuela
+    { word: 'Escuela / Colegio', definition: 'Palmas abiertas aplauden suavemente dos veces en posición horizontal.', category: 'Educación', icon: '🏫' },
+    { word: 'Profesor / Maestro', definition: 'Ambas manos en las sienes se extienden al frente + seña de persona.', category: 'Educación', icon: '👨‍🏫' },
+    { word: 'Aprender', definition: 'Mano toma información de la palma contraria y la lleva a la frente.', category: 'Educación', icon: '🧠' },
+    { word: 'Libro', definition: 'Ambas palmas unidas que se abren como las páginas de un libro.', category: 'Educación', icon: '📖' },
+
+    // Días y Expresiones
+    { word: 'Lunes', definition: 'Mano en letra L realizando un pequeño círculo en el aire.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Martes', definition: 'Mano en letra M realizando un pequeño círculo en el aire.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Miércoles', definition: 'Mano en letra W realizando un círculo en el aire.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Jueves', definition: 'Mano en letra J trazando la curva en el aire.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Viernes', definition: 'Mano en letra V realizando un círculo en el aire.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Sábado', definition: 'Mano en letra S girando suavemente frente a la barbilla.', category: 'Días y Meses', icon: '📅' },
+    { word: 'Domingo', definition: 'Ambas manos abiertas haciendo círculos hacia afuera.', category: 'Días y Meses', icon: '⛪' },
+    { word: 'Sí', definition: 'Puño cerrado en letra S asintiendo verticalmente como una cabeza.', category: 'Expresiones Comunes', icon: '✅' },
+    { word: 'No', definition: 'Índice y medio se juntan rápidamente con el pulgar como un pico cerrándose.', category: 'Expresiones Comunes', icon: '❌' },
+    { word: 'República Dominicana', definition: 'Mano en letra R sobre el corazón, luego seña de D describiendo el mapa.', category: 'Lugares', icon: '🇩🇴' },
+    { word: 'Santo Domingo', definition: 'Mano en letra S y D trazando un círculo de capital.', category: 'Lugares', icon: '📍' },
+    { word: 'Casa / Hogar', definition: 'Puntas de los dedos de ambas manos se unen formando el tejado de una casa.', category: 'Lugares', icon: '🏠' }
   ],
 
   quizzes: [

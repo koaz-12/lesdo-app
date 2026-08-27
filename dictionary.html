@@ -115,11 +115,18 @@
 
   <main id="main" class="main-content">
     <div class="container">
-      <h1 class="animate-fade-in">Diccionario LESDO</h1>
-      <p class="text-secondary animate-fade-in">Busca palabras y aprende su seña correspondiente.</p>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;" class="animate-fade-in">
+        <div>
+          <h1>Diccionario LESDO / LSRD</h1>
+          <p class="text-secondary">Busca palabras y aprende su seña correspondiente en Lengua de Señas Dominicana.</p>
+        </div>
+        <a href="https://diccionariolsrd.cc/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:0.5rem;">
+          🇩🇴 Consultar Diccionario Oficial LSRD ↗
+        </a>
+      </div>
       
       <div class="dictionary-search animate-slide-up search-wrapper">
-        <input type="text" id="searchInput" placeholder="Escribe una palabra para buscar..." class="search__input">
+        <input type="text" id="searchInput" placeholder="Escribe una palabra (ej. Mamá, Gracias, Agua, Lunes, Doctor)..." class="search__input">
       </div>
 
       <div id="resultsContainer" class="search__results animate-slide-up">
