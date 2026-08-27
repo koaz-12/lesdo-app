@@ -125,46 +125,20 @@ const Dictionary = {
     }
     
     descEl.innerHTML = `
-      <div style="font-size: 4rem; margin-bottom: 0.5rem;">${word.icon || '🤟'}</div>
-      <h2 style="color: var(--primary); margin-bottom: 0.5rem;">${word.word}</h2>
-      <p style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.75rem; max-width: 450px; margin-left: auto; margin-right: auto; line-height: 1.5;">
-        <strong>Cómo se hace:</strong> ${word.definition || 'Gesto representativo en Lengua de Señas Dominicana.'}
-      </p>
-      <span style="font-size: 0.8rem; background: var(--secondary); color: white; padding: 4px 12px; border-radius: 12px; font-weight:600;">
+      <div style="font-size: 5rem; margin-bottom: 0.5rem; animation: pulse 1.5s infinite ease-in-out;">${word.icon || '🤟'}</div>
+      <h2 style="color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem;">${word.word}</h2>
+      <div style="background: white; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 1rem; margin: 1rem auto; max-width: 500px; text-align: left;">
+        <p style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.5rem; line-height: 1.5;">
+          <strong>Posición y movimiento:</strong> ${word.definition || 'Gesto representativo en Lengua de Señas Dominicana.'}
+        </p>
+      </div>
+      <span style="font-size: 0.85rem; background: var(--secondary); color: white; padding: 4px 14px; border-radius: 14px; font-weight:600; display: inline-block;">
         ${word.category || word.categories?.name || 'Vocabulario Oficial'}
       </span>
     `;
 
-    const videoContainer = document.getElementById('modalVideoContainer') || video.parentElement;
-    
-    // Check if iframe already exists, remove or update
-    let iframe = document.getElementById('modalIframe');
-    if (iframe) iframe.remove();
-
-    if (videoUrl && (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be'))) {
-      video.style.display = 'none';
-      let videoId = '';
-      if (videoUrl.includes('embed/')) videoId = videoUrl.split('embed/')[1].split('?')[0];
-      else if (videoUrl.includes('watch?v=')) videoId = videoUrl.split('watch?v=')[1].split('&')[0];
-      else if (videoUrl.includes('youtu.be/')) videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
-      
-      const newIframe = document.createElement('iframe');
-      newIframe.id = 'modalIframe';
-      newIframe.style.width = '100%';
-      newIframe.style.height = '320px';
-      newIframe.style.border = 'none';
-      newIframe.style.borderRadius = '8px';
-      newIframe.src = `https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`;
-      newIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      newIframe.allowFullscreen = true;
-      videoContainer.insertBefore(newIframe, video);
-    } else if (videoUrl) {
-      video.style.display = 'block';
-      video.src = videoUrl;
-      video.play().catch(e => console.log("Autoplay prevented", e));
-    } else {
-      video.style.display = 'none';
-    }
+    // Hide empty video element
+    video.style.display = 'none';
 
     modal.classList.add('active');
   },

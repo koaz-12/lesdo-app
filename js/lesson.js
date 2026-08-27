@@ -298,41 +298,90 @@ const Lesson = {
   },
 
   renderVideoMarkup(url, poster) {
-    if (!url) {
-      return `
-        <div style="background:#111827; color:white; padding:3rem 1.5rem; text-align:center; border-radius:8px;">
-          <div style="font-size:3rem; margin-bottom:0.5rem;">🎬</div>
-          <h3>Video Demostrativo</h3>
-          <p class="text-secondary" style="color:#9ca3af; font-size:0.9rem; max-width:400px; margin:0 auto;">Sigue la guía detallada de señas a continuación.</p>
-        </div>`;
-    }
-    if (url.includes('youtube.com') || url.includes('youtu.be')) {
-      let videoId = '';
-      if (url.includes('embed/')) {
-        videoId = url.split('embed/')[1].split('?')[0];
-      } else if (url.includes('watch?v=')) {
-        videoId = url.split('watch?v=')[1].split('&')[0];
-      } else if (url.includes('youtu.be/')) {
-        videoId = url.split('youtu.be/')[1].split('?')[0];
-      }
-      return `<iframe id="lessonVideoIframe" style="width:100%; height:400px; border:none; border-radius:8px;" src="https://www.youtube.com/embed/${videoId}?rel=0&enablejsapi=1" title="LESDO Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-    }
-    return `<video id="lessonVideo" src="${url}" controls poster="${poster || ''}" style="width:100%; max-height:400px; border-radius:8px;"></video>`;
+    const guides = this.currentLesson.guide || [];
+    const firstSign = guides[0] || { sign: this.currentLesson.title, hand: 'Sigue las instrucciones a continuación', tip: 'Práctica activa de señas' };
+    
+    return `
+      <div class="sign-stage" id="signStage">
+        <div class="sign-stage__glow"></div>
+        
+        <!-- Sign Tabs -->
+        ${guides.length > 1 ? `
+          <div class="sign-stage__tabs">
+            ${guides.map((g, idx) => `
+              <button class="sign-tab-btn ${idx === 0 ? 'active' : ''}" data-idx="${idx}">
+                ${g.sign}
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
+
+        <!-- Active Sign Animation Stage -->
+        <div style="margin: auto 0; z-index: 2;">
+          <div class="sign-stage__icon animate-fade-in" id="stageIcon">🤟</div>
+          <h2 id="stageSignTitle" style="font-size: 2.2rem; color: #fff; margin-bottom: 0.25rem;">
+            ${firstSign.sign}
+          </h2>
+          <p id="stageSignHand" style="font-size: 1.05rem; color: rgba(255,255,255,0.9); max-width: 480px; margin: 0 auto; line-height: 1.4;">
+            ${firstSign.hand}
+          </p>
+        </div>
+
+        <div style="z-index: 2; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 0.75rem; margin-top: 1rem;">
+          <span id="stageSignTip" style="font-size: 0.85rem; color: var(--accent); font-weight: 600;">
+            💡 ${firstSign.tip}
+          </span>
+          <span style="font-size: 0.75rem; background: rgba(0,0,0,0.3); color: white; padding: 2px 8px; border-radius: 12px;">
+            LESDO Interactivo
+          </span>
+        </div>
+      </div>
+    `;
   },
 
   setupVideoTools() {
-    const video = document.getElementById('lessonVideo');
-    if (!video) return;
+    // Sign Stage Tabs logic
+    const guides = this.currentLesson.guide || [];
+    const tabButtons = document.querySelectorAll('.sign-tab-btn');
+    const stageIcon = document.getElementById('stageIcon');
+    const stageTitle = document.getElementById('stageSignTitle');
+    const stageHand = document.getElementById('stageSignHand');
+    const stageTip = document.getElementById('stageSignTip');
 
-    // Speed buttons
+    const icons = ['🤟', '✋', '👍', '👌', '✌️', '🤙', '👋', '🤞', '🤌', '🤝'];
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const idx = parseInt(btn.dataset.idx, 10);
+        const data = guides[idx];
+        if (data) {
+          if (stageTitle) stageTitle.textContent = data.sign;
+          if (stageHand) stageHand.textContent = data.hand;
+          if (stageTip) stageTip.textContent = `💡 ${data.tip}`;
+          if (stageIcon) {
+            stageIcon.textContent = icons[idx % icons.length];
+            stageIcon.style.animation = 'none';
+            void stageIcon.offsetWidth; // trigger reflow
+            stageIcon.style.animation = 'pulse 0.6s ease';
+          }
+          this.showToast(`Seña activa: ${data.sign}`, 'info');
+        }
+      });
+    });
+
+    // Speed buttons (changes pulse rhythm)
     const speedButtons = document.querySelectorAll('.speed-btn');
     speedButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         speedButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const speed = parseFloat(btn.dataset.speed);
-        video.playbackRate = speed;
-        this.showToast(`Velocidad de video: ${speed}x`, 'info');
+        if (stageIcon) {
+          stageIcon.style.animationDuration = `${1.5 / speed}s`;
+        }
+        this.showToast(`Velocidad de práctica: ${speed}x`, 'info');
       });
     });
 

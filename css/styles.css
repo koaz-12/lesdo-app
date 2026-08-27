@@ -740,6 +740,71 @@ h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
   }
 }
 
+/* ==========================================================================
+   Reproductor Interactivo de Señas (Sign Stage Visualizer)
+   ========================================================================== */
+.sign-stage {
+  background: linear-gradient(135deg, #0A2463 0%, #153b8b 50%, #1E88E5 100%);
+  color: white;
+  border-radius: var(--radius-card);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-base);
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.sign-stage__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(0, 191, 165, 0.3) 0%, rgba(30, 136, 229, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: pulse 3s infinite ease-in-out;
+}
+.sign-stage__icon {
+  font-size: 5rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+}
+.sign-stage__icon:hover {
+  transform: scale(1.15) rotate(5deg);
+}
+.sign-stage__tabs {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  z-index: 2;
+}
+.sign-tab-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+}
+.sign-tab-btn.active, .sign-tab-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0A2463;
+  transform: translateY(-2px);
+}
+
 .webcam-box {
   position: relative;
   background: #000;
