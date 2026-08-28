@@ -305,10 +305,6 @@ const Dictionary = {
       if (wrapper3d) wrapper3d.style.display = 'block';
       if (containerClassic) containerClassic.style.display = 'none';
       this.showToast('Modo Libro 3D Activado', 'info');
-      // Trigger DFLIP book parse if needed
-      if (window.DFLIP && typeof window.DFLIP.parseBooks === 'function') {
-        window.DFLIP.parseBooks();
-      }
     } else if (mode === 'classic') {
       btnClassic?.classList.remove('btn-ghost');
       btnClassic?.classList.add('btn-secondary');
