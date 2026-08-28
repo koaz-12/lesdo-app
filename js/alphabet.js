@@ -33,12 +33,15 @@ const ALPHABET_DATA = [
 ];
 
 const AlphabetApp = {
+  initialized: false,
   currentIndex: 0,
   activeList: ALPHABET_DATA,
   autoplayTimer: null,
   isAutoplaying: false,
 
   init() {
+    if (this.initialized) return;
+    this.initialized = true;
     this.setupAuth();
     this.renderVowels();
     this.renderAlphabet();
@@ -49,8 +52,14 @@ const AlphabetApp = {
   },
 
   setupAuth() {
-    document.getElementById('btnLogout')?.addEventListener('click', () => Auth.signOut());
-    document.getElementById('btnLogoutMobile')?.addEventListener('click', () => Auth.signOut());
+    document.getElementById('btnLogout')?.addEventListener('click', () => {
+      if (window.Auth?.signOut) window.Auth.signOut();
+      else window.location.href = 'index.html';
+    });
+    document.getElementById('btnLogoutMobile')?.addEventListener('click', () => {
+      if (window.Auth?.signOut) window.Auth.signOut();
+      else window.location.href = 'index.html';
+    });
   },
 
   setupNavToggle() {
@@ -312,4 +321,14 @@ const AlphabetApp = {
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => AlphabetApp.init());
+window.AlphabetApp = AlphabetApp;
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => AlphabetApp.init());
+} else {
+  AlphabetApp.init();
+}
+
+window.addEventListener('load', () => {
+  if (!AlphabetApp.initialized) AlphabetApp.init();
+});
