@@ -54,20 +54,28 @@
     }
     .dict-search-input {
       width: 100%;
-      padding: 1rem 3.5rem 1rem 3.4rem;
+      padding: 1.1rem 3.5rem 1.1rem 3.4rem;
       font-size: 1.15rem;
-      font-weight: 500;
+      font-weight: 700;
       border-radius: 14px;
-      border: 2px solid rgba(30, 136, 229, 0.25);
-      background: var(--background);
-      color: var(--text-primary);
+      border: 2px solid #1E88E5;
+      background: #FFFFFF !important;
+      color: #0A192F !important;
+      caret-color: #1E88E5;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
       transition: all 0.2s;
+    }
+    .dict-search-input::placeholder {
+      color: #718096 !important;
+      font-weight: 500;
+      opacity: 1;
     }
     .dict-search-input:focus {
       outline: none;
-      border-color: #1E88E5;
-      box-shadow: 0 0 0 4px rgba(30, 136, 229, 0.15);
-      background: #FFFFFF;
+      border-color: #0A2463;
+      box-shadow: 0 0 0 4px rgba(30, 136, 229, 0.25);
+      background: #FFFFFF !important;
+      color: #000000 !important;
     }
     .search-clear-btn {
       position: absolute;
