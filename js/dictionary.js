@@ -21,55 +21,38 @@ const Dictionary = {
     const container = document.getElementById('resultsContainer');
     container.innerHTML = '<div class="spinner"></div>';
 
-    if (!window.supabaseClient) {
-      let words = window.LESDO_MOCK_DATA?.dictionary || [];
-      if (query.trim() !== '') {
-        const qClean = query.trim().toLowerCase();
-        words = words.filter(w => w.word.toLowerCase().includes(qClean) || (w.definition && w.definition.toLowerCase().includes(qClean)));
-      }
-      this.renderResults(words, query);
-      return;
+    let allWords = window.LESDO_MOCK_DATA?.dictionary || [];
+    let words = allWords;
+
+    if (query.trim() !== '') {
+      const qClean = query.trim().toLowerCase();
+      words = allWords.filter(w => w.word.toLowerCase().includes(qClean) || (w.category && w.category.toLowerCase().includes(qClean)));
+    } else {
+      words = allWords.slice(0, 60);
     }
-
-    try {
-      let q = window.supabaseClient
-        .from('dictionary_words')
-        .select('*, categories(name, icon)')
-        .order('word');
-        
-      if (query.trim() !== '') {
-        q = q.ilike('word', `%${query}%`);
-      } else {
-        // limit initial results
-        q = q.limit(20);
-      }
-
-      const { data, error } = await q;
-
-      if (error) throw error;
-      this.renderResults(data, query);
-    } catch (error) {
-      console.warn("Supabase dictionary search failed, using local mock data:", error);
-      let words = window.LESDO_MOCK_DATA?.dictionary || [];
-      if (query.trim() !== '') {
-        const qClean = query.trim().toLowerCase();
-        words = words.filter(w => w.word.toLowerCase().includes(qClean) || (w.definition && w.definition.toLowerCase().includes(qClean)));
-      }
-      this.renderResults(words, query);
-    }
+    
+    this.renderResults(words, query, allWords.length);
   },
 
-  renderResults(words, query) {
+  renderResults(words, query, totalCount = 1390) {
     const container = document.getElementById('resultsContainer');
     container.innerHTML = '';
 
     if (!words || words.length === 0) {
       container.innerHTML = `
-        <div class="card text-center">
-          <p>No se encontraron resultados para '${query}'</p>
+        <div class="card text-center" style="padding: 2rem;">
+          <p style="font-size: 1.1rem; color: var(--text-secondary);">No se encontraron señas para '<strong>${query}</strong>'</p>
+          <p class="text-small text-secondary" style="margin-top: 0.5rem;">Prueba con otra palabra o consulta el <a href="https://diccionariolsrd.cc/" target="_blank">Diccionario Oficial LSRD</a>.</p>
         </div>`;
       return;
     }
+
+    const countHeader = document.createElement('div');
+    countHeader.style.cssText = 'grid-column: 1 / -1; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;';
+    countHeader.textContent = query.trim() !== '' 
+      ? `Encontrados ${words.length} resultados para "${query}"`
+      : `Mostrando ${words.length} señas destacadas (Catálogo de ${totalCount} señas oficiales en video)`;
+    container.appendChild(countHeader);
 
     words.forEach(word => {
       const card = document.createElement('div');
