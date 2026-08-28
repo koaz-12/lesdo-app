@@ -1,35 +1,65 @@
-// Controlador del Abecedario y Vocales LESDO
+// Controlador del Abecedario y Vocales LESDO con Videos Oficiales Diccionario LSRD
 
 const getLetterImg = (l) => `images/alphabet/${l.toUpperCase()}.svg`;
 
+const LETTER_VIDEOS = {
+  'A': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/1.-A-Sena-1.mp4',
+  'B': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/2.-B-Sena-1.mp4',
+  'C': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/3.-C-Sena-1.mp4',
+  'D': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/4.-D-Sena-1.mp4',
+  'E': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/5.-E-Sena-1.mp4',
+  'F': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/6.-F-Sena-1.mp4',
+  'G': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/7.-G-Sena-1.mp4',
+  'H': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/8.-H-Sena-1.mp4',
+  'I': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/9.-I-Sena-1.mp4',
+  'J': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/10.-J-Sena-1.mp4',
+  'K': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/11.-K-Sena-1.mp4',
+  'L': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/12.-L-Sena-1.mp4',
+  'M': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/13.-M-Sena-1.mp4',
+  'N': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/14.-N-Sena-1.mp4',
+  'Ñ': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/15.-N-Sena-1-1.mp4',
+  'O': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/16.-O-Sena-1.mp4',
+  'P': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/17.-P-Sena-1.mp4',
+  'Q': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/18.-Q-Sena-1.mp4',
+  'R': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/19.-R-Sena-1.mp4',
+  'S': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/20.-S-Sena-1.mp4',
+  'T': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/21.-T-Sena-1.mp4',
+  'U': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/22.-U-Sena-1.mp4',
+  'V': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/23.-V-Sena-1.mp4',
+  'W': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/24.-W-Sena-1.mp4',
+  'X': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/25.-X-Sena-1.mp4',
+  'Y': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/26.-Y-Sena-1.mp4',
+  'Z': 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/27.-Z-Sena-1.mp4'
+};
+
 const ALPHABET_DATA = [
-  { letter: 'A', isVowel: true, name: 'Vocal A', img: getLetterImg('A'), hand: 'Puño cerrado con el pulgar erguido y apoyado en el lateral del dedo índice.', tip: 'Palma siempre hacia el frente.' },
-  { letter: 'B', isVowel: false, name: 'Letra B', img: getLetterImg('B'), hand: 'Cuatro dedos extendidos y juntos hacia arriba con el pulgar doblado sobre la palma.', tip: 'Dedos firmemente unidos apuntando arriba.' },
-  { letter: 'C', isVowel: false, name: 'Letra C', img: getLetterImg('C'), hand: 'Mano curvada en forma de media luna formando la letra C lateral.', tip: 'La apertura mira hacia el lateral.' },
-  { letter: 'D', isVowel: false, name: 'Letra D', img: getLetterImg('D'), hand: 'Dedo índice apuntando hacia arriba, los demás dedos forman un círculo con el pulgar.', tip: 'El índice hace de asta vertical.' },
-  { letter: 'E', isVowel: true, name: 'Vocal E', img: getLetterImg('E'), hand: 'Dedos doblados hacia abajo tocando ligeramente la punta del pulgar.', tip: 'Parece una pequeña garra relajada.' },
-  { letter: 'F', isVowel: false, name: 'Letra F', img: getLetterImg('F'), hand: 'Índice y pulgar se tocan por las yemas formando un círculo; tres dedos extendidos arriba.', tip: 'Similar al símbolo de OK.' },
-  { letter: 'G', isVowel: false, name: 'Letra G', img: getLetterImg('G'), hand: 'Índice y pulgar paralelos apuntando en horizontal hacia el lado opuesto.', tip: 'Como midiendo algo pequeño horizontal.' },
-  { letter: 'H', isVowel: false, name: 'Letra H', img: getLetterImg('H'), hand: 'Índice y medio extendidos juntos en posición horizontal.', tip: 'Dos dedos horizontales.' },
-  { letter: 'I', isVowel: true, name: 'Vocal I', img: getLetterImg('I'), hand: 'Puño cerrado levantando únicamente el dedo meñique hacia arriba.', tip: 'El meñique simboliza el palito de la i.' },
-  { letter: 'J', isVowel: false, name: 'Letra J', img: getLetterImg('J'), hand: 'Con el meñique levantado (posición I), dibuja una curva en el aire hacia abajo.', tip: 'Traza la colita de la letra J en el aire.' },
-  { letter: 'K', isVowel: false, name: 'Letra K', img: getLetterImg('K'), hand: 'Índice arriba, medio diagonal hacia adelante, pulgar apoyado entre ambos.', tip: 'Forma la letra K con los dedos.' },
-  { letter: 'L', isVowel: false, name: 'Letra L', img: getLetterImg('L'), hand: 'Índice extendido hacia arriba y pulgar horizontal formando un ángulo de 90°.', tip: 'Forma una L clara.' },
-  { letter: 'M', isVowel: false, name: 'Letra M', img: getLetterImg('M'), hand: 'Tres dedos (índice, medio y anular) doblados sobre el pulgar apuntando abajo.', tip: 'Representa las 3 patitas de la M.' },
-  { letter: 'N', isVowel: false, name: 'Letra N', img: getLetterImg('N'), hand: 'Dos dedos (índice y medio) doblados sobre el pulgar apuntando abajo.', tip: 'Representa las 2 patitas de la N.' },
-  { letter: 'Ñ', isVowel: false, name: 'Letra Ñ', img: getLetterImg('Ñ'), hand: 'Misma posición de la N pero con movimiento oscilante de lado a lado.', tip: 'El movimiento representa la virgulilla (~).' },
-  { letter: 'O', isVowel: true, name: 'Vocal O', img: getLetterImg('O'), hand: 'Todos los dedos curvados uniéndose con el pulgar para formar un círculo perfecto.', tip: 'Forma la letra O con toda la mano.' },
-  { letter: 'P', isVowel: false, name: 'Letra P', img: getLetterImg('P'), hand: 'Posición de la K pero con la muñeca inclinada apuntando hacia abajo.', tip: 'Dedo medio hacia abajo.' },
-  { letter: 'Q', isVowel: false, name: 'Letra Q', img: getLetterImg('Q'), hand: 'Posición de la G con índice y pulgar apuntando directamente hacia el suelo.', tip: 'Dedos apuntando hacia abajo.' },
-  { letter: 'R', isVowel: false, name: 'Letra R', img: getLetterImg('R'), hand: 'Cruzar el dedo medio sobre el dedo índice extendido.', tip: 'Como cruzar los dedos para la suerte.' },
-  { letter: 'S', isVowel: false, name: 'Letra S', img: getLetterImg('S'), hand: 'Puño cerrado con el pulgar cruzado por encima de los cuatro dedos.', tip: 'El pulgar va horizontal al frente.' },
-  { letter: 'T', isVowel: false, name: 'Letra T', img: getLetterImg('T'), hand: 'Pulgar metido entre el dedo índice y medio en un puño cerrado.', tip: 'El pulgar asoma entre los dos dedos.' },
-  { letter: 'U', isVowel: true, name: 'Vocal U', img: getLetterImg('U'), hand: 'Dedos índice y medio extendidos y juntos hacia arriba; pulgar sujeta anular y meñique.', tip: 'Dos dedos firmemente unidos.' },
-  { letter: 'V', isVowel: false, name: 'Letra V', img: getLetterImg('V'), hand: 'Índice y medio extendidos y separados formando una V (símbolo de paz).', tip: 'Palma hacia el frente.' },
-  { letter: 'W', isVowel: false, name: 'Letra W', img: getLetterImg('W'), hand: 'Índice, medio y anular extendidos y separados formando una W.', tip: 'Tres dedos separados hacia arriba.' },
-  { letter: 'X', isVowel: false, name: 'Letra X', img: getLetterImg('X'), hand: 'Dedo índice encorvado en forma de gancho apuntando hacia arriba.', tip: 'Como un garfio hacia el frente.' },
-  { letter: 'Y', isVowel: false, name: 'Letra Y', img: getLetterImg('Y'), hand: 'Pulgar y meñique extendidos, los tres dedos centrales cerrados (shaka).', tip: 'Gesto de saludo hawaiano / Y.' },
-  { letter: 'Z', isVowel: false, name: 'Letra Z', img: getLetterImg('Z'), hand: 'Con el dedo índice extendido, dibuja la letra Z en el aire con 3 trazos.', tip: 'Traza la Z claramente en el aire.' }
+  { letter: 'A', isVowel: true, name: 'Vocal A', img: getLetterImg('A'), video: LETTER_VIDEOS['A'], hand: 'Puño cerrado con el pulgar erguido y apoyado en el lateral del dedo índice.', tip: 'Palma siempre hacia el frente.' },
+  { letter: 'B', isVowel: false, name: 'Letra B', img: getLetterImg('B'), video: LETTER_VIDEOS['B'], hand: 'Cuatro dedos extendidos y juntos hacia arriba con el pulgar doblado sobre la palma.', tip: 'Dedos firmemente unidos apuntando arriba.' },
+  { letter: 'C', isVowel: false, name: 'Letra C', img: getLetterImg('C'), video: LETTER_VIDEOS['C'], hand: 'Mano curvada en forma de media luna formando la letra C lateral.', tip: 'La apertura mira hacia el lateral.' },
+  { letter: 'D', isVowel: false, name: 'Letra D', img: getLetterImg('D'), video: LETTER_VIDEOS['D'], hand: 'Dedo índice apuntando hacia arriba, los demás dedos forman un círculo con el pulgar.', tip: 'El índice hace de asta vertical.' },
+  { letter: 'E', isVowel: true, name: 'Vocal E', img: getLetterImg('E'), video: LETTER_VIDEOS['E'], hand: 'Dedos doblados hacia abajo tocando ligeramente la punta del pulgar.', tip: 'Parece una pequeña garra relajada.' },
+  { letter: 'F', isVowel: false, name: 'Letra F', img: getLetterImg('F'), video: LETTER_VIDEOS['F'], hand: 'Índice y pulgar se tocan por las yemas formando un círculo; tres dedos extendidos arriba.', tip: 'Similar al símbolo de OK.' },
+  { letter: 'G', isVowel: false, name: 'Letra G', img: getLetterImg('G'), video: LETTER_VIDEOS['G'], hand: 'Índice y pulgar paralelos apuntando en horizontal hacia el lado opuesto.', tip: 'Como midiendo algo pequeño horizontal.' },
+  { letter: 'H', isVowel: false, name: 'Letra H', img: getLetterImg('H'), video: LETTER_VIDEOS['H'], hand: 'Índice y medio extendidos juntos en posición horizontal.', tip: 'Dos dedos horizontales.' },
+  { letter: 'I', isVowel: true, name: 'Vocal I', img: getLetterImg('I'), video: LETTER_VIDEOS['I'], hand: 'Puño cerrado levantando únicamente el dedo meñique hacia arriba.', tip: 'El meñique simboliza el palito de la i.' },
+  { letter: 'J', isVowel: false, name: 'Letra J', img: getLetterImg('J'), video: LETTER_VIDEOS['J'], hand: 'Con el meñique levantado (posición I), dibuja una curva en el aire hacia abajo.', tip: 'Traza la colita de la letra J en el aire.' },
+  { letter: 'K', isVowel: false, name: 'Letra K', img: getLetterImg('K'), video: LETTER_VIDEOS['K'], hand: 'Índice arriba, medio diagonal hacia adelante, pulgar apoyado entre ambos.', tip: 'Forma la letra K con los dedos.' },
+  { letter: 'L', isVowel: false, name: 'Letra L', img: getLetterImg('L'), video: LETTER_VIDEOS['L'], hand: 'Índice extendido hacia arriba y pulgar horizontal formando un ángulo de 90°.', tip: 'Forma una L clara.' },
+  { letter: 'M', isVowel: false, name: 'Letra M', img: getLetterImg('M'), video: LETTER_VIDEOS['M'], hand: 'Tres dedos (índice, medio y anular) doblados sobre el pulgar apuntando abajo.', tip: 'Representa las 3 patitas de la M.' },
+  { letter: 'N', isVowel: false, name: 'Letra N', img: getLetterImg('N'), video: LETTER_VIDEOS['N'], hand: 'Dos dedos (índice y medio) doblados sobre el pulgar apuntando abajo.', tip: 'Representa las 2 patitas de la N.' },
+  { letter: 'Ñ', isVowel: false, name: 'Letra Ñ', img: getLetterImg('Ñ'), video: LETTER_VIDEOS['Ñ'], hand: 'Misma posición de la N pero con movimiento oscilante de lado a lado.', tip: 'El movimiento representa la virgulilla (~).' },
+  { letter: 'O', isVowel: true, name: 'Vocal O', img: getLetterImg('O'), video: LETTER_VIDEOS['O'], hand: 'Todos los dedos curvados uniéndose con el pulgar para formar un círculo perfecto.', tip: 'Forma la letra O con toda la mano.' },
+  { letter: 'P', isVowel: false, name: 'Letra P', img: getLetterImg('P'), video: LETTER_VIDEOS['P'], hand: 'Posición de la K pero con la muñeca inclinada apuntando hacia abajo.', tip: 'Dedo medio hacia abajo.' },
+  { letter: 'Q', isVowel: false, name: 'Letra Q', img: getLetterImg('Q'), video: LETTER_VIDEOS['Q'], hand: 'Posición de la G con índice y pulgar apuntando directamente hacia el suelo.', tip: 'Dedos apuntando hacia abajo.' },
+  { letter: 'R', isVowel: false, name: 'Letra R', img: getLetterImg('R'), video: LETTER_VIDEOS['R'], hand: 'Cruzar el dedo medio sobre el dedo índice extendido.', tip: 'Como cruzar los dedos para la suerte.' },
+  { letter: 'S', isVowel: false, name: 'Letra S', img: getLetterImg('S'), video: LETTER_VIDEOS['S'], hand: 'Puño cerrado con el pulgar cruzado por encima de los cuatro dedos.', tip: 'El pulgar va horizontal al frente.' },
+  { letter: 'T', isVowel: false, name: 'Letra T', img: getLetterImg('T'), video: LETTER_VIDEOS['T'], hand: 'Pulgar metido entre el dedo índice y medio en un puño cerrado.', tip: 'El pulgar asoma entre los dos dedos.' },
+  { letter: 'U', isVowel: true, name: 'Vocal U', img: getLetterImg('U'), video: LETTER_VIDEOS['U'], hand: 'Dedos índice y medio extendidos y juntos hacia arriba; pulgar sujeta anular y meñique.', tip: 'Dos dedos firmemente unidos.' },
+  { letter: 'V', isVowel: false, name: 'Letra V', img: getLetterImg('V'), video: LETTER_VIDEOS['V'], hand: 'Índice y medio extendidos y separados formando una V (símbolo de paz).', tip: 'Palma hacia el frente.' },
+  { letter: 'W', isVowel: false, name: 'Letra W', img: getLetterImg('W'), video: LETTER_VIDEOS['W'], hand: 'Índice, medio y anular extendidos y separados formando una W.', tip: 'Tres dedos separados hacia arriba.' },
+  { letter: 'X', isVowel: false, name: 'Letra X', img: getLetterImg('X'), video: LETTER_VIDEOS['X'], hand: 'Dedo índice encorvado en forma de gancho apuntando hacia arriba.', tip: 'Como un garfio hacia el frente.' },
+  { letter: 'Y', isVowel: false, name: 'Letra Y', img: getLetterImg('Y'), video: LETTER_VIDEOS['Y'], hand: 'Pulgar y meñique extendidos, los tres dedos centrales cerrados (shaka).', tip: 'Gesto de saludo hawaiano / Y.' },
+  { letter: 'Z', isVowel: false, name: 'Letra Z', img: getLetterImg('Z'), video: LETTER_VIDEOS['Z'], hand: 'Con el dedo índice extendido, dibuja la letra Z en el aire con 3 trazos.', tip: 'Traza la Z claramente en el aire.' }
 ];
 
 const AlphabetApp = {
@@ -272,6 +302,18 @@ const AlphabetApp = {
     }
   },
 
+  toggleVideoMute() {
+    const stageVideo = document.getElementById('stageLetterVideo');
+    const btn = document.getElementById('btnToggleVideoSound');
+    if (stageVideo) {
+      stageVideo.muted = !stageVideo.muted;
+      if (btn) {
+        btn.textContent = stageVideo.muted ? '🔇 Sonido: Silenciado' : '🔊 Sonido: Activado';
+      }
+      this.showToast(stageVideo.muted ? 'Video silenciado' : 'Sonido activado', 'info');
+    }
+  },
+
   showcase(item) {
     if (!item) return;
     const detailImg = document.getElementById('detailImg');
@@ -279,6 +321,7 @@ const AlphabetApp = {
     const detailHand = document.getElementById('detailHand');
     const detailTip = document.getElementById('detailTip');
     const stageCounter = document.getElementById('stageCounter');
+    const stageVideo = document.getElementById('stageLetterVideo');
 
     if (stageCounter) {
       const isVowelView = this.activeList.length === 5;
@@ -286,12 +329,23 @@ const AlphabetApp = {
       stageCounter.textContent = `${typeLabel} ${this.currentIndex + 1} de ${this.activeList.length} • [ ${item.letter} ]`;
     }
 
+    // Update SVG Hand
     if (detailImg) {
       detailImg.src = item.img;
       detailImg.style.animation = 'none';
       void detailImg.offsetWidth;
       detailImg.style.animation = 'pulse 0.4s ease';
     }
+
+    // Update Live Official Letter Video
+    if (stageVideo && item.video) {
+      if (stageVideo.src !== item.video) {
+        stageVideo.src = item.video;
+        stageVideo.load();
+        stageVideo.play().catch(() => {});
+      }
+    }
+
     if (detailTitle) detailTitle.textContent = item.name;
     if (detailHand) detailHand.textContent = item.hand;
     if (detailTip) detailTip.textContent = `💡 ${item.tip}`;
@@ -312,9 +366,12 @@ const AlphabetApp = {
     container.innerHTML = vowels.map((v, idx) => `
       <div class="vowel-card ${idx === 0 ? 'selected' : ''}" data-letter="${v.letter}">
         <div class="vowel-card__letter">${v.letter}</div>
-        <img src="${v.img}" alt="${v.name}" class="sign-hand-img" style="width:100px; height:100px; margin-bottom:0.75rem;">
+        <img src="${v.img}" alt="${v.name}" class="sign-hand-img" style="width:100px; height:100px; margin-bottom:0.5rem;">
         <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.25rem;">${v.name}</h3>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.3;">${v.hand}</p>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.3; margin-bottom: 0.5rem;">${v.hand}</p>
+        <div style="font-size:0.75rem; color:var(--primary); font-weight:700; background:rgba(30,136,229,0.12); padding:3px 10px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+          <span>🎥</span> Video Oficial
+        </div>
       </div>
     `).join('');
 
@@ -339,8 +396,11 @@ const AlphabetApp = {
     container.innerHTML = ALPHABET_DATA.map(item => `
       <div class="letter-card" data-letter="${item.letter}">
         <div class="letter-card__name">${item.letter}</div>
-        <img src="${item.img}" alt="${item.name}" class="sign-hand-img" style="width:75px; height:75px; margin-bottom:0.5rem; padding:4px;">
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--secondary);">${item.name}</div>
+        <img src="${item.img}" alt="${item.name}" class="sign-hand-img" style="width:75px; height:75px; margin-bottom:0.35rem; padding:4px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--secondary); margin-bottom:0.25rem;">${item.name}</div>
+        <div style="font-size:0.7rem; color:var(--primary); font-weight:700; background:rgba(30,136,229,0.1); padding:2px 6px; border-radius:8px; display:inline-flex; align-items:center; gap:2px;">
+          <span>🎥</span> Video
+        </div>
       </div>
     `).join('');
 
