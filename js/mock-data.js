@@ -312,66 +312,385 @@ window.LESDO_MOCK_DATA = {
   ],
 
   dictionary: [
-    // Saludos y Cortesía
-    { word: 'Hola', icon: '👋', definition: 'Mano abierta a la altura de la sien con movimiento hacia el exterior.', category: 'Saludos y Presentaciones' },
-    { word: 'Adiós', icon: '👋', definition: 'Mano abierta a la altura del hombro moviendo los dedos en vaivén.', category: 'Saludos y Presentaciones' },
-    { word: 'Gracias', icon: '🙏', definition: 'Puntas de los dedos tocan la barbilla y se extienden al frente.', category: 'Saludos y Presentaciones' },
-    { word: 'Por favor', icon: '🤲', definition: 'Palma abierta sobre el pecho realizando un suave círculo en sentido horario.', category: 'Saludos y Presentaciones' },
-    { word: 'Buenos días', icon: '🌅', definition: 'Seña de "Bueno" (mano en barbilla al frente) + seña de "Sol / Día" saliendo.', category: 'Saludos y Presentaciones' },
-    { word: 'Buenas noches', icon: '🌙', definition: 'Seña de "Bueno" + mano dominante baja sobre la otra simulando la puesta del sol.', category: 'Saludos y Presentaciones' },
-    { word: 'Mucho gusto', icon: '🤝', definition: 'Mano derecha abierta plana sobre el pecho realizando un círculo suave.', category: 'Saludos y Presentaciones' },
-    { word: 'Nombre', image_url: getLetterImg('H'), icon: '🏷️', definition: 'Dedos índice y medio de ambas manos en H se tocan en cruz dos veces.', category: 'Saludos y Presentaciones' },
-
-    // Letras Vocales
-    { word: 'Letra A', image_url: getLetterImg('A'), icon: '🅰️', definition: 'Puño cerrado con el pulgar apoyado en el lateral del índice apuntando arriba.', category: 'Alfabeto' },
-    { word: 'Letra E', image_url: getLetterImg('E'), icon: '📧', definition: 'Dedos doblados hacia abajo tocando ligeramente la punta del pulgar.', category: 'Alfabeto' },
-    { word: 'Letra I', image_url: getLetterImg('I'), icon: 'ℹ️', definition: 'Puño cerrado levantando únicamente el dedo meñique hacia arriba.', category: 'Alfabeto' },
-    { word: 'Letra O', image_url: getLetterImg('O'), icon: '⭕', definition: 'Todos los dedos curvados uniéndose con el pulgar para formar un círculo.', category: 'Alfabeto' },
-    { word: 'Letra U', image_url: getLetterImg('U'), icon: '⛎', definition: 'Dedos índice y medio extendidos y juntos hacia arriba.', category: 'Alfabeto' },
-
-    // Familia y Personas
-    { word: 'Mamá / Madre', icon: '👩', definition: 'Mano abierta con el pulgar tocando dos veces la barbilla.', category: 'Familia' },
-    { word: 'Papá / Padre', icon: '👨', definition: 'Mano abierta con el pulgar tocando dos veces la frente.', category: 'Familia' },
-    { word: 'Hermano / Hermana', icon: '🧑‍🤝‍🧑', definition: 'Dedos índices de ambas manos se tocan y bajan juntos.', category: 'Familia' },
-    { word: 'Hijo / Hija', icon: '👶', definition: 'Mano en el pecho que se desplaza hacia adelante como meciendo a un bebé.', category: 'Familia' },
-    { word: 'Abuelo / Abuela', icon: '👵', definition: 'Pulgar en la frente (abuelo) o barbilla (abuela) dando dos pequeños saltos al frente.', category: 'Familia' },
-    { word: 'Familia', image_url: getLetterImg('F'), icon: '👨‍👩‍👧‍👦', definition: 'Ambas manos en letra F juntas que hacen un círculo hacia afuera uniéndose al final.', category: 'Familia' },
-    { word: 'Amigo / Amiga', icon: '🤝', definition: 'Dedos índices entrelazados como dos ganchos que se intercambian.', category: 'Familia' },
-
-    // Alimentos y Bebidas
-    { word: 'Agua', image_url: getLetterImg('W'), icon: '💧', definition: 'Mano en letra W tocando tres veces el labio inferior con el índice.', category: 'Alimentos' },
-    { word: 'Café', icon: '☕', definition: 'Puño derecho gira sobre el puño izquierdo como moliendo granos de café.', category: 'Alimentos' },
-    { word: 'Comer / Comida', icon: '🍽️', definition: 'Puntas de los dedos unidas al pulgar tocan la boca repetidamente.', category: 'Alimentos' },
-    { word: 'Plátano', icon: '🍌', definition: 'Mano izquierda en puño hacia arriba; mano derecha simula pelar una cáscara.', category: 'Alimentos' },
-    { word: 'Arroz', icon: '🍚', definition: 'Mano en letra A o simulación de comer con cuchara desde la palma.', category: 'Alimentos' },
-
-    // Salud y Emergencias
-    { word: 'Doctor / Médico', icon: '🩺', definition: 'Puntas de los dedos de la mano dominante tocan el pulso en la muñeca contraria.', category: 'Salud' },
-    { word: 'Hospital', icon: '🏥', definition: 'Dedos índice y medio forman una cruz sobre el hombro izquierdo.', category: 'Salud' },
-    { word: 'Ayuda / Ayudar', icon: '🆘', definition: 'Puño con pulgar arriba descansando sobre la palma plana que se eleva hacia arriba.', category: 'Salud' },
-    { word: 'Medicina', icon: '💊', definition: 'Dedo medio gira sobre la palma abierta de la otra mano.', category: 'Salud' },
-    { word: 'Dolor', icon: '⚡', definition: 'Dedos índices apuntándose entre sí realizando giros de torsión en la zona adolorida.', category: 'Salud' },
-
-    // Educación y Escuela
-    { word: 'Escuela / Colegio', icon: '🏫', definition: 'Palmas abiertas aplauden suavemente dos veces en posición horizontal.', category: 'Educación' },
-    { word: 'Profesor / Maestro', icon: '👨‍🏫', definition: 'Ambas manos en las sienes se extienden al frente + seña de persona.', category: 'Educación' },
-    { word: 'Aprender', icon: '🧠', definition: 'Mano toma información de la palma contraria y la lleva a la frente.', category: 'Educación' },
-    { word: 'Libro', icon: '📖', definition: 'Ambas palmas unidas que se abren como las páginas de un libro.', category: 'Educación' },
-
-    // Días y Expresiones
-    { word: 'Lunes', image_url: getLetterImg('L'), icon: '📅', definition: 'Mano en letra L realizando un pequeño círculo en el aire.', category: 'Días y Meses' },
-    { word: 'Martes', image_url: getLetterImg('M'), icon: '📅', definition: 'Mano en letra M realizando un pequeño círculo en el aire.', category: 'Días y Meses' },
-    { word: 'Miércoles', image_url: getLetterImg('W'), icon: '📅', definition: 'Mano en letra W realizando un círculo en el aire.', category: 'Días y Meses' },
-    { word: 'Jueves', image_url: getLetterImg('J'), icon: '📅', definition: 'Mano en letra J trazando la curva en el aire.', category: 'Días y Meses' },
-    { word: 'Viernes', image_url: getLetterImg('V'), icon: '📅', definition: 'Mano en letra V realizando un círculo en el aire.', category: 'Días y Meses' },
-    { word: 'Sábado', image_url: getLetterImg('S'), icon: '📅', definition: 'Mano en letra S girando suavemente frente a la barbilla.', category: 'Días y Meses' },
-    { word: 'Domingo', icon: '⛪', definition: 'Ambas manos abiertas haciendo círculos hacia afuera.', category: 'Días y Meses' },
-    { word: 'Sí', image_url: getLetterImg('S'), icon: '✅', definition: 'Puño cerrado en letra S asintiendo verticalmente como una cabeza.', category: 'Expresiones Comunes' },
-    { word: 'No', icon: '❌', definition: 'Índice y medio se juntan rápidamente con el pulgar como un pico cerrándose.', category: 'Expresiones Comunes' },
-    { word: 'República Dominicana', image_url: getLetterImg('R'), icon: '🇩🇴', definition: 'Mano en letra R sobre el corazón, luego seña de D describiendo el mapa.', category: 'Lugares' },
-    { word: 'Santo Domingo', image_url: getLetterImg('S'), icon: '📍', definition: 'Mano en letra S y D trazando un círculo de capital.', category: 'Lugares' },
-    { word: 'Casa / Hogar', icon: '🏠', definition: 'Puntas de los dedos de ambas manos se unen formando el tejado de una casa.', category: 'Lugares' }
-  ],
+  {
+    "word": "Hola",
+    "icon": "👋",
+    "definition": "Mano abierta a la altura de la sien con movimiento hacia el exterior.",
+    "category": "Saludos y Presentaciones"
+  },
+  {
+    "word": "Adiós",
+    "icon": "👋",
+    "definition": "Mano abierta a la altura del hombro moviendo los dedos en vaivén.",
+    "category": "Saludos y Presentaciones"
+  },
+  {
+    "word": "Gracias",
+    "icon": "🙏",
+    "definition": "Puntas de los dedos tocan la barbilla y se extienden al frente.",
+    "category": "Saludos y Presentaciones"
+  },
+  {
+    "word": "Por favor",
+    "icon": "🤲",
+    "definition": "Palma abierta sobre el pecho realizando un suave círculo en sentido horario.",
+    "category": "Saludos y Presentaciones"
+  },
+  {
+    "word": "Buenos días",
+    "icon": "🌅",
+    "definition": "Seña de \"Bueno\" (mano en barbilla al frente) + seña de \"Sol / Día\" saliendo.",
+    "category": "Saludos y Presentaciones"
+  },
+  {
+    "word": "Buenas noches",
+    "icon": "🌙",
+    "definition": "Seña de \"Bueno\" + mano dominante baja sobre la otra simulando la puesta del sol.",
+    "category": "Saludos y Presentaciones"
+  },
+  {
+    "word": "Mucho gusto",
+    "icon": "🤝",
+    "definition": "Mano derecha abierta plana sobre el pecho realizando un círculo suave.",
+    "category": "Saludos y Presentaciones"
+  },
+  {
+    "word": "Nombre",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_H.svg",
+    "icon": "🏷️",
+    "definition": "Dedos índice y medio de ambas manos en H se tocan en cruz dos veces.",
+    "category": "Saludos y Presentaciones"
+  },
+  {
+    "word": "Letra A",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_A.svg",
+    "icon": "🅰️",
+    "definition": "Puño cerrado con el pulgar apoyado en el lateral del índice apuntando arriba.",
+    "category": "Alfabeto"
+  },
+  {
+    "word": "Letra E",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_E.svg",
+    "icon": "📧",
+    "definition": "Dedos doblados hacia abajo tocando ligeramente la punta del pulgar.",
+    "category": "Alfabeto"
+  },
+  {
+    "word": "Letra I",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_I.svg",
+    "icon": "ℹ️",
+    "definition": "Puño cerrado levantando únicamente el dedo meñique hacia arriba.",
+    "category": "Alfabeto"
+  },
+  {
+    "word": "Letra O",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_O.svg",
+    "icon": "⭕",
+    "definition": "Todos los dedos curvados uniéndose con el pulgar para formar un círculo.",
+    "category": "Alfabeto"
+  },
+  {
+    "word": "Letra U",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_U.svg",
+    "icon": "⛎",
+    "definition": "Dedos índice y medio extendidos y juntos hacia arriba.",
+    "category": "Alfabeto"
+  },
+  {
+    "word": "Mamá / Madre",
+    "icon": "👩",
+    "definition": "Mano abierta con el pulgar tocando dos veces la barbilla.",
+    "category": "Familia"
+  },
+  {
+    "word": "Papá / Padre",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/08/208.-papa-Sena-1.mp4",
+    "icon": "👨",
+    "definition": "Mano abierta con el pulgar tocando dos veces la frente.",
+    "category": "Familia"
+  },
+  {
+    "word": "Hermano / Hermana",
+    "icon": "🧑‍🤝‍🧑",
+    "definition": "Dedos índices de ambas manos se tocan y bajan juntos.",
+    "category": "Familia"
+  },
+  {
+    "word": "Hijo / Hija",
+    "icon": "👶",
+    "definition": "Mano en el pecho que se desplaza hacia adelante como meciendo a un bebé.",
+    "category": "Familia"
+  },
+  {
+    "word": "Abuelo / Abuela",
+    "icon": "👵",
+    "definition": "Pulgar en la frente (abuelo) o barbilla (abuela) dando dos pequeños saltos al frente.",
+    "category": "Familia"
+  },
+  {
+    "word": "Familia",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_F.svg",
+    "icon": "👨‍👩‍👧‍👦",
+    "definition": "Ambas manos en letra F juntas que hacen un círculo hacia afuera uniéndose al final.",
+    "category": "Familia"
+  },
+  {
+    "word": "Amigo / Amistad",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/10/6.-y-7.-amigo-y-amistad-sena-1.mp4",
+    "icon": "🤝",
+    "definition": "Dedos índices entrelazados como dos ganchos que se intercambian.",
+    "category": "Familia"
+  },
+  {
+    "word": "Agua",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_W.svg",
+    "icon": "💧",
+    "definition": "Mano en letra W tocando tres veces el labio inferior con el índice.",
+    "category": "Alimentos"
+  },
+  {
+    "word": "Café",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/09/242.-cafe-Sena-1.mp4",
+    "icon": "☕",
+    "definition": "Puño derecho gira sobre el puño izquierdo como moliendo granos de café.",
+    "category": "Alimentos"
+  },
+  {
+    "word": "Comer / Comida",
+    "icon": "🍽️",
+    "definition": "Puntas de los dedos unidas al pulgar tocan la boca repetidamente.",
+    "category": "Alimentos"
+  },
+  {
+    "word": "Plátano",
+    "icon": "🍌",
+    "definition": "Mano izquierda en puño hacia arriba; mano derecha simula pelar una cáscara.",
+    "category": "Alimentos"
+  },
+  {
+    "word": "Arroz",
+    "icon": "🍚",
+    "definition": "Mano en letra A o simulación de comer con cuchara desde la palma.",
+    "category": "Alimentos"
+  },
+  {
+    "word": "Doctor / Médico",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/178.-doctor-sena-1.mp4",
+    "icon": "🩺",
+    "definition": "Puntas de los dedos de la mano dominante tocan el pulso en la muñeca contraria.",
+    "category": "Salud"
+  },
+  {
+    "word": "Hospital",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/11/76.-hospital-sena-1.mp4",
+    "icon": "🏥",
+    "definition": "Dedos índice y medio forman una cruz sobre el hombro izquierdo.",
+    "category": "Salud"
+  },
+  {
+    "word": "Ayuda / Ayudar",
+    "icon": "🆘",
+    "definition": "Puño con pulgar arriba descansando sobre la palma plana que se eleva hacia arriba.",
+    "category": "Salud"
+  },
+  {
+    "word": "Medicina",
+    "icon": "💊",
+    "definition": "Dedo medio gira sobre la palma abierta de la otra mano.",
+    "category": "Salud"
+  },
+  {
+    "word": "Dolor",
+    "icon": "⚡",
+    "definition": "Dedos índices apuntándose entre sí realizando giros de torsión en la zona adolorida.",
+    "category": "Salud"
+  },
+  {
+    "word": "Escuela / Colegio",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/10/253.-y-254.-escuela-y-colegio-sena-1.mp4",
+    "icon": "🏫",
+    "definition": "Palmas abiertas aplauden suavemente dos veces en posición horizontal.",
+    "category": "Educación"
+  },
+  {
+    "word": "Profesor / Maestro",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/11/622.-y-623.-maestro-y-profesor-sena-1.mp4",
+    "icon": "👨‍🏫",
+    "definition": "Ambas manos en las sienes se extienden al frente + seña de persona.",
+    "category": "Educación"
+  },
+  {
+    "word": "Aprender",
+    "icon": "🧠",
+    "definition": "Mano toma información de la palma contraria y la lleva a la frente.",
+    "category": "Educación"
+  },
+  {
+    "word": "Libro",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/11/590.-libro-sena-1.mp4",
+    "icon": "📖",
+    "definition": "Ambas palmas unidas que se abren como las páginas de un libro.",
+    "category": "Educación"
+  },
+  {
+    "word": "Lunes",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_L.svg",
+    "icon": "📅",
+    "definition": "Mano en letra L realizando un pequeño círculo en el aire.",
+    "category": "Días y Meses"
+  },
+  {
+    "word": "Martes",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_M.svg",
+    "icon": "📅",
+    "definition": "Mano en letra M realizando un pequeño círculo en el aire.",
+    "category": "Días y Meses"
+  },
+  {
+    "word": "Miércoles",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_W.svg",
+    "icon": "📅",
+    "definition": "Mano en letra W realizando un círculo en el aire.",
+    "category": "Días y Meses"
+  },
+  {
+    "word": "Jueves",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_J.svg",
+    "icon": "📅",
+    "definition": "Mano en letra J trazando la curva en el aire.",
+    "category": "Días y Meses"
+  },
+  {
+    "word": "Viernes",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_V.svg",
+    "icon": "📅",
+    "definition": "Mano en letra V realizando un círculo en el aire.",
+    "category": "Días y Meses"
+  },
+  {
+    "word": "Sábado",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_S.svg",
+    "icon": "📅",
+    "definition": "Mano en letra S girando suavemente frente a la barbilla.",
+    "category": "Días y Meses"
+  },
+  {
+    "word": "Domingo",
+    "icon": "⛪",
+    "definition": "Ambas manos abiertas haciendo círculos hacia afuera.",
+    "category": "Días y Meses"
+  },
+  {
+    "word": "Sí",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_S.svg",
+    "icon": "✅",
+    "definition": "Puño cerrado en letra S asintiendo verticalmente como una cabeza.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "No",
+    "icon": "❌",
+    "definition": "Índice y medio se juntan rápidamente con el pulgar como un pico cerrándose.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "República Dominicana",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_R.svg",
+    "icon": "🇩🇴",
+    "definition": "Mano en letra R sobre el corazón, luego seña de D describiendo el mapa.",
+    "category": "Lugares"
+  },
+  {
+    "word": "Santo Domingo",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_S.svg",
+    "icon": "📍",
+    "definition": "Mano en letra S y D trazando un círculo de capital.",
+    "category": "Lugares"
+  },
+  {
+    "word": "Casa / Hogar",
+    "icon": "🏠",
+    "definition": "Puntas de los dedos de ambas manos se unen formando el tejado de una casa.",
+    "category": "Lugares"
+  },
+  {
+    "word": "Miedo / Temor",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/341.-y-342.-miedo-y-temor-sena-1.mp4",
+    "icon": "😨",
+    "definition": "Ambas manos frente al pecho temblando con expresión de susto.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "Nervioso",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/343.-nervioso-sena-1.mp4",
+    "icon": "😰",
+    "definition": "Dedos de ambas manos vibran apuntando hacia el suelo.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "Defensa / Proteger",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/349.-defensa-sena-1.mp4",
+    "icon": "🛡️",
+    "definition": "Brazos cruzados en puño frente al pecho protegiendo el cuerpo.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "Mejorar",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/354.-mejorar-sena-1.mp4",
+    "icon": "📈",
+    "definition": "Mano dominante sube en diagonal sobre el brazo en sentido ascendente.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "Desarrollo",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/355.-desarrollo-sena-1.mp4",
+    "icon": "🌱",
+    "definition": "Ambas manos suben abriéndose gradualmente desde abajo.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "Justicia / Justo",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/334.-justicia-sena-1.mp4",
+    "icon": "⚖️",
+    "definition": "Ambas manos en círculo simulan los dos platillos de una balanza.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "Especial",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/332.-especial-sena-1.mp4",
+    "icon": "⭐",
+    "definition": "Mano toma el dedo índice de la otra mano y lo eleva hacia arriba.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "Siempre",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/326.-siempre-sena-1.mp4",
+    "icon": "♾️",
+    "definition": "Dedo índice extendido realiza círculos continuos hacia adelante.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "Probar",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/367.-probar-sena-1.mp4",
+    "icon": "👅",
+    "definition": "Dedo índice toca la lengua/labio y gira suavemente.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "Pero",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/366.-pero-sena-1.mp4",
+    "icon": "✋",
+    "definition": "Dedos índices cruzados se separan rápidamente hacia los lados.",
+    "category": "Expresiones Comunes"
+  },
+  {
+    "word": "Claro / Obvio",
+    "video_url": "https://diccionariolsrd.cc/wp-content/uploads/2024/12/322.-claro-sena-1.mp4",
+    "icon": "💡",
+    "definition": "Ambas manos cerradas frente al rostro se abren hacia afuera.",
+    "category": "Expresiones Comunes"
+  }
+],
 
   quizzes: [
     {

@@ -127,9 +127,9 @@ const Dictionary = {
     descEl.innerHTML = `
       ${word.image_url ? `
         <img src="${word.image_url}" alt="${word.word}" class="sign-hand-img" style="width:130px; height:130px; margin-bottom:0.75rem;">
-      ` : `
+      ` : (!word.video_url ? `
         <div style="font-size: 5rem; margin-bottom: 0.5rem; animation: pulse 1.5s infinite ease-in-out;">${word.icon || '🤟'}</div>
-      `}
+      ` : '')}
       <h2 style="color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem;">${word.word}</h2>
       <div style="background: white; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 1rem; margin: 1rem auto; max-width: 500px; text-align: left;">
         <p style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.5rem; line-height: 1.5;">
@@ -137,12 +137,23 @@ const Dictionary = {
         </p>
       </div>
       <span style="font-size: 0.85rem; background: var(--secondary); color: white; padding: 4px 14px; border-radius: 14px; font-weight:600; display: inline-block;">
-        ${word.category || word.categories?.name || 'Vocabulario Oficial'}
+        ${word.category || word.categories?.name || 'Vocabulario Oficial LSRD'}
       </span>
     `;
 
-    // Hide empty video element
-    video.style.display = 'none';
+    if (word.video_url) {
+      video.style.display = 'block';
+      video.src = word.video_url;
+      video.loop = true;
+      video.playsInline = true;
+      video.style.maxHeight = '320px';
+      video.style.borderRadius = '8px';
+      video.style.boxShadow = 'var(--shadow-sm)';
+      video.play().catch(e => console.log("Autoplay blocked:", e));
+    } else {
+      video.style.display = 'none';
+      video.src = '';
+    }
 
     modal.classList.add('active');
   },
