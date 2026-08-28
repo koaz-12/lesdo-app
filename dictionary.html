@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <!-- DearFlip 3D Book StyleSheet (Exact engine from diccionariolsrd.cc) -->
+  <link href="https://diccionariolsrd.cc/wp-content/plugins/3d-flipbook-dflip-lite/assets/css/dflip.min.css" rel="stylesheet" type="text/css">
+  <link href="https://diccionariolsrd.cc/wp-content/plugins/3d-flipbook-dflip-lite/assets/css/themify-icons.min.css" rel="stylesheet" type="text/css">
   <style>
     /* Dictionary Styles */
     .dict-hero {
@@ -522,7 +525,17 @@
               </p>
             </div>
             
-            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+              <!-- Reader Display Mode Toggle -->
+              <div style="background:rgba(0,0,0,0.3); padding:3px 6px; border-radius:12px; display:inline-flex; gap:4px; border:1px solid rgba(255,255,255,0.2);">
+                <button class="btn btn-sm btn-secondary" id="btnReaderMode3D" onclick="Dictionary.setReaderDisplayMode('3d')" style="padding:3px 10px; font-size:0.75rem; font-weight:700;">
+                  📖 Modo Libro 3D
+                </button>
+                <button class="btn btn-sm btn-ghost" id="btnReaderModeClassic" onclick="Dictionary.setReaderDisplayMode('classic')" style="color:white; padding:3px 10px; font-size:0.75rem; font-weight:700;">
+                  📄 Visor Continuo
+                </button>
+              </div>
+
               <a href="https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-sm" style="font-weight:800; display:inline-flex; align-items:center; gap:6px;">
                 <span>📥</span> Descargar PDF
               </a>
@@ -551,8 +564,17 @@
           </div>
         </div>
 
-        <!-- Embedded Interactive PDF Reader Frame -->
-        <div id="pdfViewerContainer" style="background:#0A192F; border-radius:18px; overflow:hidden; box-shadow:0 12px 36px rgba(0,0,0,0.3); border:2px solid rgba(30,136,229,0.3); min-height:750px; position:relative;">
+        <!-- 1. 3D FlipBook Interactive Mode (Same engine from diccionariolsrd.cc) -->
+        <div id="dflipBookWrapper" style="background:#071739; border-radius:18px; overflow:hidden; box-shadow:0 14px 40px rgba(0,0,0,0.5); border:2px solid rgba(30,136,229,0.3); min-height:760px; padding:10px;">
+          <div class="_df_book" id="df_diccionario_lsrd" 
+               source="https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf"
+               data-title="Diccionario Oficial de la Lengua de Señas Dominicana (LSRD)"
+               height="740">
+          </div>
+        </div>
+
+        <!-- 2. Classic PDF Viewer Mode (Continuous Scrolling) -->
+        <div id="pdfViewerContainer" style="display:none; background:#0A192F; border-radius:18px; overflow:hidden; box-shadow:0 12px 36px rgba(0,0,0,0.3); border:2px solid rgba(30,136,229,0.3); min-height:750px; position:relative;">
           <iframe 
             id="pdfViewerFrame" 
             src="https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf#toolbar=1&navpanes=1&statusbar=1&view=FitH" 
@@ -615,6 +637,13 @@
   </div>
 
   <div id="toastContainer"></div>
+
+  <!-- DearFlip 3D Book Scripts -->
+  <script>
+    window.dFlipLocation = 'https://diccionariolsrd.cc/wp-content/plugins/3d-flipbook-dflip-lite/assets/';
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://diccionariolsrd.cc/wp-content/plugins/3d-flipbook-dflip-lite/assets/js/dflip.min.js"></script>
 
   <script src="js/mock-data.js"></script>
   <script src="js/auth.js"></script>

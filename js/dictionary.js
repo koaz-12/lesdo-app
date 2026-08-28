@@ -291,6 +291,35 @@ const Dictionary = {
     }
   },
 
+  setReaderDisplayMode(mode) {
+    const btn3d = document.getElementById('btnReaderMode3D');
+    const btnClassic = document.getElementById('btnReaderModeClassic');
+    const wrapper3d = document.getElementById('dflipBookWrapper');
+    const containerClassic = document.getElementById('pdfViewerContainer');
+
+    if (mode === '3d') {
+      btn3d?.classList.remove('btn-ghost');
+      btn3d?.classList.add('btn-secondary');
+      btnClassic?.classList.remove('btn-secondary');
+      btnClassic?.classList.add('btn-ghost');
+      if (wrapper3d) wrapper3d.style.display = 'block';
+      if (containerClassic) containerClassic.style.display = 'none';
+      this.showToast('Modo Libro 3D Activado', 'info');
+      // Trigger DFLIP book parse if needed
+      if (window.DFLIP && typeof window.DFLIP.parseBooks === 'function') {
+        window.DFLIP.parseBooks();
+      }
+    } else if (mode === 'classic') {
+      btnClassic?.classList.remove('btn-ghost');
+      btnClassic?.classList.add('btn-secondary');
+      btn3d?.classList.remove('btn-secondary');
+      btn3d?.classList.add('btn-ghost');
+      if (wrapper3d) wrapper3d.style.display = 'none';
+      if (containerClassic) containerClassic.style.display = 'block';
+      this.showToast('Modo Visor Continuo Activado', 'info');
+    }
+  },
+
   jumpToPdfPage(pageNumber) {
     const frame = document.getElementById('pdfViewerFrame');
     if (frame) {
@@ -301,7 +330,7 @@ const Dictionary = {
   },
 
   toggleReaderFullscreen() {
-    const container = document.getElementById('pdfViewerContainer');
+    const container = document.getElementById('dflipBookWrapper') || document.getElementById('pdfViewerContainer');
     if (!container) return;
     if (!document.fullscreenElement) {
       container.requestFullscreen().catch(err => {
