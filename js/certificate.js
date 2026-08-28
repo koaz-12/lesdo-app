@@ -1,4 +1,4 @@
-﻿// Módulo de Certificado - LESDO App
+// Módulo de Certificado - LESDO App
 
 const Certificate = {
   user: null,
@@ -20,6 +20,9 @@ const Certificate = {
     document.getElementById('userName').textContent = displayName;
     document.getElementById('certStudentName').textContent = displayName;
     document.getElementById('btnLogout').addEventListener('click', () => Auth.signOut());
+    document.getElementById('btnLogoutMobile')?.addEventListener('click', () => Auth.signOut());
+
+    this.setupNavToggle();
 
     // Format current date in Spanish
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -31,6 +34,17 @@ const Certificate = {
     document.getElementById('certCode').textContent = `LESDO-${new Date().getFullYear()}-${shortId || 'DO8974'}`;
 
     this.setupEventListeners();
+  },
+
+  setupNavToggle() {
+    const navToggle = document.getElementById('navToggle');
+    const navMobile = document.getElementById('navMobile');
+    if (navToggle && navMobile) {
+      navToggle.addEventListener('click', () => {
+        navToggle.classList.toggle('active');
+        navMobile.style.display = navToggle.classList.contains('active') ? 'flex' : 'none';
+      });
+    }
   },
 
   setupEventListeners() {

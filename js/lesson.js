@@ -22,6 +22,9 @@ const Lesson = {
     document.getElementById('userName').textContent = name;
     
     document.getElementById('btnLogout').addEventListener('click', () => Auth.signOut());
+    document.getElementById('btnLogoutMobile')?.addEventListener('click', () => Auth.signOut());
+
+    this.setupNavToggle();
 
     const urlParams = new URLSearchParams(window.location.search);
     this.categorySlug = urlParams.get('category');
@@ -33,6 +36,17 @@ const Lesson = {
       await this.loadCategoryView(this.categorySlug);
     } else {
       window.location.href = 'dashboard.html';
+    }
+  },
+
+  setupNavToggle() {
+    const navToggle = document.getElementById('navToggle');
+    const navMobile = document.getElementById('navMobile');
+    if (navToggle && navMobile) {
+      navToggle.addEventListener('click', () => {
+        navToggle.classList.toggle('active');
+        navMobile.style.display = navToggle.classList.contains('active') ? 'flex' : 'none';
+      });
     }
   },
 

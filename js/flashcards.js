@@ -20,10 +20,23 @@ const Flashcards = {
     const name = profile?.display_name || this.user.user_metadata?.full_name || this.user.email?.split('@')[0] || 'Estudiante';
     document.getElementById('userName').textContent = name;
     document.getElementById('btnLogout').addEventListener('click', () => Auth.signOut());
+    document.getElementById('btnLogoutMobile')?.addEventListener('click', () => Auth.signOut());
 
+    this.setupNavToggle();
     this.loadWords();
     this.setupEventListeners();
     this.renderCard();
+  },
+
+  setupNavToggle() {
+    const navToggle = document.getElementById('navToggle');
+    const navMobile = document.getElementById('navMobile');
+    if (navToggle && navMobile) {
+      navToggle.addEventListener('click', () => {
+        navToggle.classList.toggle('active');
+        navMobile.style.display = navToggle.classList.contains('active') ? 'flex' : 'none';
+      });
+    }
   },
 
   loadWords() {
