@@ -191,6 +191,10 @@ const AlphabetApp = {
     document.querySelectorAll('.vowel-card, .letter-card').forEach(c => c.classList.remove('selected'));
     const activeCards = document.querySelectorAll(`[data-letter="${item.letter}"]`);
     activeCards.forEach(c => c.classList.add('selected'));
+
+    // Scroll showcase into view so user sees the change
+    const stage = document.getElementById('showcaseStage');
+    if (stage) stage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   },
 
   renderVowels() {
@@ -281,9 +285,7 @@ const AlphabetApp = {
     };
 
     btn?.addEventListener('click', doSpell);
-    input?.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') doSpell();
-    });
+    input?.addEventListener('input', doSpell);
   }
 };
 

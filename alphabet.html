@@ -52,6 +52,11 @@
       box-shadow: var(--shadow-sm);
       position: relative;
     }
+    .vowel-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--secondary);
+      box-shadow: var(--shadow-base);
+    }
     .vowel-card.selected, .letter-card.selected {
       transform: translateY(-8px) scale(1.05) !important;
       border: 3px solid #1E88E5 !important;
@@ -133,41 +138,38 @@
     <a href="#main">Saltar al contenido principal</a>
   </div>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="container header__content">
-      <a href="dashboard.html" class="logo">
-        <span class="logo__icon">🤟</span>
-        <span>LESDO</span>
-      </a>
-      <nav class="nav" aria-label="Principal">
-        <a href="dashboard.html" class="nav__link">Inicio</a>
-        <a href="alphabet.html" class="nav__link active">Abecedario</a>
-        <a href="dictionary.html" class="nav__link">Diccionario</a>
-        <a href="flashcards.html" class="nav__link">Tarjetas</a>
-        <a href="certificate.html" class="nav__link">Certificado</a>
-      </nav>
-      <div class="user-menu">
-        <button id="btnLogout" class="btn btn-sm btn-ghost">Cerrar Sesión</button>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar__container">
+      <a href="dashboard.html" class="navbar__logo">🤟 LESDO</a>
+      <div class="navbar__nav">
+        <a href="dashboard.html" class="navbar__link">Inicio</a>
+        <a href="alphabet.html" class="navbar__link navbar__link--active">Abecedario</a>
+        <a href="dictionary.html" class="navbar__link">Diccionario</a>
+        <a href="flashcards.html" class="navbar__link">Flashcards</a>
+        <a href="certificate.html" class="navbar__link">Certificado</a>
+      </div>
+      <div class="navbar__user">
+        <button class="btn btn-ghost btn-sm" id="btnLogout">Salir</button>
       </div>
       <button class="nav-toggle" id="navToggle" aria-label="Menú">
         <span></span><span></span><span></span>
       </button>
     </div>
-  </header>
-
-  <!-- Mobile Nav -->
-  <nav class="nav-mobile" id="navMobile">
-    <a href="dashboard.html" class="nav__link">Inicio</a>
-    <a href="alphabet.html" class="nav__link active">Abecedario</a>
-    <a href="dictionary.html" class="nav__link">Diccionario</a>
-    <a href="flashcards.html" class="nav__link">Tarjetas</a>
-    <a href="certificate.html" class="nav__link">Certificado</a>
-    <button id="btnLogoutMobile" class="btn btn-sm btn-secondary" style="margin-top: 1rem; width: 100%;">Cerrar Sesión</button>
   </nav>
 
+  <!-- Mobile nav overlay -->
+  <div class="nav-mobile" id="navMobile">
+    <a href="dashboard.html">Inicio</a>
+    <a href="alphabet.html">Abecedario</a>
+    <a href="dictionary.html">Diccionario</a>
+    <a href="flashcards.html">Flashcards</a>
+    <a href="certificate.html">Certificado</a>
+    <button id="btnLogoutMobile" class="btn btn-ghost">Cerrar Sesión</button>
+  </div>
+
   <!-- Main Content -->
-  <main id="main" class="section">
+  <main id="main" class="main-content">
     <div class="container">
       
       <!-- Page Header Banner -->
