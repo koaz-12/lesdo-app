@@ -1,4 +1,4 @@
-﻿// Módulo de Flashcards - LESDO App
+// Módulo de Flashcards - LESDO App
 
 const Flashcards = {
   words: [],
@@ -48,8 +48,20 @@ const Flashcards = {
     const flashcardEl = document.getElementById('flashcard');
     flashcardEl.classList.remove('is-flipped');
 
+    const cardImg = document.getElementById('cardImg');
+    const cardIcon = document.getElementById('cardIcon');
+
+    if (card.image_url) {
+      cardImg.src = card.image_url;
+      cardImg.style.display = 'block';
+      cardIcon.style.display = 'none';
+    } else {
+      cardImg.style.display = 'none';
+      cardIcon.textContent = card.icon || '🤟';
+      cardIcon.style.display = 'block';
+    }
+
     document.getElementById('cardCategory').textContent = card.category || 'General';
-    document.getElementById('cardIcon').textContent = card.icon || '🤟';
     document.getElementById('cardWordFront').textContent = card.word;
     document.getElementById('cardWordBack').textContent = card.word;
     document.getElementById('cardDefinition').textContent = card.definition || 'Gesto representativo en LESDO';

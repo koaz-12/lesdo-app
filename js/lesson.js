@@ -297,6 +297,9 @@ const Lesson = {
     }
   },
 
+  autoplayTimer: null,
+  isAutoplaying: false,
+
   renderVideoMarkup(url, poster) {
     const guides = this.currentLesson.guide || [];
     const firstSign = guides[0] || { sign: this.currentLesson.title, hand: 'Sigue las instrucciones a continuación', tip: 'Práctica activa de señas' };
@@ -318,11 +321,18 @@ const Lesson = {
 
         <!-- Active Sign Animation Stage -->
         <div style="margin: auto 0; z-index: 2;">
-          <div class="sign-stage__icon animate-fade-in" id="stageIcon">🤟</div>
+          ${firstSign.image_url ? `
+            <img id="stageImg" class="sign-hand-img animate-fade-in" src="${firstSign.image_url}" alt="${firstSign.sign}">
+            <div id="stageIcon" class="sign-stage__icon" style="display:none;">🤟</div>
+          ` : `
+            <img id="stageImg" class="sign-hand-img" src="" alt="" style="display:none;">
+            <div id="stageIcon" class="sign-stage__icon animate-fade-in">${firstSign.icon || '🤟'}</div>
+          `}
+          
           <h2 id="stageSignTitle" style="font-size: 2.2rem; color: #fff; margin-bottom: 0.25rem;">
             ${firstSign.sign}
           </h2>
-          <p id="stageSignHand" style="font-size: 1.05rem; color: rgba(255,255,255,0.9); max-width: 480px; margin: 0 auto; line-height: 1.4;">
+          <p id="stageSignHand" style="font-size: 1.05rem; color: rgba(255,255,255,0.95); max-width: 480px; margin: 0 auto; line-height: 1.4;">
             ${firstSign.hand}
           </p>
         </div>
@@ -331,9 +341,9 @@ const Lesson = {
           <span id="stageSignTip" style="font-size: 0.85rem; color: var(--accent); font-weight: 600;">
             💡 ${firstSign.tip}
           </span>
-          <span style="font-size: 0.75rem; background: rgba(0,0,0,0.3); color: white; padding: 2px 8px; border-radius: 12px;">
-            LESDO Interactivo
-          </span>
+          <button id="btnAutoplaySigns" class="btn btn-sm btn-accent" style="padding: 4px 12px; font-size: 0.8rem; font-weight:700;">
+            ▶ Reproducir Animación
+          </button>
         </div>
       </div>
     `;
@@ -343,32 +353,87 @@ const Lesson = {
     // Sign Stage Tabs logic
     const guides = this.currentLesson.guide || [];
     const tabButtons = document.querySelectorAll('.sign-tab-btn');
+    const stageImg = document.getElementById('stageImg');
     const stageIcon = document.getElementById('stageIcon');
     const stageTitle = document.getElementById('stageSignTitle');
     const stageHand = document.getElementById('stageSignHand');
     const stageTip = document.getElementById('stageSignTip');
+    const btnAutoplay = document.getElementById('btnAutoplaySigns');
 
-    const icons = ['🤟', '✋', '👍', '👌', '✌️', '🤙', '👋', '🤞', '🤌', '🤝'];
+    let currentIdx = 0;
+    let playbackSpeed = 1.0;
+
+    const selectSign = (idx) => {
+      currentIdx = idx;
+      tabButtons.forEach(b => b.classList.remove('active'));
+      const activeBtn = document.querySelector(`.sign-tab-btn[data-idx="${idx}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const data = guides[idx];
+      if (data) {
+        if (stageTitle) stageTitle.textContent = data.sign;
+        if (stageHand) stageHand.textContent = data.hand;
+        if (stageTip) stageTip.textContent = `💡 ${data.tip}`;
+
+        if (data.image_url && stageImg) {
+          stageImg.src = data.image_url;
+          stageImg.style.display = 'block';
+          if (stageIcon) stageIcon.style.display = 'none';
+          stageImg.style.animation = 'none';
+          void stageImg.offsetWidth;
+          stageImg.style.animation = 'pulse 0.4s ease';
+        } else if (stageIcon) {
+          if (stageImg) stageImg.style.display = 'none';
+          stageIcon.textContent = data.icon || '🤟';
+          stageIcon.style.display = 'inline-block';
+          stageIcon.style.animation = 'none';
+          void stageIcon.offsetWidth;
+          stageIcon.style.animation = 'pulse 0.4s ease';
+        }
+      }
+    };
 
     tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        tabButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const idx = parseInt(btn.dataset.idx, 10);
-        const data = guides[idx];
-        if (data) {
-          if (stageTitle) stageTitle.textContent = data.sign;
-          if (stageHand) stageHand.textContent = data.hand;
-          if (stageTip) stageTip.textContent = `💡 ${data.tip}`;
-          if (stageIcon) {
-            stageIcon.textContent = icons[idx % icons.length];
-            stageIcon.style.animation = 'none';
-            void stageIcon.offsetWidth; // trigger reflow
-            stageIcon.style.animation = 'pulse 0.6s ease';
-          }
-          this.showToast(`Seña activa: ${data.sign}`, 'info');
-        }
+        if (this.isAutoplaying) stopAutoplay();
+        selectSign(parseInt(btn.dataset.idx, 10));
       });
+    });
+
+    // Autoplay feature
+    const startAutoplay = () => {
+      if (guides.length <= 1) return;
+      this.isAutoplaying = true;
+      if (btnAutoplay) {
+        btnAutoplay.textContent = '⏸ Pausar Animación';
+        btnAutoplay.classList.remove('btn-accent');
+        btnAutoplay.classList.add('btn-warning');
+      }
+      this.showToast('Reproduciendo animación continua de señas...', 'info');
+
+      this.autoplayTimer = setInterval(() => {
+        currentIdx = (currentIdx + 1) % guides.length;
+        selectSign(currentIdx);
+      }, 2000 / playbackSpeed);
+    };
+
+    const stopAutoplay = () => {
+      this.isAutoplaying = false;
+      if (this.autoplayTimer) clearInterval(this.autoplayTimer);
+      this.autoplayTimer = null;
+      if (btnAutoplay) {
+        btnAutoplay.textContent = '▶ Reproducir Animación';
+        btnAutoplay.classList.remove('btn-warning');
+        btnAutoplay.classList.add('btn-accent');
+      }
+    };
+
+    btnAutoplay?.addEventListener('click', () => {
+      if (this.isAutoplaying) {
+        stopAutoplay();
+      } else {
+        startAutoplay();
+      }
     });
 
     // Speed buttons (changes pulse rhythm)

@@ -125,7 +125,11 @@ const Dictionary = {
     }
     
     descEl.innerHTML = `
-      <div style="font-size: 5rem; margin-bottom: 0.5rem; animation: pulse 1.5s infinite ease-in-out;">${word.icon || '🤟'}</div>
+      ${word.image_url ? `
+        <img src="${word.image_url}" alt="${word.word}" class="sign-hand-img" style="width:130px; height:130px; margin-bottom:0.75rem;">
+      ` : `
+        <div style="font-size: 5rem; margin-bottom: 0.5rem; animation: pulse 1.5s infinite ease-in-out;">${word.icon || '🤟'}</div>
+      `}
       <h2 style="color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem;">${word.word}</h2>
       <div style="background: white; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 1rem; margin: 1rem auto; max-width: 500px; text-align: left;">
         <p style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.5rem; line-height: 1.5;">

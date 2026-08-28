@@ -779,6 +779,22 @@ h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
 .sign-stage__icon:hover {
   transform: scale(1.15) rotate(5deg);
 }
+
+.sign-hand-img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  margin: 0 auto 0.75rem;
+  display: block;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.sign-hand-img:hover {
+  transform: scale(1.08);
+}
 .sign-stage__tabs {
   display: flex;
   gap: 0.4rem;
