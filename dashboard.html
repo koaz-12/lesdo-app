@@ -19,6 +19,7 @@
       <a href="dashboard.html" class="navbar__logo">🤟 LESDO</a>
       <div class="navbar__nav">
         <a href="dashboard.html" class="navbar__link navbar__link--active">Inicio</a>
+        <a href="alphabet.html" class="navbar__link">Abecedario y Vocales</a>
         <a href="dictionary.html" class="navbar__link">Diccionario</a>
         <a href="flashcards.html" class="navbar__link">Flashcards</a>
         <a href="certificate.html" class="navbar__link">Certificado</a>
@@ -36,6 +37,7 @@
   <!-- Mobile nav overlay -->
   <div class="nav-mobile" id="navMobile">
     <a href="dashboard.html">Inicio</a>
+    <a href="alphabet.html">Abecedario y Vocales</a>
     <a href="dictionary.html">Diccionario</a>
     <a href="flashcards.html">Flashcards</a>
     <a href="certificate.html">Certificado</a>
@@ -68,7 +70,15 @@
 
       <!-- Quick Learning Tools Banner -->
       <section class="animate-slide-up" style="margin-bottom: 2rem;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+          <div class="card" style="display: flex; align-items: center; justify-content: space-between; padding: 1.25rem; border-left: 4px solid var(--primary); cursor: pointer;" onclick="window.location.href='alphabet.html'">
+            <div>
+              <h3 style="margin-bottom: 0.25rem;">🅰️ Vocales y Abecedario</h3>
+              <p class="text-small text-secondary">Aprende las 5 vocales y las 27 letras</p>
+            </div>
+            <span class="btn btn-sm btn-primary">Ver Letras →</span>
+          </div>
+
           <div class="card" style="display: flex; align-items: center; justify-content: space-between; padding: 1.25rem; border-left: 4px solid var(--accent); cursor: pointer;" onclick="window.location.href='flashcards.html'">
             <div>
               <h3 style="margin-bottom: 0.25rem;">🎴 Modo Flashcards</h3>

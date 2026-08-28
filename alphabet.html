@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abecedario y Vocales LESDO - Lengua de Señas Dominicana</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤟</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .alpha-tabs {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .alpha-tab {
+      padding: 0.6rem 1.25rem;
+      border-radius: var(--radius-pill);
+      border: 2px solid rgba(0,0,0,0.08);
+      background: var(--surface);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .alpha-tab.active, .alpha-tab:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .vowels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .vowel-card {
+      background: var(--surface);
+      border: 2px solid rgba(30,136,229,0.2);
+      border-radius: var(--radius-card);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    .vowel-card:hover, .vowel-card.selected {
+      transform: translateY(-6px);
+      border-color: var(--secondary);
+      box-shadow: var(--shadow-base);
+    }
+    .vowel-card__letter {
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .alphabet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .letter-card {
+      background: var(--surface);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: var(--radius-card);
+      padding: 1rem 0.75rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+    .letter-card:hover, .letter-card.selected {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-base);
+      background: rgba(30,136,229,0.03);
+    }
+    .letter-card__name {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .speller-box {
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      padding: 2rem;
+      box-shadow: var(--shadow-base);
+      margin-top: 1rem;
+      border: 1px solid rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .speller-display {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      min-height: 160px;
+      align-items: center;
+      padding: 1.5rem;
+      background: rgba(30,136,229,0.03);
+      border-radius: var(--radius-card);
+      margin-top: 1.5rem;
+      border: 2px dashed rgba(30,136,229,0.2);
+    }
+    .spell-letter-badge {
+      text-align: center;
+      background: white;
+      padding: 0.75rem 0.5rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,0.08);
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="skip-link">
+    <a href="#main">Saltar al contenido principal</a>
+  </div>
+
+  <nav class="nav" role="navigation" aria-label="Navegación principal">
+    <div class="container nav__container">
+      <a href="dashboard.html" class="nav__brand" style="display:flex; align-items:center; gap:0.5rem; text-decoration:none; color:inherit;">
+        <span style="font-size:1.5rem;">🤟</span>
+        <span style="font-weight:800; font-size:1.25rem; color:var(--primary);">LESDO</span>
+      </a>
+      
+      <div class="nav__links">
+        <a href="dashboard.html" class="nav__link">Inicio</a>
+        <a href="alphabet.html" class="nav__link active">Abecedario y Vocales</a>
+        <a href="dictionary.html" class="nav__link">Diccionario</a>
+        <a href="flashcards.html" class="nav__link">Flashcards</a>
+        <a href="certificate.html" class="nav__link">Certificado</a>
+        <button id="btnLogout" class="btn btn-ghost btn-sm">Cerrar Sesión</button>
+      </div>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="navMobile">
+    <a href="dashboard.html">Inicio</a>
+    <a href="alphabet.html">Abecedario y Vocales</a>
+    <a href="dictionary.html">Diccionario</a>
+    <a href="flashcards.html">Flashcards</a>
+    <a href="certificate.html">Certificado</a>
+    <button id="btnLogoutMobile" class="btn btn-ghost">Cerrar Sesión</button>
+  </div>
+
+  <main id="main" class="main-content">
+    <div class="container">
+      
+      <div style="text-align: center; margin-bottom: 2rem;" class="animate-fade-in">
+        <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Abecedario y Vocales Dactilológicas</h1>
+        <p class="text-secondary" style="max-width: 600px; margin: 0 auto;">
+          Aprende cada letra del alfabeto dactilológico en Lengua de Señas Dominicana con ilustraciones oficiales de alta precisión y el deletreador interactivo.
+        </p>
+      </div>
+
+      <!-- Navigation Segment Tabs -->
+      <div class="alpha-tabs animate-slide-up">
+        <button class="alpha-tab active" data-tab="vowels">🅰️ Las 5 Vocales</button>
+        <button class="alpha-tab" data-tab="full-alphabet">🤟 Abecedario Completo (A - Z)</button>
+        <button class="alpha-tab" data-tab="speller">✍️ Deletreador de Palabras</button>
+      </div>
+
+      <!-- Detail Showcase Stage -->
+      <div id="showcaseStage" class="animate-slide-up" style="margin-bottom: 2.5rem;">
+        <div class="sign-stage" id="mainSignStage" style="min-height: 380px;">
+          <div class="sign-stage__glow"></div>
+          
+          <div style="margin: auto 0; z-index: 2;">
+            <img id="detailImg" class="sign-hand-img animate-fade-in" src="https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_A.svg" alt="Seña A">
+            <h2 id="detailTitle" style="font-size: 2.5rem; color: #fff; margin-bottom: 0.25rem;">Vocal A</h2>
+            <p id="detailHand" style="font-size: 1.1rem; color: rgba(255,255,255,0.95); max-width: 520px; margin: 0 auto; line-height: 1.4;">
+              Puño cerrado con el pulgar apoyado en el lateral del dedo índice apuntando hacia arriba.
+            </p>
+          </div>
+
+          <div style="z-index: 2; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 0.75rem; margin-top: 1rem;">
+            <span id="detailTip" style="font-size: 0.9rem; color: var(--accent); font-weight: 600;">
+              💡 La palma debe mirar siempre hacia el frente.
+            </span>
+            <span style="font-size: 0.8rem; background: rgba(0,0,0,0.3); color: white; padding: 3px 10px; border-radius: 12px;">
+              Dactilología Dominicana
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 1: VOWELS -->
+      <section id="sectionVowels" class="tab-section animate-fade-in">
+        <h2 style="margin-bottom: 1rem; color: var(--text-primary); display:flex; align-items:center; gap:0.5rem;">
+          <span>🅰️</span> Las 5 Vocales Fundamentales
+        </h2>
+        <div class="vowels-grid" id="vowelsGrid">
+          <!-- Vowels populated dynamically -->
+        </div>
+      </section>
+
+      <!-- SECTION 2: FULL ALPHABET -->
+      <section id="sectionFullAlphabet" class="tab-section animate-fade-in" style="display:none;">
+        <h2 style="margin-bottom: 1rem; color: var(--text-primary); display:flex; align-items:center; gap:0.5rem;">
+          <span>🤟</span> Abecedario Completo (27 Letras)
+        </h2>
+        <div class="alphabet-grid" id="alphabetGrid">
+          <!-- All 27 letters populated dynamically -->
+        </div>
+      </section>
+
+      <!-- SECTION 3: SPELLER TRANSLATOR -->
+      <section id="sectionSpeller" class="tab-section animate-fade-in" style="display:none;">
+        <div class="speller-box">
+          <h2 style="color: var(--primary); margin-bottom: 0.5rem;">✍️ Deletreador de Palabras en Señas</h2>
+          <p class="text-secondary" style="margin-bottom: 1.5rem;">
+            Escribe tu nombre o cualquier palabra para ver cómo se deletrea letra por letra en señas dominicanas:
+          </p>
+
+          <div style="display:flex; max-width:500px; margin:0 auto; gap:0.5rem;">
+            <input type="text" id="spellerInput" placeholder="Ej: CARLOS, DOMINICANA, AMOR" style="flex:1; padding:0.75rem 1rem; border-radius:var(--radius-btn); border:2px solid rgba(0,0,0,0.1); font-size:1.1rem; font-weight:600; text-transform:uppercase;">
+            <button id="btnSpellWord" class="btn btn-primary" style="font-weight:700;">Deletrear ▶</button>
+          </div>
+
+          <div class="speller-display" id="spellerDisplay">
+            <span class="text-secondary">Escribe una palabra arriba para ver el deletreo dactilológico.</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div class="toast" id="toastContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/alphabet.js"></script>
+</body>
+</html>
