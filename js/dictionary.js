@@ -43,8 +43,11 @@ const Dictionary = {
   },
 
   loadData() {
-    this.allWords = window.LESDO_MOCK_DATA?.dictionary || [];
-    // Ensure every item has a normalized sort key
+    this.allWords = (window.LESDO_MOCK_DATA?.dictionary || []).map(w => ({
+      ...w,
+      word: (w.word || '').replace(/^[,\.\s\-–—]+/, '').trim()
+    })).filter(w => w.word.length > 0);
+    // Ensure alphabetical sorting
     this.allWords.sort((a, b) => a.word.localeCompare(b.word, 'es', { sensitivity: 'base' }));
   },
 
@@ -288,52 +291,10 @@ const Dictionary = {
       if (sectionCatalog) sectionCatalog.style.display = 'none';
       if (sectionReader) sectionReader.style.display = 'block';
       this.showToast('Lector del Libro Oficial LSRD abierto', 'info');
-    }
-  },
-
-  setReaderDisplayMode(mode) {
-    const btn3d = document.getElementById('btnReaderMode3D');
-    const btnClassic = document.getElementById('btnReaderModeClassic');
-    const wrapper3d = document.getElementById('dflipBookWrapper');
-    const containerClassic = document.getElementById('pdfViewerContainer');
-
-    if (mode === '3d') {
-      btn3d?.classList.remove('btn-ghost');
-      btn3d?.classList.add('btn-secondary');
-      btnClassic?.classList.remove('btn-secondary');
-      btnClassic?.classList.add('btn-ghost');
-      if (wrapper3d) wrapper3d.style.display = 'block';
-      if (containerClassic) containerClassic.style.display = 'none';
-      this.showToast('Modo Libro 3D Activado', 'info');
-    } else if (mode === 'classic') {
-      btnClassic?.classList.remove('btn-ghost');
-      btnClassic?.classList.add('btn-secondary');
-      btn3d?.classList.remove('btn-secondary');
-      btn3d?.classList.add('btn-ghost');
-      if (wrapper3d) wrapper3d.style.display = 'none';
-      if (containerClassic) containerClassic.style.display = 'block';
-      this.showToast('Modo Visor Continuo Activado', 'info');
-    }
-  },
-
-  jumpToPdfPage(pageNumber) {
-    const frame = document.getElementById('pdfViewerFrame');
-    if (frame) {
-      const baseUrl = 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf';
-      frame.src = `${baseUrl}#page=${pageNumber}&toolbar=1&navpanes=1&statusbar=1&view=FitH`;
-      this.showToast(`Navegando a la página ${pageNumber}`, 'info');
-    }
-  },
-
-  toggleReaderFullscreen() {
-    const container = document.getElementById('dflipBookWrapper') || document.getElementById('pdfViewerContainer');
-    if (!container) return;
-    if (!document.fullscreenElement) {
-      container.requestFullscreen().catch(err => {
-        window.open('https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf', '_blank');
-      });
-    } else {
-      document.exitFullscreen();
+      // Initialize BookReader
+      if (window.BookReader && !window.BookReader.initialized) {
+        window.BookReader.init();
+      }
     }
   },
 
@@ -418,15 +379,503 @@ const Dictionary = {
   }
 };
 
+// ==========================================
+// NATIVE ILLUSTRATED BOOK READER ENGINE
+// ==========================================
+const BookReader = {
+  initialized: false,
+  allWords: [],
+  activeWords: [],
+  currentPage: 1, // 1 = Portada, 2 = Entrada 1, etc.
+  soundEnabled: true,
+  searchQuery: '',
+
+  init() {
+    if (this.initialized) return;
+    this.initialized = true;
+
+    this.allWords = window.LESDO_MOCK_DATA?.dictionary || [];
+    this.activeWords = [...this.allWords];
+
+    this.setupEventListeners();
+    this.render();
+  },
+
+  getTotalPages() {
+    return this.activeWords.length + 1;
+  },
+
+  setupEventListeners() {
+    const searchInput = document.getElementById('bookSearchInput');
+    const clearBtn = document.getElementById('btnBookClearSearch');
+    const resetBtn = document.getElementById('btnBookResetSearch');
+    const chapterSelect = document.getElementById('bookChapterSelect');
+
+    searchInput?.addEventListener('input', (e) => {
+      this.search(e.target.value);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      this.clearSearch();
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      this.clearSearch();
+    });
+
+    chapterSelect?.addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (val === 'cover') {
+        this.goToPage(1);
+      } else {
+        const idx = this.allWords.findIndex(w => (w.category || 'Vocabulario General') === val);
+        if (idx !== -1) {
+          if (this.activeWords.length !== this.allWords.length) {
+            this.activeWords = [...this.allWords];
+          }
+          this.goToPage(idx + 2);
+        }
+      }
+    });
+
+    // Navigation buttons
+    document.getElementById('btnBookPrev')?.addEventListener('click', () => this.prevPage());
+    document.getElementById('btnBookNext')?.addEventListener('click', () => this.nextPage());
+    document.getElementById('btnBookCover')?.addEventListener('click', () => this.goToPage(1));
+
+    // Page direct input
+    const pageInput = document.getElementById('bookPageNumberInput');
+    const goBtn = document.getElementById('btnBookGoPage');
+
+    const handleGoPage = () => {
+      const val = parseInt(pageInput?.value, 10);
+      if (!isNaN(val)) this.goToPage(val);
+    };
+
+    goBtn?.addEventListener('click', handleGoPage);
+    pageInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleGoPage();
+    });
+
+    // Sound toggle
+    const soundBtn = document.getElementById('btnBookSoundToggle');
+    soundBtn?.addEventListener('click', () => {
+      this.soundEnabled = !this.soundEnabled;
+      if (soundBtn) {
+        soundBtn.textContent = this.soundEnabled ? '🔊 Sonido Hojas: ON' : '🔇 Sonido Hojas: OFF';
+      }
+      Dictionary.showToast(this.soundEnabled ? 'Efecto de sonido de hojas activado' : 'Efecto de sonido silenciado', 'info');
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      const sectionReader = document.getElementById('sectionReader');
+      if (!sectionReader || sectionReader.style.display === 'none') return;
+      if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'SELECT') return;
+
+      if (e.key === 'ArrowLeft') this.prevPage();
+      else if (e.key === 'ArrowRight') this.nextPage();
+    });
+  },
+
+  search(query) {
+    this.searchQuery = (query || '').trim();
+    const statusPill = document.getElementById('bookSearchStatusPill');
+    const statusText = document.getElementById('bookSearchStatusText');
+
+    if (!this.searchQuery) {
+      this.clearSearch();
+      return;
+    }
+
+    const norm = Dictionary.normalizeText(this.searchQuery);
+    this.activeWords = this.allWords.filter(w => {
+      const wordNorm = Dictionary.normalizeText(w.word || '');
+      const defNorm = Dictionary.normalizeText(w.definition || '');
+      const catNorm = Dictionary.normalizeText(w.category || '');
+      return wordNorm.includes(norm) || defNorm.includes(norm) || catNorm.includes(norm);
+    });
+
+    if (statusPill && statusText) {
+      statusPill.style.display = 'flex';
+      statusText.innerHTML = `🔍 <strong>${this.activeWords.length} páginas</strong> encontradas para "<em>${this.searchQuery}</em>"`;
+    }
+
+    this.goToPage(this.activeWords.length > 0 ? 2 : 1, false);
+  },
+
+  clearSearch() {
+    this.searchQuery = '';
+    this.activeWords = [...this.allWords];
+    const statusPill = document.getElementById('bookSearchStatusPill');
+    if (statusPill) statusPill.style.display = 'none';
+    const searchInput = document.getElementById('bookSearchInput');
+    if (searchInput) searchInput.value = '';
+    this.render();
+  },
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.goToPage(this.currentPage - 1);
+    } else {
+      Dictionary.showToast('Estás en la portada del libro', 'info');
+    }
+  },
+
+  nextPage() {
+    if (this.currentPage < this.getTotalPages()) {
+      this.goToPage(this.currentPage + 1);
+    } else {
+      Dictionary.showToast('Has llegado a la última página del libro', 'info');
+    }
+  },
+
+  goToPage(pageNum, playSound = true) {
+    const total = this.getTotalPages();
+    if (pageNum < 1) pageNum = 1;
+    if (pageNum > total) pageNum = total;
+
+    this.currentPage = pageNum;
+    if (playSound) this.playPageFlipSound();
+
+    this.render();
+  },
+
+  jumpToWord(wordName) {
+    const idx = this.allWords.findIndex(w => w.word.toLowerCase() === wordName.toLowerCase());
+    if (idx !== -1) {
+      this.clearSearch();
+      this.goToPage(idx + 2);
+    }
+  },
+
+  playPageFlipSound() {
+    if (!this.soundEnabled) return;
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const bufferSize = ctx.sampleRate * 0.09;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 1400;
+      filter.Q.value = 1.0;
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.085);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+
+      noise.start();
+      noise.stop(ctx.currentTime + 0.09);
+    } catch (e) {}
+  },
+
+  render() {
+    const pageLeft = document.getElementById('bookPageLeft');
+    const pageRight = document.getElementById('bookPageRight');
+    const spreadContainer = document.getElementById('bookSpreadContainer');
+    const pageInput = document.getElementById('bookPageNumberInput');
+    const totalCountEl = document.getElementById('bookTotalPagesCount');
+
+    const total = this.getTotalPages();
+    if (pageInput) pageInput.value = this.currentPage;
+    if (totalCountEl) totalCountEl.textContent = total;
+
+    if (spreadContainer) {
+      spreadContainer.classList.remove('book-page-turning');
+      void spreadContainer.offsetWidth;
+      spreadContainer.classList.add('book-page-turning');
+    }
+
+    // PAGE 1: COVER SPREAD
+    if (this.currentPage === 1) {
+      if (pageLeft) {
+        pageLeft.innerHTML = `
+          <div>
+            <div class="book-page-header">
+              <span>🇩🇴 República Dominicana</span>
+              <span>Edición Oficial 2026</span>
+            </div>
+
+            <div style="text-align:center; padding: 2rem 1rem;">
+              <div style="font-size: 3.5rem; margin-bottom: 0.75rem;">🤟</div>
+              <div style="display:inline-block; background:rgba(10,36,99,0.08); color:#0A2463; padding:4px 14px; border-radius:20px; font-weight:800; font-size:0.82rem; margin-bottom:1rem; text-transform:uppercase;">
+                Lengua de Señas Dominicana (LSRD)
+              </div>
+              <h1 style="font-size: 1.85rem; font-weight: 900; color: #0A2463; line-height: 1.25; margin-bottom: 1rem;">
+                DICCIONARIO ILUSTRADO DIGITAL
+              </h1>
+              <p style="font-size: 0.95rem; color: #4A5568; line-height: 1.6; max-width: 380px; margin: 0 auto 1.5rem;">
+                Guía visual, anatómica y práctica para el aprendizaje y la inclusión social y educativa de la comunidad sorda en la República Dominicana.
+              </p>
+              
+              <div style="display:inline-flex; gap:0.5rem; align-items:center; background:#FFF; border:1px solid #E2E8F0; padding:8px 16px; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.04);">
+                <span style="font-size:1.1rem;">🏛️</span>
+                <span style="font-size:0.85rem; font-weight:700; color:#1E293B;">CONADIS • ANSORDO • LESDO</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="book-page-footer">
+            <span>ISBN 978-9945-00-000-0</span>
+            <span>Pág. 1</span>
+          </div>
+        `;
+      }
+
+      if (pageRight) {
+        pageRight.innerHTML = `
+          <div>
+            <div class="book-page-header">
+              <span>Índice General de Capítulos</span>
+              <span>1,390 Señas Oficiales</span>
+            </div>
+
+            <h3 style="font-size:1.2rem; font-weight:800; color:#0A2463; margin-bottom:0.85rem; display:flex; align-items:center; gap:8px;">
+              <span>📑</span> Capítulos del Libro
+            </h3>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:1.25rem;">
+              <button class="btn btn-sm btn-ghost" onclick="BookReader.goToPage(2)" style="text-align:left; justify-content:flex-start; font-size:0.82rem; font-weight:700; color:#0A2463; border:1px solid rgba(0,0,0,0.1); background:#FFF;">
+                🅰️ Alfabeto Dactilológico
+              </button>
+              <button class="btn btn-sm btn-ghost" onclick="BookReader.search('hola')" style="text-align:left; justify-content:flex-start; font-size:0.82rem; font-weight:700; color:#0A2463; border:1px solid rgba(0,0,0,0.1); background:#FFF;">
+                👋 Saludos y Cortesía
+              </button>
+              <button class="btn btn-sm btn-ghost" onclick="BookReader.search('familia')" style="text-align:left; justify-content:flex-start; font-size:0.82rem; font-weight:700; color:#0A2463; border:1px solid rgba(0,0,0,0.1); background:#FFF;">
+                👨‍👩‍👧 Familia y Personas
+              </button>
+              <button class="btn btn-sm btn-ghost" onclick="BookReader.search('comida')" style="text-align:left; justify-content:flex-start; font-size:0.82rem; font-weight:700; color:#0A2463; border:1px solid rgba(0,0,0,0.1); background:#FFF;">
+                🍎 Alimentos y Bebidas
+              </button>
+              <button class="btn btn-sm btn-ghost" onclick="BookReader.search('escuela')" style="text-align:left; justify-content:flex-start; font-size:0.82rem; font-weight:700; color:#0A2463; border:1px solid rgba(0,0,0,0.1); background:#FFF;">
+                🏫 Educación y Escuela
+              </button>
+              <button class="btn btn-sm btn-ghost" onclick="BookReader.search('lunes')" style="text-align:left; justify-content:flex-start; font-size:0.82rem; font-weight:700; color:#0A2463; border:1px solid rgba(0,0,0,0.1); background:#FFF;">
+                📅 Días y Calendario
+              </button>
+              <button class="btn btn-sm btn-ghost" onclick="BookReader.search('salud')" style="text-align:left; justify-content:flex-start; font-size:0.82rem; font-weight:700; color:#0A2463; border:1px solid rgba(0,0,0,0.1); background:#FFF;">
+                🏥 Salud y Emergencias
+              </button>
+              <button class="btn btn-sm btn-ghost" onclick="BookReader.search('dominicana')" style="text-align:left; justify-content:flex-start; font-size:0.82rem; font-weight:700; color:#0A2463; border:1px solid rgba(0,0,0,0.1); background:#FFF;">
+                🇩🇴 Geografía Nacional
+              </button>
+            </div>
+
+            <div style="background:rgba(30,136,229,0.06); padding:0.85rem; border-radius:12px; border:1px solid rgba(30,136,229,0.2); text-align:center;">
+              <p style="font-size:0.85rem; color:#1E3A8A; font-weight:600; margin-bottom:0.5rem;">
+                💡 Usa el buscador en la barra superior para encontrar cualquier palabra al instante.
+              </p>
+              <button class="btn btn-primary btn-sm" onclick="BookReader.goToPage(2)" style="font-weight:800; padding:0.55rem 1.4rem;">
+                📖 Comenzar a Leer el Libro ▶
+              </button>
+            </div>
+          </div>
+
+          <div class="book-page-footer">
+            <span>Guía de Estudio LESDO</span>
+            <span>Pág. 2</span>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    // WORD SPREAD: Pages 2..N
+    const wordIndex = this.currentPage - 2;
+    const item = this.activeWords[wordIndex];
+
+    if (!item) {
+      if (pageLeft) pageLeft.innerHTML = `<div style="text-align:center; padding:3rem;"><p>Página no encontrada.</p></div>`;
+      if (pageRight) pageRight.innerHTML = ``;
+      return;
+    }
+
+    const isLetter = item.category === 'Alfabeto' || (item.word.length === 1 && /^[A-ZÑ]$/i.test(item.word));
+    const letterChar = item.word.trim().toUpperCase();
+    const letterSvgPath = `images/alphabet/${letterChar}.svg`;
+
+    // LEFT PAGE: Word anatomical posture & description
+    if (pageLeft) {
+      pageLeft.innerHTML = `
+        <div>
+          <div class="book-page-header">
+            <span>📖 ${item.category || 'Vocabulario General'}</span>
+            <span>Entrada #${wordIndex + 1}</span>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; margin-bottom:0.85rem;">
+            <div>
+              <h1 style="font-size:1.85rem; font-weight:900; color:#0A2463; margin:0 0 4px; line-height:1.2;">
+                ${item.word}
+              </h1>
+              <span style="display:inline-block; font-size:0.75rem; font-weight:800; background:rgba(30,136,229,0.12); color:#1E88E5; padding:3px 10px; border-radius:10px;">
+                ${item.category || 'Vocabulario Oficial LSRD'}
+              </span>
+            </div>
+            <div style="font-size:1.8rem; background:#FFF; width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; box-shadow:0 3px 8px rgba(0,0,0,0.06); border:1px solid #E2E8F0;">
+              ${item.icon || (isLetter ? '🔤' : '🤟')}
+            </div>
+          </div>
+
+          <!-- Visual Illustration Box -->
+          <div style="background:#FFF; border-radius:14px; border:2px solid #E2E8F0; padding:1rem; text-align:center; margin-bottom:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.03);">
+            ${isLetter ? `
+              <img src="${letterSvgPath}" alt="Seña ${letterChar}" style="max-height:135px; margin:0 auto; display:block;" onerror="this.src='images/alphabet/A.svg'">
+              <div style="font-size:0.78rem; font-weight:700; color:#64748B; margin-top:6px;">Configuración Dactilológica Oficial</div>
+            ` : `
+              <div style="display:flex; justify-content:space-around; align-items:center; padding:8px 0;">
+                <div style="text-align:center;">
+                  <span style="font-size:2rem; display:block;">✋</span>
+                  <span style="font-size:0.72rem; font-weight:700; color:#64748B;">Mano Dominante</span>
+                </div>
+                <div style="font-size:1.3rem; color:#1E88E5;">➔</div>
+                <div style="text-align:center;">
+                  <span style="font-size:2rem; display:block;">🗣️</span>
+                  <span style="font-size:0.72rem; font-weight:700; color:#64748B;">Espacio Gestual</span>
+                </div>
+                <div style="font-size:1.3rem; color:#1E88E5;">➔</div>
+                <div style="text-align:center;">
+                  <span style="font-size:2rem; display:block;">🎯</span>
+                  <span style="font-size:0.72rem; font-weight:700; color:#64748B;">Ubicación</span>
+                </div>
+              </div>
+              <div style="font-size:0.75rem; font-weight:700; color:#0A2463; background:#F0FDF4; border:1px solid #BBF7D0; padding:3px 10px; border-radius:8px; display:inline-block; margin-top:4px;">
+                ✔ Signo Oficial CONADIS / ANSORDO
+              </div>
+            `}
+          </div>
+
+          <!-- Anatomical Posture Explanation -->
+          <div style="background:#F8FAFC; border-radius:12px; border:1px solid #E2E8F0; padding:0.85rem;">
+            <div style="font-size:0.75rem; font-weight:800; color:#0A2463; text-transform:uppercase; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+              <span>✋</span> Configuración y Postura
+            </div>
+            <p style="font-size:0.88rem; color:#334155; line-height:1.45; margin:0;">
+              ${item.definition || 'Realiza el gesto oficial con la mano dominante siguiendo la posición y trayectoria establecida.'}
+            </p>
+          </div>
+        </div>
+
+        <div class="book-page-footer">
+          <span>Diccionario Ilustrado LSRD</span>
+          <span>Pág. ${this.currentPage * 2 - 1}</span>
+        </div>
+      `;
+    }
+
+    // RIGHT PAGE: Video playback, conversation application & related words
+    if (pageRight) {
+      pageRight.innerHTML = `
+        <div>
+          <div class="book-page-header">
+            <span>Demostración en Video Oficial</span>
+            <span>Pág. ${this.currentPage * 2}</span>
+          </div>
+
+          <!-- Video Player Screen -->
+          <div style="background:#000; border-radius:14px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.25); margin-bottom:0.85rem; position:relative; aspect-ratio:16/10;">
+            ${item.video_url ? `
+              <video id="inBookVideo" src="${item.video_url}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover; display:block;"></video>
+              <div style="position:absolute; bottom:8px; right:8px; display:flex; gap:4px; z-index:2;">
+                <button onclick="BookReader.toggleInBookSound()" id="btnInBookMute" class="btn btn-sm btn-ghost" style="background:rgba(0,0,0,0.7); color:white; padding:2px 8px; font-size:0.75rem; border-radius:6px; border:1px solid rgba(255,255,255,0.2);">
+                  🔇
+                </button>
+                <button onclick="Dictionary.openVideoModal(BookReader.activeWords[BookReader.currentPage - 2])" class="btn btn-sm btn-secondary" style="padding:2px 10px; font-size:0.75rem; font-weight:700; border-radius:6px;">
+                  🔍 Pantalla Completa
+                </button>
+              </div>
+            ` : `
+              <div style="display:flex; height:100%; align-items:center; justify-content:center; color:#94A3B8; font-size:0.9rem; font-weight:600;">
+                Demostración gráfica ilustrada
+              </div>
+            `}
+          </div>
+
+          <!-- Practical Context Box -->
+          <div style="background:#F8FAFC; border-radius:12px; border:1px solid #E2E8F0; padding:0.85rem; margin-bottom:0.75rem;">
+            <div style="font-size:0.75rem; font-weight:800; color:#0A2463; text-transform:uppercase; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+              <span>💬</span> Uso en Conversación Cotidiana
+            </div>
+            <p style="font-size:0.85rem; color:#475569; line-height:1.4; margin:0;">
+              Se utiliza de forma natural en República Dominicana para comunicar la idea de "<strong>${item.word}</strong>". Mantén siempre contacto visual y una postura corporal abierta al realizar la seña.
+            </p>
+          </div>
+
+          <!-- Related Words Tags -->
+          <div>
+            <div style="font-size:0.72rem; font-weight:800; color:#64748B; text-transform:uppercase; margin-bottom:4px;">
+              Señas Relacionadas:
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+              ${this.getRelatedWords(item).map(w => `
+                <button class="btn btn-sm btn-ghost" onclick="BookReader.jumpToWord('${w}')" style="background:#FFF; border:1px solid #E2E8F0; color:#0A2463; font-weight:700; font-size:0.75rem; padding:2px 8px; border-radius:8px;">
+                  ${w} ➔
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="book-page-footer">
+          <span>LESDO • República Dominicana</span>
+          <span>Pág. ${this.currentPage * 2} de ${total * 2}</span>
+        </div>
+      `;
+    }
+  },
+
+  getRelatedWords(item) {
+    const sameCat = this.allWords
+      .filter(w => w.word !== item.word && (w.category || '') === (item.category || ''))
+      .slice(0, 3)
+      .map(w => w.word);
+
+    if (sameCat.length > 0) return sameCat;
+    return ['Hola', 'Gracias', 'Familia'];
+  },
+
+  toggleInBookSound() {
+    const video = document.getElementById('inBookVideo');
+    const btn = document.getElementById('btnInBookMute');
+    if (video) {
+      video.muted = !video.muted;
+      if (btn) btn.textContent = video.muted ? '🔇' : '🔊';
+      Dictionary.showToast(video.muted ? 'Video silenciado' : 'Sonido activado', 'info');
+    }
+  }
+};
+
 window.Dictionary = Dictionary;
+window.BookReader = BookReader;
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => Dictionary.init());
+  document.addEventListener('DOMContentLoaded', () => {
+    Dictionary.init();
+    BookReader.init();
+  });
 } else {
   Dictionary.init();
+  BookReader.init();
 }
 
 window.addEventListener('load', () => {
   if (!Dictionary.initialized) Dictionary.init();
+  if (!BookReader.initialized) BookReader.init();
 });
 
