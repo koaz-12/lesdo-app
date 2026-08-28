@@ -1,6 +1,6 @@
 // Controlador del Abecedario y Vocales LESDO
 
-const getLetterImg = (l) => `https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_${l.toUpperCase()}.svg`;
+const getLetterImg = (l) => `images/alphabet/${l.toUpperCase()}.svg`;
 
 const ALPHABET_DATA = [
   { letter: 'A', isVowel: true, name: 'Vocal A', img: getLetterImg('A'), hand: 'Puño cerrado con el pulgar erguido y apoyado en el lateral del dedo índice.', tip: 'Palma siempre hacia el frente.' },
@@ -17,7 +17,7 @@ const ALPHABET_DATA = [
   { letter: 'L', isVowel: false, name: 'Letra L', img: getLetterImg('L'), hand: 'Índice extendido hacia arriba y pulgar horizontal formando un ángulo de 90°.', tip: 'Forma una L clara.' },
   { letter: 'M', isVowel: false, name: 'Letra M', img: getLetterImg('M'), hand: 'Tres dedos (índice, medio y anular) doblados sobre el pulgar apuntando abajo.', tip: 'Representa las 3 patitas de la M.' },
   { letter: 'N', isVowel: false, name: 'Letra N', img: getLetterImg('N'), hand: 'Dos dedos (índice y medio) doblados sobre el pulgar apuntando abajo.', tip: 'Representa las 2 patitas de la N.' },
-  { letter: 'Ñ', isVowel: false, name: 'Letra Ñ', img: getLetterImg('N'), hand: 'Misma posición de la N pero con movimiento oscilante de lado a lado.', tip: 'El movimiento representa la virgulilla (~).' },
+  { letter: 'Ñ', isVowel: false, name: 'Letra Ñ', img: getLetterImg('Ñ'), hand: 'Misma posición de la N pero con movimiento oscilante de lado a lado.', tip: 'El movimiento representa la virgulilla (~).' },
   { letter: 'O', isVowel: true, name: 'Vocal O', img: getLetterImg('O'), hand: 'Todos los dedos curvados uniéndose con el pulgar para formar un círculo perfecto.', tip: 'Forma la letra O con toda la mano.' },
   { letter: 'P', isVowel: false, name: 'Letra P', img: getLetterImg('P'), hand: 'Posición de la K pero con la muñeca inclinada apuntando hacia abajo.', tip: 'Dedo medio hacia abajo.' },
   { letter: 'Q', isVowel: false, name: 'Letra Q', img: getLetterImg('Q'), hand: 'Posición de la G con índice y pulgar apuntando directamente hacia el suelo.', tip: 'Dedos apuntando hacia abajo.' },
@@ -213,10 +213,11 @@ const AlphabetApp = {
       card.addEventListener('click', () => {
         if (this.isAutoplaying) this.stopAutoplay();
         const letter = card.dataset.letter;
-        const idx = this.activeList.findIndex(d => d.letter === letter);
-        if (idx !== -1) {
-          this.currentIndex = idx;
-          this.showcase(this.activeList[idx]);
+        const item = ALPHABET_DATA.find(d => d.letter === letter);
+        if (item) {
+          this.currentIndex = this.activeList.findIndex(d => d.letter === letter);
+          if (this.currentIndex === -1) this.currentIndex = 0;
+          this.showcase(item);
         }
       });
     });
@@ -229,7 +230,7 @@ const AlphabetApp = {
     container.innerHTML = ALPHABET_DATA.map(item => `
       <div class="letter-card" data-letter="${item.letter}">
         <div class="letter-card__name">${item.letter}</div>
-        <img src="${item.img}" alt="${item.name}" class="sign-hand-img" style="width:75px; height:75px; margin-bottom:0.5rem; padding:6px;">
+        <img src="${item.img}" alt="${item.name}" class="sign-hand-img" style="width:75px; height:75px; margin-bottom:0.5rem; padding:4px;">
         <div style="font-size: 0.8rem; font-weight: 700; color: var(--secondary);">${item.name}</div>
       </div>
     `).join('');
@@ -238,10 +239,11 @@ const AlphabetApp = {
       card.addEventListener('click', () => {
         if (this.isAutoplaying) this.stopAutoplay();
         const letter = card.dataset.letter;
-        const idx = this.activeList.findIndex(d => d.letter === letter);
-        if (idx !== -1) {
-          this.currentIndex = idx;
-          this.showcase(this.activeList[idx]);
+        const item = ALPHABET_DATA.find(d => d.letter === letter);
+        if (item) {
+          this.currentIndex = this.activeList.findIndex(d => d.letter === letter);
+          if (this.currentIndex === -1) this.currentIndex = 0;
+          this.showcase(item);
         }
       });
     });

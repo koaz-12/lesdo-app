@@ -1,6 +1,6 @@
 ﻿// Datos enriquecidos de LESDO (Lengua de Señas Dominicana) con Ilustraciones y Gestos Reales
 
-const getLetterImg = (l) => `https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_${l.toUpperCase()}.svg`;
+const getLetterImg = (l) => `images/alphabet/${l.toUpperCase()}.svg`;
 
 window.LESDO_MOCK_DATA = {
   categories: [
@@ -356,84 +356,84 @@ window.LESDO_MOCK_DATA = {
   },
   {
     "word": "Nombre",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_H.svg",
+    "image_url": "images/alphabet/H.svg",
     "icon": "🏷️",
     "definition": "Dedos índice y medio de ambas manos en H se tocan en cruz dos veces.",
     "category": "Saludos y Presentaciones"
   },
   {
     "word": "Letra A",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_A.svg",
+    "image_url": "images/alphabet/A.svg",
     "icon": "🅰️",
     "definition": "Puño cerrado con el pulgar apoyado en el lateral del índice apuntando arriba.",
     "category": "Alfabeto"
   },
   {
     "word": "Letra E",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_E.svg",
+    "image_url": "images/alphabet/E.svg",
     "icon": "📧",
     "definition": "Dedos doblados hacia abajo tocando ligeramente la punta del pulgar.",
     "category": "Alfabeto"
   },
   {
     "word": "Letra I",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_I.svg",
+    "image_url": "images/alphabet/I.svg",
     "icon": "ℹ️",
     "definition": "Puño cerrado levantando únicamente el dedo meñique hacia arriba.",
     "category": "Alfabeto"
   },
   {
     "word": "Letra O",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_O.svg",
+    "image_url": "images/alphabet/O.svg",
     "icon": "⭕",
     "definition": "Todos los dedos curvados uniéndose con el pulgar para formar un círculo.",
     "category": "Alfabeto"
   },
   {
     "word": "Letra U",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_U.svg",
+    "image_url": "images/alphabet/U.svg",
     "icon": "⛎",
     "definition": "Dedos índice y medio extendidos y juntos hacia arriba.",
     "category": "Alfabeto"
   },
   {
     "word": "Lunes",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_L.svg",
+    "image_url": "images/alphabet/L.svg",
     "icon": "📅",
     "definition": "Mano en letra L realizando un pequeño círculo en el aire.",
     "category": "Días y Meses"
   },
   {
     "word": "Martes",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_M.svg",
+    "image_url": "images/alphabet/M.svg",
     "icon": "📅",
     "definition": "Mano en letra M realizando un pequeño círculo en el aire.",
     "category": "Días y Meses"
   },
   {
     "word": "Miércoles",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_W.svg",
+    "image_url": "images/alphabet/W.svg",
     "icon": "📅",
     "definition": "Mano en letra W realizando un círculo en el aire.",
     "category": "Días y Meses"
   },
   {
     "word": "Jueves",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_J.svg",
+    "image_url": "images/alphabet/J.svg",
     "icon": "📅",
     "definition": "Mano en letra J trazando la curva en el aire.",
     "category": "Días y Meses"
   },
   {
     "word": "Viernes",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_V.svg",
+    "image_url": "images/alphabet/V.svg",
     "icon": "📅",
     "definition": "Mano en letra V realizando un círculo en el aire.",
     "category": "Días y Meses"
   },
   {
     "word": "Sábado",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_S.svg",
+    "image_url": "images/alphabet/S.svg",
     "icon": "📅",
     "definition": "Mano en letra S girando suavemente frente a la barbilla.",
     "category": "Días y Meses"
@@ -446,7 +446,7 @@ window.LESDO_MOCK_DATA = {
   },
   {
     "word": "Sí",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_S.svg",
+    "image_url": "images/alphabet/S.svg",
     "icon": "✅",
     "definition": "Puño cerrado en letra S asintiendo verticalmente como una cabeza.",
     "category": "Expresiones Comunes"
@@ -459,14 +459,14 @@ window.LESDO_MOCK_DATA = {
   },
   {
     "word": "República Dominicana",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_R.svg",
+    "image_url": "images/alphabet/R.svg",
     "icon": "🇩🇴",
     "definition": "Mano en letra R sobre el corazón, luego seña de D describiendo el mapa.",
     "category": "Lugares"
   },
   {
     "word": "Santo Domingo",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_S.svg",
+    "image_url": "images/alphabet/S.svg",
     "icon": "📍",
     "definition": "Mano en letra S y D trazando un círculo de capital.",
     "category": "Lugares"

@@ -52,10 +52,11 @@
       box-shadow: var(--shadow-sm);
       position: relative;
     }
-    .vowel-card:hover, .vowel-card.selected {
-      transform: translateY(-6px);
-      border-color: var(--secondary);
-      box-shadow: var(--shadow-base);
+    .vowel-card.selected, .letter-card.selected {
+      transform: translateY(-8px) scale(1.05) !important;
+      border: 3px solid #1E88E5 !important;
+      box-shadow: 0 12px 28px rgba(30, 136, 229, 0.4) !important;
+      background: #FFFFFF !important;
     }
     .vowel-card__letter {
       font-size: 2.75rem;
@@ -76,14 +77,13 @@
       padding: 1rem 0.75rem;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
       box-shadow: var(--shadow-sm);
     }
-    .letter-card:hover, .letter-card.selected {
+    .letter-card:hover {
       transform: translateY(-4px);
       border-color: var(--primary);
       box-shadow: var(--shadow-base);
-      background: rgba(30,136,229,0.03);
     }
     .letter-card__name {
       font-size: 1.75rem;
@@ -133,45 +133,50 @@
     <a href="#main">Saltar al contenido principal</a>
   </div>
 
-  <nav class="nav" role="navigation" aria-label="Navegación principal">
-    <div class="container nav__container">
-      <a href="dashboard.html" class="nav__brand" style="display:flex; align-items:center; gap:0.5rem; text-decoration:none; color:inherit;">
-        <span style="font-size:1.5rem;">🤟</span>
-        <span style="font-weight:800; font-size:1.25rem; color:var(--primary);">LESDO</span>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__content">
+      <a href="dashboard.html" class="logo">
+        <span class="logo__icon">🤟</span>
+        <span>LESDO</span>
       </a>
-      
-      <div class="nav__links">
+      <nav class="nav" aria-label="Principal">
         <a href="dashboard.html" class="nav__link">Inicio</a>
-        <a href="alphabet.html" class="nav__link active">Abecedario y Vocales</a>
+        <a href="alphabet.html" class="nav__link active">Abecedario</a>
         <a href="dictionary.html" class="nav__link">Diccionario</a>
-        <a href="flashcards.html" class="nav__link">Flashcards</a>
+        <a href="flashcards.html" class="nav__link">Tarjetas</a>
         <a href="certificate.html" class="nav__link">Certificado</a>
-        <button id="btnLogout" class="btn btn-ghost btn-sm">Cerrar Sesión</button>
+      </nav>
+      <div class="user-menu">
+        <button id="btnLogout" class="btn btn-sm btn-ghost">Cerrar Sesión</button>
       </div>
-
-      <button class="nav__toggle" id="navToggle" aria-label="Abrir menú">
-        <span></span>
-        <span></span>
-        <span></span>
+      <button class="nav-toggle" id="navToggle" aria-label="Menú">
+        <span></span><span></span><span></span>
       </button>
     </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <nav class="nav-mobile" id="navMobile">
+    <a href="dashboard.html" class="nav__link">Inicio</a>
+    <a href="alphabet.html" class="nav__link active">Abecedario</a>
+    <a href="dictionary.html" class="nav__link">Diccionario</a>
+    <a href="flashcards.html" class="nav__link">Tarjetas</a>
+    <a href="certificate.html" class="nav__link">Certificado</a>
+    <button id="btnLogoutMobile" class="btn btn-sm btn-secondary" style="margin-top: 1rem; width: 100%;">Cerrar Sesión</button>
   </nav>
 
-  <div class="nav-mobile" id="navMobile">
-    <a href="dashboard.html">Inicio</a>
-    <a href="alphabet.html">Abecedario y Vocales</a>
-    <a href="dictionary.html">Diccionario</a>
-    <a href="flashcards.html">Flashcards</a>
-    <a href="certificate.html">Certificado</a>
-    <button id="btnLogoutMobile" class="btn btn-ghost">Cerrar Sesión</button>
-  </div>
-
-  <main id="main" class="main-content">
+  <!-- Main Content -->
+  <main id="main" class="section">
     <div class="container">
       
-      <div style="text-align: center; margin-bottom: 2rem;" class="animate-fade-in">
-        <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Abecedario y Vocales Dactilológicas</h1>
-        <p class="text-secondary" style="max-width: 600px; margin: 0 auto;">
+      <!-- Page Header Banner -->
+      <div class="card animate-fade-in" style="background: linear-gradient(135deg, var(--primary) 0%, #1565C0 100%); color: white; margin-bottom: 2rem; border: none; padding: 2.5rem 2rem;">
+        <div style="display:inline-block; background:rgba(255,255,255,0.2); padding:4px 14px; border-radius:20px; font-size:0.85rem; font-weight:700; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.5px;">
+          🇩🇴 Módulo de Dactilología Oficial
+        </div>
+        <h1 style="color: white; font-size: 2.4rem; margin-bottom: 0.5rem;">Abecedario y Vocales en Señas</h1>
+        <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; max-width: 650px; line-height: 1.5;">
           Aprende cada letra del alfabeto dactilológico en Lengua de Señas Dominicana con ilustraciones oficiales de alta precisión y el deletreador interactivo.
         </p>
       </div>
@@ -193,7 +198,7 @@
             <button id="btnPrevLetter" class="btn btn-ghost" style="color:white; font-size:1.5rem; padding:0.6rem 0.9rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer;" title="Letra Anterior (←)">◀</button>
             
             <div style="flex: 1; text-align: center;">
-              <img id="detailImg" class="sign-hand-img animate-fade-in" src="https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_A.svg" alt="Seña A">
+              <img id="detailImg" class="sign-hand-img animate-fade-in" src="images/alphabet/A.svg" alt="Seña A">
               <h2 id="detailTitle" style="font-size: 2.5rem; color: #fff; margin-bottom: 0.25rem;">Vocal A</h2>
               <p id="detailHand" style="font-size: 1.1rem; color: rgba(255,255,255,0.95); max-width: 520px; margin: 0 auto; line-height: 1.4;">
                 Puño cerrado con el pulgar apoyado en el lateral del dedo índice apuntando hacia arriba.
