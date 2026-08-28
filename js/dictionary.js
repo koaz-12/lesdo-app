@@ -353,6 +353,56 @@ const Dictionary = {
       if (e.key === 'Escape') this.closeVideoModal();
     });
 
+    // PDF Book Search Input
+    const pdfSearchInput = document.getElementById('pdfBookSearchInput');
+    const pdfClearBtn = document.getElementById('btnPdfBookClearSearch');
+    const pdfPageDirectInput = document.getElementById('pdfPageDirectInput');
+
+    if (pdfSearchInput) {
+      pdfSearchInput.addEventListener('input', (e) => {
+        this.searchPdf(e.target.value);
+      });
+      pdfSearchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const val = pdfSearchInput.value.trim();
+          if (val) {
+            const frame = document.getElementById('officialPdfFrame');
+            if (frame) {
+              const baseUrl = 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf';
+              frame.src = `${baseUrl}#search=${encodeURIComponent(val)}&toolbar=1&navpanes=1&statusbar=1&view=FitH`;
+              this.showToast(`Buscando "${val}" en el PDF...`, 'info');
+              const dropdown = document.getElementById('pdfSearchDropdown');
+              if (dropdown) dropdown.style.display = 'none';
+            }
+          }
+        }
+      });
+    }
+
+    if (pdfClearBtn) {
+      pdfClearBtn.addEventListener('click', () => {
+        if (pdfSearchInput) pdfSearchInput.value = '';
+        const dropdown = document.getElementById('pdfSearchDropdown');
+        if (dropdown) dropdown.style.display = 'none';
+        pdfClearBtn.style.display = 'none';
+      });
+    }
+
+    if (pdfPageDirectInput) {
+      pdfPageDirectInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') this.jumpPdfFromInput();
+      });
+    }
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('pdfSearchDropdown');
+      const searchWrap = document.querySelector('.book-search-bar');
+      if (dropdown && searchWrap && !searchWrap.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
     // Mobile nav toggle
     const navToggle = document.getElementById('navToggle');
     const navMobile = document.getElementById('navMobile');
@@ -361,6 +411,99 @@ const Dictionary = {
         navToggle.classList.toggle('active');
         navMobile.style.display = navToggle.classList.contains('active') ? 'flex' : 'none';
       });
+    }
+  },
+
+  jumpPdfToPage(pageNumber) {
+    const frame = document.getElementById('officialPdfFrame');
+    const input = document.getElementById('pdfPageDirectInput');
+    if (input) input.value = pageNumber;
+    if (frame) {
+      const baseUrl = 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf';
+      frame.src = `${baseUrl}#page=${pageNumber}&toolbar=1&navpanes=1&statusbar=1&view=FitH`;
+      this.showToast(`Navegando a la página ${pageNumber} del PDF`, 'info');
+    }
+  },
+
+  jumpPdfFromInput() {
+    const input = document.getElementById('pdfPageDirectInput');
+    const val = parseInt(input?.value, 10);
+    if (!isNaN(val) && val >= 1) {
+      this.jumpPdfToPage(val);
+    }
+  },
+
+  searchPdf(query) {
+    const dropdown = document.getElementById('pdfSearchDropdown');
+    const clearBtn = document.getElementById('btnPdfBookClearSearch');
+
+    if (!query || !query.trim()) {
+      if (dropdown) dropdown.style.display = 'none';
+      if (clearBtn) clearBtn.style.display = 'none';
+      return;
+    }
+
+    if (clearBtn) clearBtn.style.display = 'block';
+
+    const norm = this.normalizeText(query.trim());
+    const matches = this.allWords.filter(w => {
+      const wNorm = this.normalizeText(w.word || '');
+      const defNorm = this.normalizeText(w.definition || '');
+      return wNorm.includes(norm) || defNorm.includes(norm);
+    }).slice(0, 8);
+
+    if (dropdown) {
+      if (matches.length > 0) {
+        dropdown.innerHTML = matches.map(w => {
+          let estPage = 15;
+          const cat = w.category || '';
+          if (cat.includes('Alfabeto')) estPage = 15;
+          else if (cat.includes('Saludos')) estPage = 35;
+          else if (cat.includes('Familia')) estPage = 60;
+          else if (cat.includes('Alimentos')) estPage = 110;
+          else if (cat.includes('Educación') || cat.includes('Escuela')) estPage = 160;
+          else if (cat.includes('Días') || cat.includes('Tiempo')) estPage = 210;
+          else if (cat.includes('Salud')) estPage = 260;
+          else if (cat.includes('Lugares')) estPage = 320;
+          else estPage = 50 + (w.word.charCodeAt(0) % 250);
+
+          return `
+            <div onclick="Dictionary.selectPdfSearchResult('${w.word.replace(/'/g, "\\'")}', ${estPage})" style="padding:8px 12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; color:white; border-bottom:1px solid rgba(255,255,255,0.06); transition:background 0.15s;" onmouseover="this.style.background='rgba(30,136,229,0.25)'" onmouseout="this.style.background='transparent'">
+              <div>
+                <strong style="color:#00BFA5; font-size:0.95rem;">${w.word}</strong>
+                <span style="font-size:0.75rem; color:#94A3B8; margin-left:6px;">(${w.category || 'General'})</span>
+              </div>
+              <span style="font-size:0.75rem; background:rgba(255,255,255,0.15); padding:2px 8px; border-radius:6px; font-weight:700;">
+                Ir a Pág. ${estPage} ➔
+              </span>
+            </div>
+          `;
+        }).join('');
+        dropdown.style.display = 'block';
+      } else {
+        dropdown.innerHTML = `<div style="padding:10px; color:#94A3B8; text-align:center; font-size:0.85rem;">Presiona Enter para buscar "${query}" dentro del texto del PDF.</div>`;
+        dropdown.style.display = 'block';
+      }
+    }
+  },
+
+  selectPdfSearchResult(word, page) {
+    const dropdown = document.getElementById('pdfSearchDropdown');
+    const input = document.getElementById('pdfBookSearchInput');
+    if (dropdown) dropdown.style.display = 'none';
+    if (input) input.value = word;
+    this.jumpPdfToPage(page);
+  },
+
+  togglePdfFullscreen() {
+    const container = document.getElementById('pdfBookContainer');
+    if (!container) return;
+    if (!document.fullscreenElement) {
+      container.requestFullscreen().catch(() => {
+        window.open('https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf', '_blank');
+      });
+    } else {
+      document.exitFullscreen();
     }
   },
 
