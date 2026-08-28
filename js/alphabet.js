@@ -72,6 +72,7 @@ const AlphabetApp = {
       'video-masterclass': document.getElementById('sectionVideoMasterclass'),
       speller: document.getElementById('sectionSpeller')
     };
+    const showcaseStage = document.getElementById('showcaseStage');
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
@@ -85,6 +86,11 @@ const AlphabetApp = {
             sections[key].style.display = key === target ? 'block' : 'none';
           }
         });
+
+        // Hide showcase stage when viewing video masterclass or word speller
+        if (showcaseStage) {
+          showcaseStage.style.display = (target === 'vowels' || target === 'full-alphabet') ? 'block' : 'none';
+        }
 
         if (target === 'vowels') {
           this.activeList = ALPHABET_DATA.filter(a => a.isVowel);
@@ -176,6 +182,13 @@ const AlphabetApp = {
     const detailTitle = document.getElementById('detailTitle');
     const detailHand = document.getElementById('detailHand');
     const detailTip = document.getElementById('detailTip');
+    const stageCounter = document.getElementById('stageCounter');
+
+    if (stageCounter) {
+      const isVowelView = this.activeList.length === 5;
+      const typeLabel = isVowelView ? 'Vocal' : 'Letra';
+      stageCounter.textContent = `${typeLabel} ${this.currentIndex + 1} de ${this.activeList.length} • [ ${item.letter} ]`;
+    }
 
     if (detailImg) {
       detailImg.src = item.img;
@@ -191,10 +204,6 @@ const AlphabetApp = {
     document.querySelectorAll('.vowel-card, .letter-card').forEach(c => c.classList.remove('selected'));
     const activeCards = document.querySelectorAll(`[data-letter="${item.letter}"]`);
     activeCards.forEach(c => c.classList.add('selected'));
-
-    // Scroll showcase into view so user sees the change
-    const stage = document.getElementById('showcaseStage');
-    if (stage) stage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   },
 
   renderVowels() {
@@ -286,6 +295,20 @@ const AlphabetApp = {
 
     btn?.addEventListener('click', doSpell);
     input?.addEventListener('input', doSpell);
+  },
+
+  showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    container.innerHTML = '';
+    const toast = document.createElement('div');
+    toast.className = `toast toast--${type} active`;
+    toast.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#0A2463; color:white; padding:12px 20px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.3); z-index:9999; font-weight:600; display:flex; align-items:center; gap:8px; border-left: 4px solid #1E88E5;';
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.remove();
+    }, 1800);
   }
 };
 

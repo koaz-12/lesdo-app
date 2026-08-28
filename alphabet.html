@@ -196,6 +196,15 @@
         <div class="sign-stage" id="mainSignStage" style="min-height: 380px;">
           <div class="sign-stage__glow"></div>
           
+          <div style="z-index: 2; display:flex; justify-content:space-between; align-items:center; width: 100%; margin-bottom: 0.5rem;">
+            <span id="stageCounter" style="font-size:0.85rem; background:rgba(255,255,255,0.22); color:white; padding:3px 14px; border-radius:12px; font-weight:700; border: 1px solid rgba(255,255,255,0.2);">
+              Vocal 1 de 5
+            </span>
+            <span style="font-size:0.8rem; background:rgba(0,0,0,0.3); color:white; padding:3px 10px; border-radius:12px;">
+              🇩🇴 Dactilología Dominicana
+            </span>
+          </div>
+
           <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin: auto 0; z-index: 2; width: 100%;">
             <button id="btnPrevLetter" class="btn btn-ghost" style="color:white; font-size:1.5rem; padding:0.6rem 0.9rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer;" title="Letra Anterior (←)">◀</button>
             
@@ -286,9 +295,9 @@
   <div class="toast" id="toastContainer"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/mock-data.js"></script>
-  <script src="js/config.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/alphabet.js"></script>
+  <script src="js/mock-data.js?v=2.2"></script>
+  <script src="js/config.js?v=2.2"></script>
+  <script src="js/auth.js?v=2.2"></script>
+  <script src="js/alphabet.js?v=2.2"></script>
 </body>
 </html>
