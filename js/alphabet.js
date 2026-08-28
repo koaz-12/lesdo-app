@@ -68,11 +68,13 @@ const AlphabetApp = {
   activeList: ALPHABET_DATA,
   autoplayTimer: null,
   isAutoplaying: false,
+  viewMode: localStorage.getItem('lesdo_alphabet_view_mode') || 'video',
 
   init() {
     if (this.initialized) return;
     this.initialized = true;
     this.setupAuth();
+    this.setViewMode(this.viewMode);
     this.renderVowels();
     this.renderAlphabet();
     this.setupTabs();
@@ -322,6 +324,51 @@ const AlphabetApp = {
     }
   },
 
+  setViewMode(mode) {
+    this.viewMode = mode;
+    localStorage.setItem('lesdo_alphabet_view_mode', mode);
+
+    const btnVideo = document.getElementById('btnModeVideo');
+    const btnSide = document.getElementById('btnModeSide');
+    const btnIll = document.getElementById('btnModeIllustration');
+    const illustContainer = document.getElementById('stageIllustrationContainer');
+    const videoFrame = document.getElementById('stageVideoFrame');
+
+    // Reset button styles
+    [btnVideo, btnSide, btnIll].forEach(b => {
+      if (b) {
+        b.classList.remove('btn-secondary');
+        b.classList.add('btn-ghost');
+        b.style.color = 'white';
+      }
+    });
+
+    if (mode === 'video') {
+      btnVideo?.classList.remove('btn-ghost');
+      btnVideo?.classList.add('btn-secondary');
+      if (illustContainer) illustContainer.style.display = 'none';
+      if (videoFrame) {
+        videoFrame.style.display = 'block';
+        videoFrame.style.maxWidth = '580px';
+      }
+    } else if (mode === 'side') {
+      btnSide?.classList.remove('btn-ghost');
+      btnSide?.classList.add('btn-secondary');
+      if (illustContainer) illustContainer.style.display = 'block';
+      if (videoFrame) {
+        videoFrame.style.display = 'block';
+        videoFrame.style.maxWidth = '460px';
+      }
+    } else if (mode === 'illustration') {
+      btnIll?.classList.remove('btn-ghost');
+      btnIll?.classList.add('btn-secondary');
+      if (illustContainer) illustContainer.style.display = 'block';
+      if (videoFrame) videoFrame.style.display = 'none';
+    }
+
+    this.showToast(`Modo cambiado: ${mode === 'video' ? 'Solo Video' : mode === 'side' ? 'Ambos al lado' : 'Solo Ilustración'}`, 'info');
+  },
+
   showcase(item) {
     if (!item) return;
     const detailTitle = document.getElementById('detailTitle');
@@ -329,11 +376,20 @@ const AlphabetApp = {
     const detailTip = document.getElementById('detailTip');
     const stageCounter = document.getElementById('stageCounter');
     const stageVideo = document.getElementById('stageLetterVideo');
+    const detailImg = document.getElementById('detailImg');
 
     if (stageCounter) {
       const isVowelView = this.activeList.length === 5;
       const typeLabel = isVowelView ? 'Vocal' : 'Letra';
       stageCounter.textContent = `${typeLabel} ${this.currentIndex + 1} de ${this.activeList.length} • [ ${item.letter} ]`;
+    }
+
+    // Update SVG Illustration
+    if (detailImg && item.img) {
+      detailImg.src = item.img;
+      detailImg.style.animation = 'none';
+      void detailImg.offsetWidth;
+      detailImg.style.animation = 'popIn 0.3s ease';
     }
 
     // Update Live Official Letter Video

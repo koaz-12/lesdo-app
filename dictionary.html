@@ -3,101 +3,347 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LESDO - Diccionario</title>
+  <title>Diccionario Digital LSRD - LESDO</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤟</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <style>
-    .dictionary-search {
+    /* Dictionary Styles */
+    .dict-hero {
+      background: linear-gradient(135deg, #071739 0%, #0A2463 55%, #1565C0 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
       margin-bottom: 2rem;
-    }
-    .dictionary-search input {
-      width: 100%;
-      padding: 1rem 1rem 1rem 3rem;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-    }
-    .search-wrapper {
+      box-shadow: 0 16px 40px rgba(7, 23, 57, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       position: relative;
+      overflow: hidden;
     }
-    .search-wrapper::before {
-      content: '🔍';
+    .dict-hero::before {
+      content: '';
       position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.2rem;
+      top: -60px;
+      right: -60px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(30, 136, 229, 0.35) 0%, transparent 70%);
+      pointer-events: none;
     }
-    .word-card {
+    .search-panel {
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .search-input-wrap {
+      position: relative;
       display: flex;
-      gap: 1rem;
       align-items: center;
-      padding: 1rem;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
     }
-    .word-card img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
+    .search-input-wrap .search-icon {
+      position: absolute;
+      left: 1.25rem;
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+    .dict-search-input {
+      width: 100%;
+      padding: 1rem 3.5rem 1rem 3.4rem;
+      font-size: 1.15rem;
+      font-weight: 500;
+      border-radius: 14px;
+      border: 2px solid rgba(30, 136, 229, 0.25);
+      background: var(--background);
+      color: var(--text-primary);
+      transition: all 0.2s;
+    }
+    .dict-search-input:focus {
+      outline: none;
+      border-color: #1E88E5;
+      box-shadow: 0 0 0 4px rgba(30, 136, 229, 0.15);
+      background: #FFFFFF;
+    }
+    .search-clear-btn {
+      position: absolute;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: none;
+      padding: 4px;
+      border-radius: 50%;
+    }
+    .search-clear-btn:hover {
+      color: var(--danger);
+    }
+    /* Alphabet A-Z Index Bar */
+    .az-index-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .az-btn {
+      min-width: 32px;
+      height: 32px;
+      padding: 0 6px;
       border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: var(--surface);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .az-btn:hover {
+      background: rgba(30, 136, 229, 0.12);
+      border-color: #1E88E5;
+      color: #1E88E5;
+      transform: translateY(-2px);
+    }
+    .az-btn.active {
+      background: #1E88E5;
+      color: white;
+      border-color: #1E88E5;
+      box-shadow: 0 3px 8px rgba(30, 136, 229, 0.35);
+    }
+    /* Category Filter Chips */
+    .cat-chips-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .cat-chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: var(--surface);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cat-chip:hover {
+      border-color: #1E88E5;
+      color: #1E88E5;
+      background: rgba(30, 136, 229, 0.06);
+    }
+    .cat-chip.active {
+      background: #0A2463;
+      color: white;
+      border-color: #0A2463;
+      box-shadow: 0 3px 10px rgba(10, 36, 99, 0.25);
+    }
+    /* Results Grid */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .dict-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 1.25rem;
+      border: 1px solid rgba(0, 0, 0, 0.07);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
       cursor: pointer;
     }
-    .word-info {
+    .dict-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 24px rgba(10, 36, 99, 0.12);
+      border-color: rgba(30, 136, 229, 0.4);
+    }
+    .dict-card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+      gap: 0.5rem;
+    }
+    .dict-card__title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 0;
+      line-height: 1.3;
+    }
+    .dict-card__badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 8px;
+      background: rgba(30, 136, 229, 0.1);
+      color: var(--primary);
+      white-space: nowrap;
+    }
+    .dict-card__desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-bottom: 1rem;
       flex: 1;
     }
+    .dict-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding-top: 0.75rem;
+      margin-top: auto;
+    }
+    .dict-card__btn {
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0A2463, #1E88E5);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+    .dict-card__btn:hover {
+      box-shadow: 0 4px 12px rgba(30, 136, 229, 0.4);
+      transform: translateY(-1px);
+    }
+    /* Video Modal */
     .video-modal {
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.8);
-      z-index: 1000;
+      inset: 0;
+      background: rgba(5, 15, 36, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
       align-items: center;
       justify-content: center;
+      padding: 1rem;
     }
     .video-modal.active {
       display: flex;
     }
-    .video-modal-content {
-      background: #fff;
-      padding: 1rem;
-      border-radius: 8px;
-      max-width: 90%;
-      width: 800px;
-      position: relative;
-    }
-    .video-modal video {
+    .video-modal-dialog {
+      background: #0A192F;
+      color: white;
+      border-radius: 20px;
+      max-width: 680px;
       width: 100%;
-      border-radius: 4px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(30, 136, 229, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      overflow: hidden;
+      position: relative;
+      animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .close-modal {
-      position: absolute;
-      top: -30px;
-      right: 0;
+    @keyframes modalPop {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .video-modal__header {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .video-modal__body {
+      padding: 1.5rem;
+    }
+    .modal-video-wrap {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      margin-bottom: 1.25rem;
+    }
+    .modal-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .modal-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+    .close-modal-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
       color: white;
       font-size: 1.5rem;
+      line-height: 1;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
       cursor: pointer;
-      background: none;
-      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .close-modal-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(90deg);
     }
   </style>
 </head>
 <body>
-  <a href="#main" class="skip-link">Ir al contenido principal</a>
-  
-  <nav class="navbar">
+  <div class="skip-link">
+    <a href="#main">Saltar al contenido principal</a>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Navegación principal">
     <div class="container navbar__container">
-      <a href="dashboard.html" class="navbar__logo">🤟 LESDO</a>
+      <a href="dashboard.html" class="navbar__brand">
+        <span class="navbar__logo">🤟</span>
+        <span>LESDO</span>
+      </a>
       <div class="navbar__nav">
         <a href="dashboard.html" class="navbar__link">Inicio</a>
-        <a href="alphabet.html" class="navbar__link">Abecedario y Vocales</a>
-        <a href="dictionary.html" class="navbar__link navbar__link--active">Diccionario</a>
+        <a href="alphabet.html" class="navbar__link">Abecedario</a>
+        <a href="dictionary.html" class="navbar__link active" aria-current="page">Diccionario</a>
         <a href="flashcards.html" class="navbar__link">Flashcards</a>
         <a href="certificate.html" class="navbar__link">Certificado</a>
       </div>
       <div class="navbar__user">
-        <span class="navbar__username" id="userName"></span>
+        <span class="navbar__username" id="userName" style="font-size:0.9rem; font-weight:600; color:var(--text-secondary); margin-right:0.5rem;">Estudiante</span>
         <button class="btn btn-ghost btn-sm" id="btnLogout">Salir</button>
       </div>
       <button class="nav-toggle" id="navToggle" aria-label="Menú">
@@ -106,50 +352,147 @@
     </div>
   </nav>
 
+  <!-- Mobile nav overlay -->
   <div class="nav-mobile" id="navMobile">
     <a href="dashboard.html">Inicio</a>
-    <a href="alphabet.html">Abecedario y Vocales</a>
+    <a href="alphabet.html">Abecedario</a>
     <a href="dictionary.html">Diccionario</a>
     <a href="flashcards.html">Flashcards</a>
     <a href="certificate.html">Certificado</a>
     <button id="btnLogoutMobile" class="btn btn-ghost">Cerrar Sesión</button>
   </div>
 
+  <!-- Main Content -->
   <main id="main" class="main-content">
     <div class="container">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;" class="animate-fade-in">
-        <div>
-          <h1>Diccionario LESDO / LSRD</h1>
-          <p class="text-secondary">Busca palabras y aprende su seña correspondiente en Lengua de Señas Dominicana.</p>
-        </div>
-        <a href="https://diccionariolsrd.cc/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:0.5rem;">
-          🇩🇴 Consultar Diccionario Oficial LSRD ↗
-        </a>
-      </div>
       
-      <div class="dictionary-search animate-slide-up search-wrapper">
-        <input type="text" id="searchInput" placeholder="Escribe una palabra (ej. Mamá, Gracias, Agua, Lunes, Doctor)..." class="search__input">
+      <!-- Diccionario Hero Banner -->
+      <div class="dict-hero animate-fade-in">
+        <div style="display:inline-block; background:rgba(255,255,255,0.2); padding:4px 14px; border-radius:20px; font-size:0.85rem; font-weight:700; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.5px;">
+          🇩🇴 Diccionario Digital Oficial LSRD
+        </div>
+        <h1 style="color: white; font-size: 2.3rem; margin-bottom: 0.5rem; font-weight: 800;">
+          Diccionario Digital de Señas Dominicanas
+        </h1>
+        <p style="color: rgba(255,255,255,0.92); font-size: 1.05rem; max-width: 720px; line-height: 1.5; margin-bottom: 1.25rem;">
+          Explora y aprende más de 1,300 señas oficiales grabadas por personas sordas dominicanas (CONADIS / ANSORDO / Diccionario LSRD).
+        </p>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <span style="background:rgba(0,0,0,0.35); color:white; padding:4px 12px; border-radius:10px; font-size:0.85rem; font-weight:700;">
+            🎥 1,390 Señas en Video HD
+          </span>
+          <span style="background:rgba(0,0,0,0.35); color:white; padding:4px 12px; border-radius:10px; font-size:0.85rem; font-weight:700;">
+            ⚡ Búsqueda Instantánea
+          </span>
+          <a href="https://diccionariolsrd.cc/diccionario-digital/" target="_blank" rel="noopener noreferrer" style="background:rgba(255,255,255,0.25); color:white; padding:4px 14px; border-radius:10px; font-size:0.85rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+            🌐 Portal Oficial diccionariolsrd.cc ↗
+          </a>
+        </div>
       </div>
 
-      <div id="resultsContainer" class="search__results animate-slide-up">
-        <!-- Results will appear here -->
+      <!-- Search & Filters Control Panel -->
+      <div class="search-panel animate-slide-up">
+        
+        <!-- Live Search Input -->
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Buscar palabra o seña... (ej. Hola, Mamá, Gracias, Escuela, República Dominicana, Lunes)" 
+            class="dict-search-input"
+            autocomplete="off"
+            autofocus
+          >
+          <button id="btnClearSearch" class="search-clear-btn" title="Borrar búsqueda">✕</button>
+        </div>
+
+        <!-- Alphabet A-Z Jump Bar -->
+        <div class="az-index-bar" id="azIndexBar">
+          <button class="az-btn active" data-letter="ALL">Todos</button>
+          <!-- A-Z buttons generated by JS -->
+        </div>
+
+        <!-- Category Filters -->
+        <div class="cat-chips-bar" id="catChipsBar">
+          <button class="cat-chip active" data-category="ALL">Todas las Categorías</button>
+          <!-- Categories generated by JS -->
+        </div>
+
       </div>
+
+      <!-- Results Count Status Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;" class="animate-fade-in">
+        <div id="resultsCountStatus" style="font-size:0.95rem; font-weight:700; color:var(--text-secondary);">
+          Cargando catálogo oficial...
+        </div>
+        <div style="font-size:0.85rem; color:var(--text-secondary);">
+          Haz clic en cualquier seña para abrir el reproductor oficial 🎥
+        </div>
+      </div>
+
+      <!-- Results Grid Container -->
+      <div id="resultsContainer" class="results-grid animate-slide-up">
+        <!-- Word Cards Injected by JS -->
+      </div>
+
     </div>
   </main>
 
-  <div class="video-modal" id="videoModal">
-    <div class="video-modal-content">
-      <button class="close-modal" id="closeModal">×</button>
-      <h3 id="modalTitle" style="margin-bottom: 1rem;"></h3>
-      <video id="modalVideo" controls></video>
+  <!-- Video Cinema Modal -->
+  <div class="video-modal" id="videoModal" role="dialog" aria-modal="true">
+    <div class="video-modal-dialog">
+      <div class="video-modal__header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:1.4rem;">🇩🇴</span>
+          <div>
+            <h3 id="modalWordTitle" style="font-size:1.4rem; color:#fff; margin:0; font-weight:800;">Seña LSRD</h3>
+            <span id="modalCategoryBadge" style="font-size:0.75rem; color:var(--accent); font-weight:700;">Vocabulario Oficial</span>
+          </div>
+        </div>
+        <button class="close-modal-btn" id="closeModal" aria-label="Cerrar modal">✕</button>
+      </div>
+      
+      <div class="video-modal__body">
+        <!-- Video Screen -->
+        <div class="modal-video-wrap">
+          <video id="modalVideo" autoplay loop muted playsinline></video>
+        </div>
+
+        <!-- Modal Controls -->
+        <div class="modal-controls">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <button id="modalBtnSound" class="btn btn-sm btn-ghost" style="color:white; border:1px solid rgba(255,255,255,0.3); font-size:0.8rem;" onclick="Dictionary.toggleModalSound()">
+              🔇 Sonido
+            </button>
+            <button id="modalBtnReplay" class="btn btn-sm btn-ghost" style="color:white; border:1px solid rgba(255,255,255,0.3); font-size:0.8rem;" onclick="Dictionary.replayModalVideo()">
+              🔄 Reiniciar
+            </button>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.35rem;">
+            <span style="font-size:0.8rem; color:rgba(255,255,255,0.7); font-weight:600;">Velocidad:</span>
+            <button class="btn btn-ghost btn-sm" style="color:white; padding:2px 8px; font-size:0.8rem;" onclick="Dictionary.setModalSpeed(0.5)">0.5x</button>
+            <button class="btn btn-ghost btn-sm" style="color:white; padding:2px 8px; font-size:0.8rem;" onclick="Dictionary.setModalSpeed(0.75)">0.75x</button>
+            <button class="btn btn-secondary btn-sm" style="padding:2px 8px; font-size:0.8rem;" onclick="Dictionary.setModalSpeed(1.0)">1.0x</button>
+          </div>
+        </div>
+
+        <!-- Posture / Description Details -->
+        <div style="background:rgba(255,255,255,0.06); padding:1rem; border-radius:12px; border:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); font-weight:700; text-transform:uppercase; margin-bottom:4px;">
+            Postura y Movimiento
+          </div>
+          <p id="modalDefinitionText" style="color:rgba(255,255,255,0.92); font-size:0.95rem; line-height:1.45; margin:0;">
+            Gesto oficial en Lengua de Señas Dominicana.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="toast" id="toastContainer"></div>
+  <div id="toastContainer"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/mock-data.js"></script>
-  <script src="js/config.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/dictionary.js"></script>
 </body>

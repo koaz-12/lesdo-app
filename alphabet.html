@@ -258,11 +258,19 @@
       <!-- Cinema Theater Stage (Hero Video Player) -->
       <div id="showcaseStage" class="cinema-stage animate-slide-up">
         
-        <!-- Top Status Bar -->
-        <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <!-- Top Status Bar & View Mode Toggle -->
+        <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:1.25rem; flex-wrap:wrap; gap:0.75rem;">
           <span id="stageCounter" style="font-size:0.85rem; background:rgba(255,255,255,0.2); color:white; padding:4px 14px; border-radius:12px; font-weight:700; border:1px solid rgba(255,255,255,0.25);">
             Vocal 1 de 5 • [ A ]
           </span>
+
+          <!-- View Mode Selector -->
+          <div style="display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.35); padding:3px 6px; border-radius:12px; border:1px solid rgba(255,255,255,0.15);">
+            <button class="btn btn-sm btn-secondary view-mode-btn" id="btnModeVideo" onclick="AlphabetApp.setViewMode('video')" style="padding:3px 10px; font-size:0.75rem; font-weight:700; border-radius:8px;">🎥 Solo Video</button>
+            <button class="btn btn-sm btn-ghost view-mode-btn" id="btnModeSide" onclick="AlphabetApp.setViewMode('side')" style="color:white; padding:3px 10px; font-size:0.75rem; font-weight:700; border-radius:8px;">🔲 Ambos al lado</button>
+            <button class="btn btn-sm btn-ghost view-mode-btn" id="btnModeIllustration" onclick="AlphabetApp.setViewMode('illustration')" style="color:white; padding:3px 10px; font-size:0.75rem; font-weight:700; border-radius:8px;">🖼️ Solo Ilustración</button>
+          </div>
+
           <span style="font-size:0.8rem; background:rgba(0,0,0,0.4); color:white; padding:4px 12px; border-radius:12px; font-weight:600;">
             🇩🇴 Diccionario Oficial LSRD
           </span>
@@ -272,12 +280,22 @@
         <div style="display:flex; align-items:center; justify-content:center; gap:0.75rem; width:100%;">
           <button id="btnPrevLetter" class="btn btn-ghost" style="color:white; font-size:1.6rem; padding:0.8rem 1rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer; flex-shrink:0;" title="Letra Anterior (←)">◀</button>
           
-          <div style="flex:1; max-width:620px; text-align:center;">
-            <!-- Main Video Frame -->
-            <div class="video-frame">
-              <video id="stageLetterVideo" src="https://diccionariolsrd.cc/wp-content/uploads/2024/06/1.-A-Sena-1.mp4" autoplay loop muted playsinline></video>
-              <div id="videoBadgeLive" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.75); color:white; padding:3px 10px; border-radius:6px; font-size:0.75rem; font-weight:700; display:flex; align-items:center; gap:4px;">
-                <span style="color:#4CAF50;">●</span> Video Oficial LSRD
+          <div style="flex:1; max-width:760px; text-align:center;">
+            
+            <!-- Flexible Media Display (Video / Illustration / Side-by-side) -->
+            <div id="stageMediaWrapper" style="display:flex; justify-content:center; align-items:center; gap:1.25rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+              <!-- SVG Illustration Frame -->
+              <div id="stageIllustrationContainer" style="display:none; text-align:center;">
+                <img id="detailImg" class="sign-hand-img" src="images/alphabet/A.svg" alt="Seña A" style="width:170px; height:170px; background:rgba(255,255,255,0.95); border-radius:16px; padding:12px; box-shadow:0 8px 24px rgba(0,0,0,0.3); border:2px solid rgba(255,255,255,0.3);">
+                <div style="font-size:0.75rem; color:rgba(255,255,255,0.85); font-weight:700; margin-top:4px;">Ilustración de Apoyo</div>
+              </div>
+
+              <!-- Main Video Frame -->
+              <div id="stageVideoFrame" class="video-frame" style="margin:0 auto;">
+                <video id="stageLetterVideo" src="https://diccionariolsrd.cc/wp-content/uploads/2024/06/1.-A-Sena-1.mp4" autoplay loop muted playsinline></video>
+                <div id="videoBadgeLive" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.75); color:white; padding:3px 10px; border-radius:6px; font-size:0.75rem; font-weight:700; display:flex; align-items:center; gap:4px;">
+                  <span style="color:#4CAF50;">●</span> Video Oficial LSRD
+                </div>
               </div>
             </div>
 

@@ -1,196 +1,365 @@
+// Diccionario Digital LESDO / LSRD - 100% Oficial con Videos y Búsqueda Instantánea
+
 const Dictionary = {
-  user: null,
+  initialized: false,
+  allWords: [],
+  filteredWords: [],
+  selectedLetter: 'ALL',
+  selectedCategory: 'ALL',
+  searchQuery: '',
 
   async init() {
-    const session = await Auth.getSession();
-    if (!session) {
-      window.location.href = 'index.html';
-      return;
-    }
-    this.user = session.user;
-    
-    const profile = await Auth.getProfile(this.user.id);
-    const name = profile?.display_name || this.user.user_metadata?.full_name || this.user.user_metadata?.username || this.user.email?.split('@')[0] || 'Estudiante';
-    document.getElementById('userName').textContent = name;
+    if (this.initialized) return;
+    this.initialized = true;
 
+    this.setupAuth();
+    this.loadData();
+    this.renderAlphabetIndex();
+    this.renderCategoryChips();
     this.setupEventListeners();
-    await this.search(''); // Load initial words
+    this.applyFilters();
   },
 
-  async search(query) {
-    const container = document.getElementById('resultsContainer');
-    container.innerHTML = '<div class="spinner"></div>';
-
-    let allWords = window.LESDO_MOCK_DATA?.dictionary || [];
-    let words = allWords;
-
-    if (query.trim() !== '') {
-      const qClean = query.trim().toLowerCase();
-      words = allWords.filter(w => w.word.toLowerCase().includes(qClean) || (w.category && w.category.toLowerCase().includes(qClean)));
-    } else {
-      words = allWords.slice(0, 60);
-    }
-    
-    this.renderResults(words, query, allWords.length);
-  },
-
-  renderResults(words, query, totalCount = 1390) {
-    const container = document.getElementById('resultsContainer');
-    container.innerHTML = '';
-
-    if (!words || words.length === 0) {
-      container.innerHTML = `
-        <div class="card text-center" style="padding: 2rem;">
-          <p style="font-size: 1.1rem; color: var(--text-secondary);">No se encontraron señas para '<strong>${query}</strong>'</p>
-          <p class="text-small text-secondary" style="margin-top: 0.5rem;">Prueba con otra palabra o consulta el <a href="https://diccionariolsrd.cc/" target="_blank">Diccionario Oficial LSRD</a>.</p>
-        </div>`;
-      return;
+  setupAuth() {
+    // Graceful profile detection
+    const userNameEl = document.getElementById('userName');
+    if (window.Auth && typeof window.Auth.getSession === 'function') {
+      window.Auth.getSession().then(session => {
+        if (session && session.user) {
+          const profileName = session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Estudiante';
+          if (userNameEl) userNameEl.textContent = profileName;
+        }
+      }).catch(() => {});
     }
 
-    const countHeader = document.createElement('div');
-    countHeader.style.cssText = 'grid-column: 1 / -1; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;';
-    countHeader.textContent = query.trim() !== '' 
-      ? `Encontrados ${words.length} resultados para "${query}"`
-      : `Mostrando ${words.length} señas destacadas (Catálogo de ${totalCount} señas oficiales en video)`;
-    container.appendChild(countHeader);
-
-    words.forEach(word => {
-      const card = document.createElement('div');
-      card.className = 'card word-card';
-      
-      const icon = word.icon || '🤟';
-      const catName = word.category || word.categories?.name || 'Vocabulario General';
-      
-      card.innerHTML = `
-        <div style="font-size: 2.5rem; width: 80px; height: 80px; background: rgba(30,136,229,0.08); border-radius: 8px; display:flex; align-items:center; justify-content:center; cursor:pointer;" class="word-thumb">
-          ${icon}
-        </div>
-        <div class="word-info" style="flex: 1;">
-          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">${word.word}</h2>
-          <span style="font-size: 0.75rem; background: rgba(30,136,229,0.1); color: var(--secondary); padding: 2px 8px; border-radius: 12px; font-weight: 600; display: inline-block; margin-bottom: 0.5rem;">
-            ${catName}
-          </span>
-          <p class="text-secondary" style="font-size: 0.9rem;">${word.definition || ''}</p>
-        </div>
-        <button class="btn btn-primary btn-play">Ver Seña ▶</button>
-      `;
-      
-      card.querySelector('.btn-play').addEventListener('click', () => {
-        this.playVideo(word.video_url, word);
-      });
-      card.querySelector('.word-thumb').addEventListener('click', () => {
-        this.playVideo(word.video_url, word);
-      });
-      
-      container.appendChild(card);
+    document.getElementById('btnLogout')?.addEventListener('click', () => {
+      if (window.Auth?.signOut) window.Auth.signOut();
+      else window.location.href = 'index.html';
+    });
+    document.getElementById('btnLogoutMobile')?.addEventListener('click', () => {
+      if (window.Auth?.signOut) window.Auth.signOut();
+      else window.location.href = 'index.html';
     });
   },
 
-  playVideo(videoUrl, wordData) {
+  loadData() {
+    this.allWords = window.LESDO_MOCK_DATA?.dictionary || [];
+    // Ensure every item has a normalized sort key
+    this.allWords.sort((a, b) => a.word.localeCompare(b.word, 'es', { sensitivity: 'base' }));
+  },
+
+  renderAlphabetIndex() {
+    const container = document.getElementById('azIndexBar');
+    if (!container) return;
+
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÑ'.split('');
+    let html = `<button class="az-btn ${this.selectedLetter === 'ALL' ? 'active' : ''}" data-letter="ALL">Todos</button>`;
+
+    alphabet.forEach(letter => {
+      // Check if there's at least one word starting with this letter
+      const hasWords = this.allWords.some(w => {
+        const first = (w.word || '').trim().toUpperCase();
+        return first.startsWith(letter);
+      });
+
+      if (hasWords) {
+        html += `<button class="az-btn ${this.selectedLetter === letter ? 'active' : ''}" data-letter="${letter}">${letter}</button>`;
+      }
+    });
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.az-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        container.querySelectorAll('.az-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.selectedLetter = btn.dataset.letter;
+        this.applyFilters();
+      });
+    });
+  },
+
+  renderCategoryChips() {
+    const container = document.getElementById('catChipsBar');
+    if (!container) return;
+
+    const categoriesMap = {};
+    this.allWords.forEach(w => {
+      const cat = w.category || 'Vocabulario General';
+      categoriesMap[cat] = (categoriesMap[cat] || 0) + 1;
+    });
+
+    const sortedCats = Object.keys(categoriesMap).sort();
+    let html = `<button class="cat-chip ${this.selectedCategory === 'ALL' ? 'active' : ''}" data-category="ALL">Todas las Categorías (${this.allWords.length})</button>`;
+
+    sortedCats.forEach(cat => {
+      const count = categoriesMap[cat];
+      html += `<button class="cat-chip ${this.selectedCategory === cat ? 'active' : ''}" data-category="${cat}">${cat} (${count})</button>`;
+    });
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.cat-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        container.querySelectorAll('.cat-chip').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.selectedCategory = btn.dataset.category;
+        this.applyFilters();
+      });
+    });
+  },
+
+  applyFilters() {
+    let results = this.allWords;
+
+    // Filter by category
+    if (this.selectedCategory !== 'ALL') {
+      results = results.filter(w => (w.category || 'Vocabulario General') === this.selectedCategory);
+    }
+
+    // Filter by letter
+    if (this.selectedLetter !== 'ALL') {
+      results = results.filter(w => {
+        const first = (w.word || '').trim().toUpperCase();
+        return first.startsWith(this.selectedLetter);
+      });
+    }
+
+    // Filter by search query
+    if (this.searchQuery.trim() !== '') {
+      const q = this.normalizeText(this.searchQuery);
+      results = results.filter(w => {
+        const wordNorm = this.normalizeText(w.word || '');
+        const defNorm = this.normalizeText(w.definition || '');
+        const catNorm = this.normalizeText(w.category || '');
+        return wordNorm.includes(q) || defNorm.includes(q) || catNorm.includes(q);
+      });
+    }
+
+    this.filteredWords = results;
+    this.renderResults();
+  },
+
+  normalizeText(str) {
+    return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  },
+
+  renderResults() {
+    const container = document.getElementById('resultsContainer');
+    const statusHeader = document.getElementById('resultsCountStatus');
+    if (!container) return;
+
+    if (statusHeader) {
+      if (this.searchQuery.trim() !== '') {
+        statusHeader.textContent = `Mostrando ${this.filteredWords.length} resultados para "${this.searchQuery}"`;
+      } else if (this.selectedLetter !== 'ALL') {
+        statusHeader.textContent = `Mostrando ${this.filteredWords.length} señas con la letra [ ${this.selectedLetter} ]`;
+      } else if (this.selectedCategory !== 'ALL') {
+        statusHeader.textContent = `Mostrando ${this.filteredWords.length} señas en categoría "${this.selectedCategory}"`;
+      } else {
+        statusHeader.textContent = `Catálogo Completo: ${this.filteredWords.length} señas disponibles con video oficial`;
+      }
+    }
+
+    if (this.filteredWords.length === 0) {
+      container.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1.5rem; background: var(--surface); border-radius: 16px; border: 1px solid rgba(0,0,0,0.08);">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">🔍</div>
+          <h3 style="font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem;">No se encontraron señas</h3>
+          <p style="color: var(--text-secondary); max-width: 480px; margin: 0 auto 1.25rem;">
+            No encontramos coincidencias para "${this.searchQuery}". Intenta con otra palabra o consulta el portal oficial.
+          </p>
+          <button class="btn btn-primary btn-sm" onclick="Dictionary.clearSearch()">
+            Restablecer Búsqueda
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    // Limit initial DOM nodes for ultra-fast rendering (paginate / lazy display first 120 items)
+    const displayList = this.filteredWords.slice(0, 150);
+
+    container.innerHTML = displayList.map(item => `
+      <div class="dict-card" data-word="${item.word}">
+        <div>
+          <div class="dict-card__header">
+            <h3 class="dict-card__title">${item.word}</h3>
+            <span class="dict-card__badge">${item.category || 'LSRD'}</span>
+          </div>
+          <p class="dict-card__desc">${item.definition || 'Seña oficial en Lengua de Señas Dominicana.'}</p>
+        </div>
+        <div class="dict-card__footer">
+          <span style="font-size:0.75rem; color:var(--text-secondary); font-weight:600;">🇩🇴 CONADIS / ANSORDO</span>
+          <button class="dict-card__btn">
+            <span>▶</span> Ver Video
+          </button>
+        </div>
+      </div>
+    `).join('');
+
+    // Attach click listeners to cards
+    container.querySelectorAll('.dict-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const wordName = card.dataset.word;
+        const item = this.allWords.find(w => w.word === wordName);
+        if (item) this.openVideoModal(item);
+      });
+    });
+  },
+
+  openVideoModal(item) {
     const modal = document.getElementById('videoModal');
     const video = document.getElementById('modalVideo');
-    const title = document.getElementById('modalTitle');
-    const word = typeof wordData === 'string' ? { word: wordData, definition: '' } : wordData;
-    
-    title.textContent = `Seña LESDO: ${word.word}`;
-    
-    let descEl = document.getElementById('modalDesc');
-    if (!descEl) {
-      descEl = document.createElement('div');
-      descEl.id = 'modalDesc';
-      descEl.style.marginTop = '1rem';
-      descEl.style.padding = '1.25rem';
-      descEl.style.background = 'rgba(30,136,229,0.05)';
-      descEl.style.borderRadius = '8px';
-      descEl.style.border = '1px solid rgba(30,136,229,0.2)';
-      descEl.style.textAlign = 'center';
-      video.parentNode.appendChild(descEl);
-    }
-    
-    descEl.innerHTML = `
-      ${word.image_url ? `
-        <img src="${word.image_url}" alt="${word.word}" class="sign-hand-img" style="width:130px; height:130px; margin-bottom:0.75rem;">
-      ` : (!word.video_url ? `
-        <div style="font-size: 5rem; margin-bottom: 0.5rem; animation: pulse 1.5s infinite ease-in-out;">${word.icon || '🤟'}</div>
-      ` : '')}
-      <h2 style="color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem;">${word.word}</h2>
-      <div style="background: white; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 1rem; margin: 1rem auto; max-width: 500px; text-align: left;">
-        <p style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.5rem; line-height: 1.5;">
-          <strong>Posición y movimiento:</strong> ${word.definition || 'Gesto representativo en Lengua de Señas Dominicana.'}
-        </p>
-      </div>
-      <span style="font-size: 0.85rem; background: var(--secondary); color: white; padding: 4px 14px; border-radius: 14px; font-weight:600; display: inline-block;">
-        ${word.category || word.categories?.name || 'Vocabulario Oficial LSRD'}
-      </span>
-    `;
+    const title = document.getElementById('modalWordTitle');
+    const badge = document.getElementById('modalCategoryBadge');
+    const def = document.getElementById('modalDefinitionText');
 
-    if (word.video_url) {
-      video.style.display = 'block';
-      video.src = word.video_url;
-      video.loop = true;
-      video.playsInline = true;
-      video.style.maxHeight = '320px';
-      video.style.borderRadius = '8px';
-      video.style.boxShadow = 'var(--shadow-sm)';
-      video.play().catch(e => console.log("Autoplay blocked:", e));
-    } else {
-      video.style.display = 'none';
-      video.src = '';
+    if (!modal || !video) return;
+
+    if (title) title.textContent = item.word;
+    if (badge) badge.textContent = `Categoría: ${item.category || 'Vocabulario General'}`;
+    if (def) def.textContent = item.definition || 'Postura y movimiento oficial según el Diccionario de la Lengua de Señas Dominicana.';
+
+    if (item.video_url) {
+      video.src = item.video_url;
+      video.load();
+      video.play().catch(() => {});
     }
 
     modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  },
+
+  closeVideoModal() {
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('modalVideo');
+    if (modal) modal.classList.remove('active');
+    if (video) {
+      video.pause();
+      video.src = '';
+    }
+    document.body.style.overflow = '';
+  },
+
+  setModalSpeed(rate) {
+    const video = document.getElementById('modalVideo');
+    if (video) {
+      video.playbackRate = rate;
+      this.showToast(`Velocidad de video: ${rate}x`, 'info');
+    }
+  },
+
+  toggleModalSound() {
+    const video = document.getElementById('modalVideo');
+    const btn = document.getElementById('modalBtnSound');
+    if (video) {
+      video.muted = !video.muted;
+      if (btn) {
+        btn.textContent = video.muted ? '🔇 Sonido: Silenciado' : '🔊 Sonido: Activado';
+      }
+      this.showToast(video.muted ? 'Video silenciado' : 'Sonido activado', 'info');
+    }
+  },
+
+  replayModalVideo() {
+    const video = document.getElementById('modalVideo');
+    if (video) {
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    }
+  },
+
+  clearSearch() {
+    const input = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('btnClearSearch');
+    if (input) {
+      input.value = '';
+      this.searchQuery = '';
+    }
+    if (clearBtn) clearBtn.style.display = 'none';
+    this.selectedLetter = 'ALL';
+    this.selectedCategory = 'ALL';
+    
+    // Reset index & chip buttons
+    document.querySelectorAll('.az-btn').forEach(b => b.classList.toggle('active', b.dataset.letter === 'ALL'));
+    document.querySelectorAll('.cat-chip').forEach(b => b.classList.toggle('active', b.dataset.category === 'ALL'));
+    
+    this.applyFilters();
   },
 
   setupEventListeners() {
     const searchInput = document.getElementById('searchInput');
-    const debouncedSearch = this.debounce((e) => {
-      this.search(e.target.value);
-    }, 300);
-    
-    searchInput.addEventListener('input', debouncedSearch);
+    const clearBtn = document.getElementById('btnClearSearch');
+    const closeBtn = document.getElementById('closeModal');
+    const modal = document.getElementById('videoModal');
 
-    // Logout and Nav
-    document.getElementById('btnLogout').addEventListener('click', () => Auth.signOut());
-    document.getElementById('btnLogoutMobile').addEventListener('click', () => Auth.signOut());
-    
-    const navToggle = document.getElementById('navToggle');
-    const navMobile = document.getElementById('navMobile');
-    if(navToggle && navMobile) {
-        navToggle.addEventListener('click', () => {
-            navToggle.classList.toggle('active');
-            navMobile.style.display = navToggle.classList.contains('active') ? 'flex' : 'none';
-        });
+    // Instant Search Input
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        this.searchQuery = e.target.value;
+        if (clearBtn) {
+          clearBtn.style.display = this.searchQuery ? 'block' : 'none';
+        }
+        this.applyFilters();
+      });
     }
 
-    // Modal close
-    const modal = document.getElementById('videoModal');
-    const video = document.getElementById('modalVideo');
-    const closeBtn = document.getElementById('closeModal');
-    
-    const closeModal = () => {
-      modal.classList.remove('active');
-      video.pause();
-      const iframe = document.getElementById('modalIframe');
-      if (iframe) iframe.remove();
-      video.src = '';
-    };
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        this.clearSearch();
+        searchInput?.focus();
+      });
+    }
 
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-      if(e.target === modal) closeModal();
-    });
+    // Modal Close
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => this.closeVideoModal());
+    }
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) this.closeVideoModal();
+      });
+    }
     document.addEventListener('keydown', (e) => {
-      if(e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+      if (e.key === 'Escape') this.closeVideoModal();
     });
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navMobile = document.getElementById('navMobile');
+    if (navToggle && navMobile) {
+      navToggle.addEventListener('click', () => {
+        navToggle.classList.toggle('active');
+        navMobile.style.display = navToggle.classList.contains('active') ? 'flex' : 'none';
+      });
+    }
   },
 
-  debounce(fn, delay) {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => fn(...args), delay);
-    };
+  showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    container.innerHTML = '';
+    const toast = document.createElement('div');
+    toast.className = `toast toast--${type} active`;
+    toast.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#0A2463; color:white; padding:12px 20px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.3); z-index:99999; font-weight:600; display:flex; align-items:center; gap:8px; border-left: 4px solid #1E88E5;';
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.remove();
+    }, 1800);
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => Dictionary.init());
+window.Dictionary = Dictionary;
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => Dictionary.init());
+} else {
+  Dictionary.init();
+}
+
+window.addEventListener('load', () => {
+  if (!Dictionary.initialized) Dictionary.init();
+});
+
