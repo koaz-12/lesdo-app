@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -188,21 +188,27 @@
         <div class="sign-stage" id="mainSignStage" style="min-height: 380px;">
           <div class="sign-stage__glow"></div>
           
-          <div style="margin: auto 0; z-index: 2;">
-            <img id="detailImg" class="sign-hand-img animate-fade-in" src="https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_A.svg" alt="Seña A">
-            <h2 id="detailTitle" style="font-size: 2.5rem; color: #fff; margin-bottom: 0.25rem;">Vocal A</h2>
-            <p id="detailHand" style="font-size: 1.1rem; color: rgba(255,255,255,0.95); max-width: 520px; margin: 0 auto; line-height: 1.4;">
-              Puño cerrado con el pulgar apoyado en el lateral del dedo índice apuntando hacia arriba.
-            </p>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin: auto 0; z-index: 2; width: 100%;">
+            <button id="btnPrevLetter" class="btn btn-ghost" style="color:white; font-size:1.5rem; padding:0.6rem 0.9rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer;" title="Letra Anterior (←)">◀</button>
+            
+            <div style="flex: 1; text-align: center;">
+              <img id="detailImg" class="sign-hand-img animate-fade-in" src="https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_A.svg" alt="Seña A">
+              <h2 id="detailTitle" style="font-size: 2.5rem; color: #fff; margin-bottom: 0.25rem;">Vocal A</h2>
+              <p id="detailHand" style="font-size: 1.1rem; color: rgba(255,255,255,0.95); max-width: 520px; margin: 0 auto; line-height: 1.4;">
+                Puño cerrado con el pulgar apoyado en el lateral del dedo índice apuntando hacia arriba.
+              </p>
+            </div>
+
+            <button id="btnNextLetter" class="btn btn-ghost" style="color:white; font-size:1.5rem; padding:0.6rem 0.9rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer;" title="Siguiente Letra (→)">▶</button>
           </div>
 
           <div style="z-index: 2; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 0.75rem; margin-top: 1rem;">
             <span id="detailTip" style="font-size: 0.9rem; color: var(--accent); font-weight: 600;">
               💡 La palma debe mirar siempre hacia el frente.
             </span>
-            <span style="font-size: 0.8rem; background: rgba(0,0,0,0.3); color: white; padding: 3px 10px; border-radius: 12px;">
-              Dactilología Dominicana
-            </span>
+            <button id="btnAutoplayAlphabet" class="btn btn-sm btn-accent" style="padding: 4px 12px; font-size: 0.8rem; font-weight:700;">
+              ▶ Reproducir Secuencia
+            </button>
           </div>
         </div>
       </div>

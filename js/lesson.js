@@ -319,22 +319,32 @@ const Lesson = {
           </div>
         ` : ''}
 
-        <!-- Active Sign Animation Stage -->
-        <div style="margin: auto 0; z-index: 2;">
-          ${firstSign.image_url ? `
-            <img id="stageImg" class="sign-hand-img animate-fade-in" src="${firstSign.image_url}" alt="${firstSign.sign}">
-            <div id="stageIcon" class="sign-stage__icon" style="display:none;">🤟</div>
-          ` : `
-            <img id="stageImg" class="sign-hand-img" src="" alt="" style="display:none;">
-            <div id="stageIcon" class="sign-stage__icon animate-fade-in">${firstSign.icon || '🤟'}</div>
-          `}
+        <!-- Active Sign Animation Stage with Next/Prev Buttons -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin: auto 0; z-index: 2; width: 100%;">
+          ${guides.length > 1 ? `
+            <button id="btnPrevSign" class="btn btn-ghost" style="color:white; font-size:1.5rem; padding:0.5rem 0.75rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer;" title="Seña Anterior">◀</button>
+          ` : '<div style="width:40px;"></div>'}
           
-          <h2 id="stageSignTitle" style="font-size: 2.2rem; color: #fff; margin-bottom: 0.25rem;">
-            ${firstSign.sign}
-          </h2>
-          <p id="stageSignHand" style="font-size: 1.05rem; color: rgba(255,255,255,0.95); max-width: 480px; margin: 0 auto; line-height: 1.4;">
-            ${firstSign.hand}
-          </p>
+          <div style="flex: 1; text-align: center;">
+            ${firstSign.image_url ? `
+              <img id="stageImg" class="sign-hand-img animate-fade-in" src="${firstSign.image_url}" alt="${firstSign.sign}">
+              <div id="stageIcon" class="sign-stage__icon" style="display:none;">🤟</div>
+            ` : `
+              <img id="stageImg" class="sign-hand-img" src="" alt="" style="display:none;">
+              <div id="stageIcon" class="sign-stage__icon animate-fade-in">${firstSign.icon || '🤟'}</div>
+            `}
+            
+            <h2 id="stageSignTitle" style="font-size: 2.2rem; color: #fff; margin-bottom: 0.25rem;">
+              ${firstSign.sign}
+            </h2>
+            <p id="stageSignHand" style="font-size: 1.05rem; color: rgba(255,255,255,0.95); max-width: 480px; margin: 0 auto; line-height: 1.4;">
+              ${firstSign.hand}
+            </p>
+          </div>
+
+          ${guides.length > 1 ? `
+            <button id="btnNextSign" class="btn btn-ghost" style="color:white; font-size:1.5rem; padding:0.5rem 0.75rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer;" title="Siguiente Seña">▶</button>
+          ` : '<div style="width:40px;"></div>'}
         </div>
 
         <div style="z-index: 2; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 0.75rem; margin-top: 1rem;">
@@ -359,12 +369,17 @@ const Lesson = {
     const stageHand = document.getElementById('stageSignHand');
     const stageTip = document.getElementById('stageSignTip');
     const btnAutoplay = document.getElementById('btnAutoplaySigns');
+    const btnPrevSign = document.getElementById('btnPrevSign');
+    const btnNextSign = document.getElementById('btnNextSign');
 
     let currentIdx = 0;
     let playbackSpeed = 1.0;
 
     const selectSign = (idx) => {
+      if (idx < 0) idx = guides.length - 1;
+      if (idx >= guides.length) idx = 0;
       currentIdx = idx;
+      
       tabButtons.forEach(b => b.classList.remove('active'));
       const activeBtn = document.querySelector(`.sign-tab-btn[data-idx="${idx}"]`);
       if (activeBtn) activeBtn.classList.add('active');
@@ -392,6 +407,22 @@ const Lesson = {
         }
       }
     };
+
+    btnPrevSign?.addEventListener('click', () => {
+      if (this.isAutoplaying) stopAutoplay();
+      selectSign(currentIdx - 1);
+    });
+
+    btnNextSign?.addEventListener('click', () => {
+      if (this.isAutoplaying) stopAutoplay();
+      selectSign(currentIdx + 1);
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') selectSign(currentIdx + 1);
+      if (e.key === 'ArrowLeft') selectSign(currentIdx - 1);
+    });
 
     tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -501,28 +532,51 @@ const Lesson = {
   },
 
   async setupNavigation() {
-    const { data: allLessons } = await window.supabaseClient
-      .from('lessons')
-      .select('id')
-      .eq('category_id', this.category.id)
-      .order('sort_order');
+    let allLessons = [];
+    const catId = this.category?.id || this.currentLesson?.category_id;
+    
+    if (window.LESDO_MOCK_DATA?.lessons) {
+      allLessons = window.LESDO_MOCK_DATA.lessons.filter(l => l.category_id === catId);
+      if (allLessons.length === 0) allLessons = window.LESDO_MOCK_DATA.lessons;
+    }
+
+    if (window.supabaseClient && !window.CONFIG?.OFFLINE_MODE) {
+      try {
+        const { data } = await window.supabaseClient
+          .from('lessons')
+          .select('id, sort_order')
+          .eq('category_id', catId)
+          .order('sort_order');
+        if (data && data.length > 0) allLessons = data;
+      } catch (e) {
+        console.warn("Using fallback lessons list:", e);
+      }
+    }
       
-    if (allLessons) {
-      const idx = allLessons.findIndex(l => l.id === this.currentLesson.id);
-      
-      const btnPrev = document.getElementById('btnPrev');
+    const idx = allLessons.findIndex(l => l.id === this.currentLesson.id);
+    
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+
+    if (btnPrev) {
       if (idx > 0) {
+        btnPrev.style.visibility = 'visible';
+        btnPrev.textContent = '← Lección Anterior';
         btnPrev.onclick = () => window.location.href = `lesson.html?lesson=${allLessons[idx-1].id}`;
       } else {
         btnPrev.style.visibility = 'hidden';
       }
-      
-      const btnNext = document.getElementById('btnNext');
-      if (idx < allLessons.length - 1) {
+    }
+    
+    if (btnNext) {
+      if (idx >= 0 && idx < allLessons.length - 1) {
+        btnNext.style.visibility = 'visible';
+        btnNext.textContent = 'Siguiente Lección →';
         btnNext.onclick = () => window.location.href = `lesson.html?lesson=${allLessons[idx+1].id}`;
       } else {
-        btnNext.textContent = 'Terminar Categoría';
-        btnNext.onclick = () => window.location.href = `lesson.html?category=${this.category.slug}`;
+        btnNext.style.visibility = 'visible';
+        btnNext.textContent = 'Terminar Categoría ✓';
+        btnNext.onclick = () => window.location.href = `dashboard.html`;
       }
     }
   },

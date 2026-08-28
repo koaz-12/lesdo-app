@@ -33,11 +33,17 @@ const ALPHABET_DATA = [
 ];
 
 const AlphabetApp = {
+  currentIndex: 0,
+  activeList: ALPHABET_DATA,
+  autoplayTimer: null,
+  isAutoplaying: false,
+
   init() {
     this.setupAuth();
     this.renderVowels();
     this.renderAlphabet();
     this.setupTabs();
+    this.setupStageNavigation();
     this.setupSpeller();
     this.setupNavToggle();
   },
@@ -69,6 +75,7 @@ const AlphabetApp = {
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
+        if (this.isAutoplaying) this.stopAutoplay();
         tabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
 
@@ -78,11 +85,93 @@ const AlphabetApp = {
             sections[key].style.display = key === target ? 'block' : 'none';
           }
         });
+
+        if (target === 'vowels') {
+          this.activeList = ALPHABET_DATA.filter(a => a.isVowel);
+          this.currentIndex = 0;
+          this.showcase(this.activeList[0]);
+        } else if (target === 'full-alphabet') {
+          this.activeList = ALPHABET_DATA;
+          this.currentIndex = 0;
+          this.showcase(this.activeList[0]);
+        }
       });
     });
   },
 
+  setupStageNavigation() {
+    const btnPrev = document.getElementById('btnPrevLetter');
+    const btnNext = document.getElementById('btnNextLetter');
+    const btnAutoplay = document.getElementById('btnAutoplayAlphabet');
+
+    btnPrev?.addEventListener('click', () => {
+      if (this.isAutoplaying) this.stopAutoplay();
+      this.prevLetter();
+    });
+
+    btnNext?.addEventListener('click', () => {
+      if (this.isAutoplaying) this.stopAutoplay();
+      this.nextLetter();
+    });
+
+    btnAutoplay?.addEventListener('click', () => {
+      if (this.isAutoplaying) {
+        this.stopAutoplay();
+      } else {
+        this.startAutoplay();
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        if (this.isAutoplaying) this.stopAutoplay();
+        this.prevLetter();
+      } else if (e.key === 'ArrowRight') {
+        if (this.isAutoplaying) this.stopAutoplay();
+        this.nextLetter();
+      }
+    });
+  },
+
+  nextLetter() {
+    this.currentIndex = (this.currentIndex + 1) % this.activeList.length;
+    this.showcase(this.activeList[this.currentIndex]);
+  },
+
+  prevLetter() {
+    this.currentIndex = (this.currentIndex - 1 + this.activeList.length) % this.activeList.length;
+    this.showcase(this.activeList[this.currentIndex]);
+  },
+
+  startAutoplay() {
+    this.isAutoplaying = true;
+    const btn = document.getElementById('btnAutoplayAlphabet');
+    if (btn) {
+      btn.textContent = '⏸ Pausar Secuencia';
+      btn.classList.remove('btn-accent');
+      btn.classList.add('btn-warning');
+    }
+
+    this.autoplayTimer = setInterval(() => {
+      this.nextLetter();
+    }, 1600);
+  },
+
+  stopAutoplay() {
+    this.isAutoplaying = false;
+    if (this.autoplayTimer) clearInterval(this.autoplayTimer);
+    this.autoplayTimer = null;
+    const btn = document.getElementById('btnAutoplayAlphabet');
+    if (btn) {
+      btn.textContent = '▶ Reproducir Secuencia';
+      btn.classList.remove('btn-warning');
+      btn.classList.add('btn-accent');
+    }
+  },
+
   showcase(item) {
+    if (!item) return;
     const detailImg = document.getElementById('detailImg');
     const detailTitle = document.getElementById('detailTitle');
     const detailHand = document.getElementById('detailHand');
@@ -102,11 +191,6 @@ const AlphabetApp = {
     document.querySelectorAll('.vowel-card, .letter-card').forEach(c => c.classList.remove('selected'));
     const activeCards = document.querySelectorAll(`[data-letter="${item.letter}"]`);
     activeCards.forEach(c => c.classList.add('selected'));
-
-    const showcaseStage = document.getElementById('showcaseStage');
-    if (showcaseStage) {
-      showcaseStage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
   },
 
   renderVowels() {
@@ -114,8 +198,10 @@ const AlphabetApp = {
     if (!container) return;
 
     const vowels = ALPHABET_DATA.filter(item => item.isVowel);
-    container.innerHTML = vowels.map(v => `
-      <div class="vowel-card ${v.letter === 'A' ? 'selected' : ''}" data-letter="${v.letter}">
+    this.activeList = vowels;
+
+    container.innerHTML = vowels.map((v, idx) => `
+      <div class="vowel-card ${idx === 0 ? 'selected' : ''}" data-letter="${v.letter}">
         <div class="vowel-card__letter">${v.letter}</div>
         <img src="${v.img}" alt="${v.name}" class="sign-hand-img" style="width:100px; height:100px; margin-bottom:0.75rem;">
         <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.25rem;">${v.name}</h3>
@@ -125,9 +211,13 @@ const AlphabetApp = {
 
     container.querySelectorAll('.vowel-card').forEach(card => {
       card.addEventListener('click', () => {
+        if (this.isAutoplaying) this.stopAutoplay();
         const letter = card.dataset.letter;
-        const item = ALPHABET_DATA.find(d => d.letter === letter);
-        if (item) this.showcase(item);
+        const idx = this.activeList.findIndex(d => d.letter === letter);
+        if (idx !== -1) {
+          this.currentIndex = idx;
+          this.showcase(this.activeList[idx]);
+        }
       });
     });
   },
@@ -146,9 +236,13 @@ const AlphabetApp = {
 
     container.querySelectorAll('.letter-card').forEach(card => {
       card.addEventListener('click', () => {
+        if (this.isAutoplaying) this.stopAutoplay();
         const letter = card.dataset.letter;
-        const item = ALPHABET_DATA.find(d => d.letter === letter);
-        if (item) this.showcase(item);
+        const idx = this.activeList.findIndex(d => d.letter === letter);
+        if (idx !== -1) {
+          this.currentIndex = idx;
+          this.showcase(this.activeList[idx]);
+        }
       });
     });
   },
