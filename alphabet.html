@@ -17,6 +17,126 @@
       flex-wrap: wrap;
       justify-content: center;
     }
+    /* Modern Cinema Stage & Card styles */
+    .cinema-stage {
+      background: linear-gradient(145deg, #071739 0%, #0A2463 55%, #0e3b85 100%);
+      border-radius: 20px;
+      padding: 2.25rem 1.5rem;
+      color: white;
+      box-shadow: 0 16px 40px rgba(7, 23, 57, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+    .video-frame {
+      max-width: 580px;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(30, 136, 229, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .video-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cinema-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .vowels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .vowel-card {
+      background: var(--surface);
+      border: 2px solid rgba(30,136,229,0.15);
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    .vowel-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 24px rgba(30, 136, 229, 0.2);
+    }
+    .vowel-card.selected, .letter-card.selected {
+      border: 3px solid #1E88E5 !important;
+      box-shadow: 0 10px 28px rgba(30, 136, 229, 0.35) !important;
+      background: #FFFFFF !important;
+      transform: translateY(-4px) scale(1.03) !important;
+    }
+    .letter-badge-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0A2463, #1E88E5);
+      color: white;
+      font-size: 2rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.75rem;
+      box-shadow: 0 4px 12px rgba(10, 36, 99, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+    .alphabet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .letter-card {
+      background: var(--surface);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 14px;
+      padding: 1.25rem 0.75rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    .letter-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 6px 18px rgba(10, 36, 99, 0.15);
+    }
+    .letter-card .mini-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0A2463, #1976D2);
+      color: white;
+      font-size: 1.4rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.5rem;
+      box-shadow: 0 2px 8px rgba(10, 36, 99, 0.2);
+    }
     .alpha-tab {
       padding: 0.6rem 1.25rem;
       border-radius: var(--radius-pill);
@@ -35,70 +155,9 @@
       transform: translateY(-2px);
       box-shadow: var(--shadow-sm);
     }
-    .vowels-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 2.5rem;
-    }
-    .vowel-card {
-      background: var(--surface);
-      border: 2px solid rgba(30,136,229,0.2);
-      border-radius: var(--radius-card);
-      padding: 1.5rem 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: var(--shadow-sm);
-      position: relative;
-    }
-    .vowel-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--secondary);
-      box-shadow: var(--shadow-base);
-    }
-    .vowel-card.selected, .letter-card.selected {
-      transform: translateY(-8px) scale(1.05) !important;
-      border: 3px solid #1E88E5 !important;
-      box-shadow: 0 12px 28px rgba(30, 136, 229, 0.4) !important;
-      background: #FFFFFF !important;
-    }
-    .vowel-card__letter {
-      font-size: 2.75rem;
-      font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 0.25rem;
-    }
-    .alphabet-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2.5rem;
-    }
-    .letter-card {
-      background: var(--surface);
-      border: 1px solid rgba(0,0,0,0.08);
-      border-radius: var(--radius-card);
-      padding: 1rem 0.75rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: var(--shadow-sm);
-    }
-    .letter-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--primary);
-      box-shadow: var(--shadow-base);
-    }
-    .letter-card__name {
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 0.25rem;
-    }
     .speller-box {
       background: var(--surface);
-      border-radius: var(--radius-card);
+      border-radius: 16px;
       padding: 2rem;
       box-shadow: var(--shadow-base);
       margin-top: 1rem;
@@ -110,22 +169,27 @@
       gap: 0.75rem;
       justify-content: center;
       flex-wrap: wrap;
-      min-height: 160px;
+      min-height: 140px;
       align-items: center;
       padding: 1.5rem;
-      background: rgba(30,136,229,0.03);
-      border-radius: var(--radius-card);
+      background: rgba(30,136,229,0.04);
+      border-radius: 14px;
       margin-top: 1.5rem;
-      border: 2px dashed rgba(30,136,229,0.2);
+      border: 2px dashed rgba(30,136,229,0.25);
     }
     .spell-letter-badge {
       text-align: center;
       background: white;
-      padding: 0.75rem 0.5rem;
+      padding: 0.85rem 1rem;
       border-radius: 12px;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 2px solid #1E88E5;
+      cursor: pointer;
+      transition: transform 0.2s;
       animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .spell-letter-badge:hover {
+      transform: translateY(-3px) scale(1.05);
     }
     @keyframes popIn {
       0% { transform: scale(0.6); opacity: 0; }
@@ -173,13 +237,13 @@
     <div class="container">
       
       <!-- Page Header Banner -->
-      <div class="card animate-fade-in" style="background: linear-gradient(135deg, var(--primary) 0%, #1565C0 100%); color: white; margin-bottom: 2rem; border: none; padding: 2.5rem 2rem;">
+      <div class="card animate-fade-in" style="background: linear-gradient(135deg, #0A2463 0%, #1565C0 100%); color: white; margin-bottom: 2rem; border: none; padding: 2.25rem 2rem; border-radius: 18px; box-shadow: var(--shadow-md);">
         <div style="display:inline-block; background:rgba(255,255,255,0.2); padding:4px 14px; border-radius:20px; font-size:0.85rem; font-weight:700; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.5px;">
-          🇩🇴 Módulo de Dactilología Oficial
+          🇩🇴 Videos Oficiales Diccionario LSRD
         </div>
-        <h1 style="color: white; font-size: 2.4rem; margin-bottom: 0.5rem;">Abecedario y Vocales en Señas</h1>
-        <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; max-width: 650px; line-height: 1.5;">
-          Aprende cada letra del alfabeto dactilológico en Lengua de Señas Dominicana con ilustraciones oficiales de alta precisión y el deletreador interactivo.
+        <h1 style="color: white; font-size: 2.3rem; margin-bottom: 0.5rem;">Abecedario y Vocales en Señas Dominicanas</h1>
+        <p style="color: rgba(255,255,255,0.92); font-size: 1.05rem; max-width: 680px; line-height: 1.5; margin: 0;">
+          Aprende cada una de las 27 letras del alfabeto dactilológico dominicano con los videos auténticos grabados por instructores sordos de CONADIS / ANSORDO.
         </p>
       </div>
 
@@ -187,67 +251,65 @@
       <div class="alpha-tabs animate-slide-up">
         <button class="alpha-tab active" data-tab="vowels">🅰️ Las 5 Vocales</button>
         <button class="alpha-tab" data-tab="full-alphabet">🤟 Abecedario Completo (A - Z)</button>
-        <button class="alpha-tab" data-tab="video-masterclass">🎥 Video Oficial del Abecedario</button>
+        <button class="alpha-tab" data-tab="video-masterclass">🎥 Clases en Video</button>
         <button class="alpha-tab" data-tab="speller">✍️ Deletreador de Palabras</button>
       </div>
 
-      <!-- Detail Showcase Stage -->
-      <div id="showcaseStage" class="animate-slide-up" style="margin-bottom: 2.5rem;">
-        <div class="sign-stage" id="mainSignStage" style="min-height: 380px;">
-          <div class="sign-stage__glow"></div>
+      <!-- Cinema Theater Stage (Hero Video Player) -->
+      <div id="showcaseStage" class="cinema-stage animate-slide-up">
+        
+        <!-- Top Status Bar -->
+        <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+          <span id="stageCounter" style="font-size:0.85rem; background:rgba(255,255,255,0.2); color:white; padding:4px 14px; border-radius:12px; font-weight:700; border:1px solid rgba(255,255,255,0.25);">
+            Vocal 1 de 5 • [ A ]
+          </span>
+          <span style="font-size:0.8rem; background:rgba(0,0,0,0.4); color:white; padding:4px 12px; border-radius:12px; font-weight:600;">
+            🇩🇴 Diccionario Oficial LSRD
+          </span>
+        </div>
+
+        <!-- Cinema Video Container with Navigation Arrows -->
+        <div style="display:flex; align-items:center; justify-content:center; gap:0.75rem; width:100%;">
+          <button id="btnPrevLetter" class="btn btn-ghost" style="color:white; font-size:1.6rem; padding:0.8rem 1rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer; flex-shrink:0;" title="Letra Anterior (←)">◀</button>
           
-          <div style="z-index: 2; display:flex; justify-content:space-between; align-items:center; width: 100%; margin-bottom: 0.5rem;">
-            <span id="stageCounter" style="font-size:0.85rem; background:rgba(255,255,255,0.22); color:white; padding:3px 14px; border-radius:12px; font-weight:700; border: 1px solid rgba(255,255,255,0.2);">
-              Vocal 1 de 5
-            </span>
-            <span style="font-size:0.8rem; background:rgba(0,0,0,0.3); color:white; padding:3px 10px; border-radius:12px;">
-              🇩🇴 Dactilología Dominicana
-            </span>
-          </div>
-
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin: auto 0; z-index: 2; width: 100%;">
-            <button id="btnPrevLetter" class="btn btn-ghost" style="color:white; font-size:1.5rem; padding:0.6rem 0.9rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer;" title="Letra Anterior (←)">◀</button>
-            
-            <div style="flex: 1; text-align: center;">
-              <!-- Dual Visual Display: SVG Illustration + Official Video -->
-              <div style="display:flex; justify-content:center; align-items:center; gap:1.25rem; flex-wrap:wrap; margin-bottom:0.75rem;">
-                <div style="text-align:center;">
-                  <img id="detailImg" class="sign-hand-img animate-fade-in" src="images/alphabet/A.svg" alt="Seña A" style="width:130px; height:130px; background:rgba(255,255,255,0.95); border-radius:16px; padding:10px; box-shadow:0 6px 16px rgba(0,0,0,0.25);">
-                  <div style="font-size:0.75rem; color:rgba(255,255,255,0.85); font-weight:700; margin-top:4px;">Ilustración Vectorial</div>
-                </div>
-                
-                <div style="text-align:center;">
-                  <div id="stageVideoContainer" style="width:200px; height:130px; border-radius:16px; overflow:hidden; background:#000; box-shadow:0 6px 16px rgba(0,0,0,0.35); border:2px solid rgba(255,255,255,0.25); position:relative;">
-                    <video id="stageLetterVideo" src="https://diccionariolsrd.cc/wp-content/uploads/2024/06/1.-A-Sena-1.mp4" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>
-                    <span style="position:absolute; bottom:6px; right:6px; background:rgba(0,0,0,0.75); color:white; font-size:0.7rem; padding:2px 6px; border-radius:4px; font-weight:700;">🎥 Video LSRD</span>
-                  </div>
-                  <div style="font-size:0.75rem; color:rgba(255,255,255,0.85); font-weight:700; margin-top:4px;">Video Oficial en Vivo</div>
-                </div>
+          <div style="flex:1; max-width:620px; text-align:center;">
+            <!-- Main Video Frame -->
+            <div class="video-frame">
+              <video id="stageLetterVideo" src="https://diccionariolsrd.cc/wp-content/uploads/2024/06/1.-A-Sena-1.mp4" autoplay loop muted playsinline></video>
+              <div id="videoBadgeLive" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.75); color:white; padding:3px 10px; border-radius:6px; font-size:0.75rem; font-weight:700; display:flex; align-items:center; gap:4px;">
+                <span style="color:#4CAF50;">●</span> Video Oficial LSRD
               </div>
-
-              <h2 id="detailTitle" style="font-size: 2.2rem; color: #fff; margin-bottom: 0.25rem;">Vocal A</h2>
-              <p id="detailHand" style="font-size: 1.05rem; color: rgba(255,255,255,0.95); max-width: 540px; margin: 0 auto; line-height: 1.4;">
-                Puño cerrado con el pulgar apoyado en el lateral del dedo índice apuntando hacia arriba.
-              </p>
             </div>
 
-            <button id="btnNextLetter" class="btn btn-ghost" style="color:white; font-size:1.5rem; padding:0.6rem 0.9rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer;" title="Siguiente Letra (→)">▶</button>
+            <!-- Letter Title & Description -->
+            <h2 id="detailTitle" style="font-size:2.2rem; color:#fff; margin-bottom:0.25rem; font-weight:800;">Vocal A</h2>
+            <p id="detailHand" style="font-size:1.05rem; color:rgba(255,255,255,0.92); max-width:540px; margin:0 auto 0.75rem; line-height:1.4;">
+              Puño cerrado con el pulgar erguido y apoyado en el lateral del dedo índice.
+            </p>
+            <div id="detailTip" style="font-size:0.9rem; color:var(--accent); font-weight:600; background:rgba(0,0,0,0.2); display:inline-block; padding:3px 14px; border-radius:8px;">
+              💡 Palma siempre hacia el frente.
+            </div>
           </div>
 
-          <div style="z-index: 2; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 0.75rem; margin-top: 1rem;">
-            <span id="detailTip" style="font-size: 0.9rem; color: var(--accent); font-weight: 600;">
-              💡 La palma debe mirar siempre hacia el frente.
-            </span>
-            <div style="display:flex; gap:0.5rem;">
-              <button id="btnToggleVideoSound" class="btn btn-sm btn-ghost" onclick="AlphabetApp.toggleVideoMute()" style="color:white; border:1px solid rgba(255,255,255,0.35); padding: 4px 10px; font-size: 0.8rem; font-weight:700; border-radius:var(--radius-btn);">
-                🔊 Sonido: Desactivado
-              </button>
-              <button id="btnAutoplayAlphabet" class="btn btn-sm btn-accent" style="padding: 4px 12px; font-size: 0.8rem; font-weight:700;">
-                ▶ Reproducir Secuencia
-              </button>
-            </div>
+          <button id="btnNextLetter" class="btn btn-ghost" style="color:white; font-size:1.6rem; padding:0.8rem 1rem; border-radius:50%; background:rgba(255,255,255,0.18); cursor:pointer; flex-shrink:0;" title="Siguiente Letra (→)">▶</button>
+        </div>
+
+        <!-- Cinema Bottom Controls -->
+        <div class="cinema-controls">
+          <button id="btnAutoplayAlphabet" class="btn btn-sm btn-accent" style="padding:5px 14px; font-size:0.85rem; font-weight:700;">
+            ▶ Reproducir Secuencia
+          </button>
+          <button id="btnToggleVideoSound" class="btn btn-sm btn-ghost" onclick="AlphabetApp.toggleVideoMute()" style="color:white; border:1px solid rgba(255,255,255,0.3); padding:5px 12px; font-size:0.85rem; font-weight:600;">
+            🔇 Sonido
+          </button>
+          <div style="display:flex; align-items:center; gap:0.35rem; margin-left:auto;">
+            <span style="font-size:0.8rem; color:rgba(255,255,255,0.7); font-weight:600;">Velocidad:</span>
+            <button class="btn btn-ghost btn-sm" style="color:white; padding:2px 8px; font-size:0.8rem;" onclick="AlphabetApp.setSpeed(0.5)">0.5x</button>
+            <button class="btn btn-ghost btn-sm" style="color:white; padding:2px 8px; font-size:0.8rem;" onclick="AlphabetApp.setSpeed(0.75)">0.75x</button>
+            <button class="btn btn-secondary btn-sm" style="padding:2px 8px; font-size:0.8rem;" onclick="AlphabetApp.setSpeed(1.0)">1.0x</button>
           </div>
         </div>
+
       </div>
 
       <!-- SECTION 1: VOWELS -->

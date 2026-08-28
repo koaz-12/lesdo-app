@@ -314,9 +314,16 @@ const AlphabetApp = {
     }
   },
 
+  setSpeed(rate) {
+    const stageVideo = document.getElementById('stageLetterVideo');
+    if (stageVideo) {
+      stageVideo.playbackRate = rate;
+      this.showToast(`Velocidad de video: ${rate}x`, 'info');
+    }
+  },
+
   showcase(item) {
     if (!item) return;
-    const detailImg = document.getElementById('detailImg');
     const detailTitle = document.getElementById('detailTitle');
     const detailHand = document.getElementById('detailHand');
     const detailTip = document.getElementById('detailTip');
@@ -329,14 +336,6 @@ const AlphabetApp = {
       stageCounter.textContent = `${typeLabel} ${this.currentIndex + 1} de ${this.activeList.length} • [ ${item.letter} ]`;
     }
 
-    // Update SVG Hand
-    if (detailImg) {
-      detailImg.src = item.img;
-      detailImg.style.animation = 'none';
-      void detailImg.offsetWidth;
-      detailImg.style.animation = 'pulse 0.4s ease';
-    }
-
     // Update Live Official Letter Video
     if (stageVideo && item.video) {
       if (stageVideo.src !== item.video) {
@@ -346,7 +345,7 @@ const AlphabetApp = {
       }
     }
 
-    if (detailTitle) detailTitle.textContent = item.name;
+    if (detailTitle) detailTitle.textContent = `${item.name} 🇩🇴`;
     if (detailHand) detailHand.textContent = item.hand;
     if (detailTip) detailTip.textContent = `💡 ${item.tip}`;
 
@@ -354,6 +353,17 @@ const AlphabetApp = {
     document.querySelectorAll('.vowel-card, .letter-card').forEach(c => c.classList.remove('selected'));
     const activeCards = document.querySelectorAll(`[data-letter="${item.letter}"]`);
     activeCards.forEach(c => c.classList.add('selected'));
+  },
+
+  playLetter(letterChar) {
+    const item = ALPHABET_DATA.find(d => d.letter === letterChar.toUpperCase());
+    if (item) {
+      this.activeList = ALPHABET_DATA;
+      this.currentIndex = ALPHABET_DATA.findIndex(d => d.letter === item.letter);
+      this.showcase(item);
+      // Smooth scroll to showcase
+      document.getElementById('showcaseStage')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   },
 
   renderVowels() {
@@ -365,13 +375,12 @@ const AlphabetApp = {
 
     container.innerHTML = vowels.map((v, idx) => `
       <div class="vowel-card ${idx === 0 ? 'selected' : ''}" data-letter="${v.letter}">
-        <div class="vowel-card__letter">${v.letter}</div>
-        <img src="${v.img}" alt="${v.name}" class="sign-hand-img" style="width:100px; height:100px; margin-bottom:0.5rem;">
-        <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.25rem;">${v.name}</h3>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.3; margin-bottom: 0.5rem;">${v.hand}</p>
-        <div style="font-size:0.75rem; color:var(--primary); font-weight:700; background:rgba(30,136,229,0.12); padding:3px 10px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-          <span>🎥</span> Video Oficial
-        </div>
+        <div class="letter-badge-circle">${v.letter}</div>
+        <h3 style="font-size: 1.25rem; color: var(--primary); margin-bottom: 0.35rem; font-weight:800;">${v.name}</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.35; margin-bottom: 0.75rem; min-height: 48px;">${v.hand}</p>
+        <button class="btn btn-sm btn-primary" style="font-size:0.78rem; font-weight:700; border-radius:var(--radius-pill); width:100%; justify-content:center;">
+          ▶ Ver Video LSRD
+        </button>
       </div>
     `).join('');
 
@@ -384,6 +393,7 @@ const AlphabetApp = {
           this.currentIndex = this.activeList.findIndex(d => d.letter === letter);
           if (this.currentIndex === -1) this.currentIndex = 0;
           this.showcase(item);
+          document.getElementById('showcaseStage')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
       });
     });
@@ -395,11 +405,10 @@ const AlphabetApp = {
 
     container.innerHTML = ALPHABET_DATA.map(item => `
       <div class="letter-card" data-letter="${item.letter}">
-        <div class="letter-card__name">${item.letter}</div>
-        <img src="${item.img}" alt="${item.name}" class="sign-hand-img" style="width:75px; height:75px; margin-bottom:0.35rem; padding:4px;">
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--secondary); margin-bottom:0.25rem;">${item.name}</div>
-        <div style="font-size:0.7rem; color:var(--primary); font-weight:700; background:rgba(30,136,229,0.1); padding:2px 6px; border-radius:8px; display:inline-flex; align-items:center; gap:2px;">
-          <span>🎥</span> Video
+        <div class="mini-badge">${item.letter}</div>
+        <div style="font-size: 0.9rem; font-weight: 800; color: var(--primary); margin-bottom:0.35rem;">${item.name}</div>
+        <div style="font-size:0.7rem; color:var(--primary); font-weight:700; background:rgba(30,136,229,0.12); padding:3px 8px; border-radius:8px; display:inline-flex; align-items:center; gap:3px;">
+          <span>▶</span> Video
         </div>
       </div>
     `).join('');
@@ -413,6 +422,7 @@ const AlphabetApp = {
           this.currentIndex = this.activeList.findIndex(d => d.letter === letter);
           if (this.currentIndex === -1) this.currentIndex = 0;
           this.showcase(item);
+          document.getElementById('showcaseStage')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
       });
     });
@@ -433,18 +443,14 @@ const AlphabetApp = {
       const letters = text.split('');
       const validLetters = letters.map(char => {
         const found = ALPHABET_DATA.find(a => a.letter === char);
-        return found || { letter: char, name: char, img: null, hand: 'Espacio o símbolo' };
+        return found || { letter: char, name: char, hand: 'Símbolo' };
       });
 
       display.innerHTML = validLetters.map((l, idx) => `
-        <div class="spell-letter-badge" style="animation-delay: ${idx * 0.1}s;">
-          <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.25rem;">${l.letter}</div>
-          ${l.img ? `
-            <img src="${l.img}" alt="${l.name}" class="sign-hand-img" style="width:70px; height:70px; padding:4px; margin-bottom:0.25rem;">
-          ` : `
-            <div style="width:70px; height:70px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; background:rgba(0,0,0,0.05); border-radius:12px; margin-bottom:0.25rem;">—</div>
-          `}
-          <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight:600;">${l.name}</div>
+        <div class="spell-letter-badge" onclick="AlphabetApp.playLetter('${l.letter}')" title="Clic para reproducir video de la ${l.letter}" style="animation-delay: ${idx * 0.08}s;">
+          <div style="font-size: 1.8rem; font-weight: 900; color: var(--primary); line-height: 1;">${l.letter}</div>
+          <div style="font-size: 0.72rem; color: var(--text-secondary); font-weight:700; margin-top: 4px;">${l.name}</div>
+          <div style="font-size: 0.65rem; color: #1E88E5; font-weight:800; margin-top: 2px;">▶ Video</div>
         </div>
       `).join('');
     };
