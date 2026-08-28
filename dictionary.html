@@ -329,6 +329,51 @@
       background: rgba(255, 255, 255, 0.3);
       transform: rotate(90deg);
     }
+    /* Dictionary Segment Tabs */
+    .dict-tabs {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .dict-tab {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-pill);
+      border: 2px solid rgba(0,0,0,0.08);
+      background: var(--surface);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .dict-tab.active, .dict-tab:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .reader-chapter-btn {
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.15);
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .reader-chapter-btn:hover {
+      background: #00BFA5;
+      color: #0A2463;
+      border-color: #00BFA5;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
@@ -392,83 +437,131 @@
           <span style="background:rgba(0,0,0,0.35); color:white; padding:4px 12px; border-radius:10px; font-size:0.85rem; font-weight:700;">
             ⚡ Búsqueda Instantánea
           </span>
-          <a href="https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf" target="_blank" rel="noopener noreferrer" style="background:#00BFA5; color:#0A2463; padding:4px 14px; border-radius:10px; font-size:0.85rem; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:6px; box-shadow: 0 4px 12px rgba(0,191,165,0.4);">
-            📥 Descargar Libro en PDF Completo (Ilustraciones)
-          </a>
+          <span style="background:rgba(0,0,0,0.35); color:white; padding:4px 12px; border-radius:10px; font-size:0.85rem; font-weight:700;">
+            📖 Libro Ilustrado en PDF
+          </span>
         </div>
       </div>
 
-      <!-- Official PDF Book Quick Access Card -->
-      <div class="card animate-slide-up" style="background: linear-gradient(135deg, #0A2463 0%, #1565C0 100%); color: white; border: none; padding: 1.5rem 1.75rem; border-radius: 16px; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; box-shadow: var(--shadow-md);">
-        <div style="max-width: 640px;">
-          <div style="font-size: 0.8rem; font-weight: 700; background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 12px; display: inline-block; margin-bottom: 0.5rem; text-transform: uppercase;">
-            📚 Libro Oficial con Todas las Ilustraciones
-          </div>
-          <h3 style="color: white; margin-bottom: 0.35rem; font-size: 1.35rem; font-weight: 800;">
-            Diccionario Oficial de la Lengua de Señas Dominicana (LSRD en PDF)
-          </h3>
-          <p style="color: rgba(255,255,255,0.92); font-size: 0.95rem; margin: 0; line-height: 1.45;">
-            El libro completo publicado por CONADIS y ANSORDO con todas las ilustraciones anatómicas de apoyo, diagramas vectoriales y señas impresas.
-          </p>
-        </div>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-          <a href="https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="font-weight: 700; font-size: 0.9rem; padding: 0.7rem 1.25rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(0, 191, 165, 0.4);">
-            <span>📥</span> Descargar PDF Oficial
-          </a>
-          <a href="https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="color: white; border: 1px solid rgba(255,255,255,0.35); font-weight: 600; font-size: 0.9rem; padding: 0.7rem 1rem;">
-            👁️ Ver en Pantalla Completa
-          </a>
-        </div>
+      <!-- Navigation Segment Tabs -->
+      <div class="dict-tabs animate-slide-up">
+        <button class="dict-tab active" data-tab="catalog" onclick="Dictionary.switchTab('catalog')">
+          🎥 Catálogo Digital en Video (1,390 Señas)
+        </button>
+        <button class="dict-tab" data-tab="reader" onclick="Dictionary.switchTab('reader')">
+          📖 Lector del Libro Oficial en PDF (Ilustraciones)
+        </button>
       </div>
 
-      <!-- Search & Filters Control Panel -->
-      <div class="search-panel animate-slide-up">
+      <!-- SECTION 1: VIDEO CATALOG -->
+      <section id="sectionCatalog" class="animate-fade-in">
         
-        <!-- Live Search Input -->
-        <div class="search-input-wrap">
-          <span class="search-icon">🔍</span>
-          <input 
-            type="text" 
-            id="searchInput" 
-            placeholder="Buscar palabra o seña... (ej. Hola, Mamá, Gracias, Escuela, República Dominicana, Lunes)" 
-            class="dict-search-input"
-            autocomplete="off"
-            autofocus
-          >
-          <button id="btnClearSearch" class="search-clear-btn" title="Borrar búsqueda">✕</button>
+        <!-- Search & Filters Control Panel -->
+        <div class="search-panel animate-slide-up">
+          
+          <!-- Live Search Input -->
+          <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input 
+              type="text" 
+              id="searchInput" 
+              placeholder="Buscar palabra o seña... (ej. Hola, Mamá, Gracias, Escuela, República Dominicana, Lunes)" 
+              class="dict-search-input"
+              autocomplete="off"
+              autofocus
+            >
+            <button id="btnClearSearch" class="search-clear-btn" title="Borrar búsqueda">✕</button>
+          </div>
+
+          <!-- Alphabet A-Z Jump Bar -->
+          <div class="az-index-bar" id="azIndexBar">
+            <button class="az-btn active" data-letter="ALL">Todos</button>
+            <!-- A-Z buttons generated by JS -->
+          </div>
+
+          <!-- Category Filters -->
+          <div class="cat-chips-bar" id="catChipsBar">
+            <button class="cat-chip active" data-category="ALL">Todas las Categorías</button>
+            <!-- Categories generated by JS -->
+          </div>
+
         </div>
 
-        <!-- Alphabet A-Z Jump Bar -->
-        <div class="az-index-bar" id="azIndexBar">
-          <button class="az-btn active" data-letter="ALL">Todos</button>
-          <!-- A-Z buttons generated by JS -->
+        <!-- Results Count Status Header -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;" class="animate-fade-in">
+          <div id="resultsCountStatus" style="font-size:0.95rem; font-weight:700; color:var(--text-secondary);">
+            Cargando catálogo oficial...
+          </div>
+          <div style="font-size:0.85rem; color:var(--text-secondary);">
+            Haz clic en cualquier seña para abrir el reproductor oficial 🎥
+          </div>
         </div>
 
-        <!-- Category Filters -->
-        <div class="cat-chips-bar" id="catChipsBar">
-          <button class="cat-chip active" data-category="ALL">Todas las Categorías</button>
-          <!-- Categories generated by JS -->
+        <!-- Results Grid Container -->
+        <div id="resultsContainer" class="results-grid animate-slide-up">
+          <!-- Word Cards Injected by JS -->
         </div>
 
-      </div>
+      </section>
 
-      <!-- Results Count Status Header -->
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;" class="animate-fade-in">
-        <div id="resultsCountStatus" style="font-size:0.95rem; font-weight:700; color:var(--text-secondary);">
-          Cargando catálogo oficial...
+      <!-- SECTION 2: INTEGRATED ILLUSTRATED PDF BOOK READER -->
+      <section id="sectionReader" class="animate-fade-in" style="display:none;">
+        
+        <!-- Reader Control Bar -->
+        <div class="card" style="background: linear-gradient(135deg, #0A2463 0%, #1565C0 100%); color: white; border: none; padding: 1.5rem 1.75rem; border-radius: 18px; margin-bottom: 1.5rem; box-shadow: var(--shadow-md);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+            <div>
+              <div style="font-size: 0.8rem; font-weight: 700; background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 12px; display: inline-block; margin-bottom: 0.5rem; text-transform: uppercase;">
+                📖 Visor Integrado Oficial
+              </div>
+              <h2 style="color:white; font-size:1.5rem; font-weight:800; margin:0 0 0.25rem;">
+                Diccionario de la Lengua de Señas Dominicana (LSRD)
+              </h2>
+              <p style="color:rgba(255,255,255,0.9); font-size:0.95rem; margin:0;">
+                Publicado por CONADIS / ANSORDO. Contiene todas las ilustraciones gráficas, dibujos explicativos y vocabulario impreso.
+              </p>
+            </div>
+            
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <a href="https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-sm" style="font-weight:800; display:inline-flex; align-items:center; gap:6px;">
+                <span>📥</span> Descargar PDF
+              </a>
+              <button class="btn btn-ghost btn-sm" onclick="Dictionary.toggleReaderFullscreen()" style="color:white; border:1px solid rgba(255,255,255,0.35); font-weight:600;">
+                🔍 Pantalla Completa
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Jump Chapter Shortcuts -->
+          <div style="border-top:1px solid rgba(255,255,255,0.15); padding-top:1rem;">
+            <div style="font-size:0.8rem; color:rgba(255,255,255,0.8); font-weight:700; margin-bottom:0.5rem; text-transform:uppercase;">
+              ⚡ Atajos Rápidos por Categoría:
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+              <button class="reader-chapter-btn" onclick="Dictionary.jumpToPdfPage(1)">🏠 Portada</button>
+              <button class="reader-chapter-btn" onclick="Dictionary.jumpToPdfPage(15)">🅰️ Abecedario y Fonemas</button>
+              <button class="reader-chapter-btn" onclick="Dictionary.jumpToPdfPage(35)">👋 Saludos y Cortesía</button>
+              <button class="reader-chapter-btn" onclick="Dictionary.jumpToPdfPage(60)">👨‍👩‍👧 Familia y Personas</button>
+              <button class="reader-chapter-btn" onclick="Dictionary.jumpToPdfPage(110)">🍎 Alimentos y Bebidas</button>
+              <button class="reader-chapter-btn" onclick="Dictionary.jumpToPdfPage(160)">🏫 Escuela y Educación</button>
+              <button class="reader-chapter-btn" onclick="Dictionary.jumpToPdfPage(210)">⏰ Tiempo y Días</button>
+              <button class="reader-chapter-btn" onclick="Dictionary.jumpToPdfPage(260)">🏥 Salud y Cuerpo</button>
+              <button class="reader-chapter-btn" onclick="Dictionary.jumpToPdfPage(320)">🇩🇴 República Dominicana</button>
+            </div>
+          </div>
         </div>
-        <div style="font-size:0.85rem; color:var(--text-secondary);">
-          Haz clic en cualquier seña para abrir el reproductor oficial 🎥
+
+        <!-- Embedded Interactive PDF Reader Frame -->
+        <div id="pdfViewerContainer" style="background:#0A192F; border-radius:18px; overflow:hidden; box-shadow:0 12px 36px rgba(0,0,0,0.3); border:2px solid rgba(30,136,229,0.3); min-height:750px; position:relative;">
+          <iframe 
+            id="pdfViewerFrame" 
+            src="https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf#toolbar=1&navpanes=1&statusbar=1&view=FitH" 
+            style="width:100%; height:750px; border:none; display:block; background:#fff;"
+            title="Lector del Libro Oficial LSRD"
+          ></iframe>
         </div>
-      </div>
 
-      <!-- Results Grid Container -->
-      <div id="resultsContainer" class="results-grid animate-slide-up">
-        <!-- Word Cards Injected by JS -->
-      </div>
-
-    </div>
-  </main>
+      </section>
 
   <!-- Video Cinema Modal -->
   <div class="video-modal" id="videoModal" role="dialog" aria-modal="true">

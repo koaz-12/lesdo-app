@@ -270,6 +270,48 @@ const Dictionary = {
     }
   },
 
+  switchTab(tabId) {
+    const tabCatalog = document.querySelector('.dict-tab[data-tab="catalog"]');
+    const tabReader = document.querySelector('.dict-tab[data-tab="reader"]');
+    const sectionCatalog = document.getElementById('sectionCatalog');
+    const sectionReader = document.getElementById('sectionReader');
+
+    if (tabId === 'catalog') {
+      tabCatalog?.classList.add('active');
+      tabReader?.classList.remove('active');
+      if (sectionCatalog) sectionCatalog.style.display = 'block';
+      if (sectionReader) sectionReader.style.display = 'none';
+      this.showToast('Mostrando Catálogo Digital en Video', 'info');
+    } else if (tabId === 'reader') {
+      tabReader?.classList.add('active');
+      tabCatalog?.classList.remove('active');
+      if (sectionCatalog) sectionCatalog.style.display = 'none';
+      if (sectionReader) sectionReader.style.display = 'block';
+      this.showToast('Lector del Libro Oficial LSRD abierto', 'info');
+    }
+  },
+
+  jumpToPdfPage(pageNumber) {
+    const frame = document.getElementById('pdfViewerFrame');
+    if (frame) {
+      const baseUrl = 'https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf';
+      frame.src = `${baseUrl}#page=${pageNumber}&toolbar=1&navpanes=1&statusbar=1&view=FitH`;
+      this.showToast(`Navegando a la página ${pageNumber}`, 'info');
+    }
+  },
+
+  toggleReaderFullscreen() {
+    const container = document.getElementById('pdfViewerContainer');
+    if (!container) return;
+    if (!document.fullscreenElement) {
+      container.requestFullscreen().catch(err => {
+        window.open('https://diccionariolsrd.cc/wp-content/uploads/2024/06/LIBRO-FINAL-Diccionario-sin-lineas-de-division-1.pdf', '_blank');
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  },
+
   clearSearch() {
     const input = document.getElementById('searchInput');
     const clearBtn = document.getElementById('btnClearSearch');
