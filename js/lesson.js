@@ -98,6 +98,24 @@ const Lesson = {
       <div class="breadcrumb">
         <a href="dashboard.html">Inicio</a> &gt; ${this.category.name}
       </div>
+      
+      ${this.category.slug === 'alfabeto' ? `
+        <div class="card" style="background: linear-gradient(135deg, #0A2463 0%, #1E88E5 100%); color: white; border: none; padding: 1.75rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; border-radius: var(--radius-card); box-shadow: var(--shadow-md);">
+          <div>
+            <div style="font-size: 0.8rem; font-weight: 700; background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 12px; display: inline-block; margin-bottom: 0.5rem; text-transform: uppercase;">
+              ✨ Sección Interactiva Recomendada
+            </div>
+            <h2 style="color: white; margin-bottom: 0.25rem; font-size: 1.6rem;">Abecedario y Vocales Completo</h2>
+            <p style="color: rgba(255,255,255,0.9); font-size: 1rem; margin: 0; max-width: 580px;">
+              Aprende las 27 letras y 5 vocales con ilustraciones vectoriales, video oficial en MP4 y el deletreador dactilológico en tiempo real.
+            </p>
+          </div>
+          <a href="alphabet.html" class="btn btn-accent" style="font-weight: 800; font-size: 1.05rem; padding: 0.75rem 1.5rem;">
+            Ir al Abecedario Interactivo ➔
+          </a>
+        </div>
+      ` : ''}
+
       <div class="hero" style="border-top: 5px solid ${this.category.color}; padding: 2rem; background: #fff; border-radius: 8px; margin-bottom: 2rem;">
         <h1 style="display:flex; align-items:center; gap:1rem;">
           <span style="font-size:3rem;">${this.category.icon}</span> 
@@ -111,11 +129,11 @@ const Lesson = {
 
     this.lessons.forEach(lesson => {
       const isCompleted = this.userProgress.includes(lesson.id);
-      const thumb = lesson.thumbnail_url || 'https://via.placeholder.com/300x160?text=LESDO';
+      const thumb = lesson.thumbnail_url || (lesson.title.includes('Vocales') ? 'images/alphabet/A.svg' : 'https://via.placeholder.com/300x160?text=LESDO');
       
       html += `
         <div class="card lesson-card cursor-pointer" onclick="window.location.href='lesson.html?lesson=${lesson.id}'">
-          <img src="${thumb}" alt="${lesson.title}">
+          <img src="${thumb}" alt="${lesson.title}" style="object-fit: contain; background: #f8fafc; padding: 8px;">
           <div class="lesson-card-content">
             <div>
               <h3>${lesson.title}</h3>
@@ -132,14 +150,16 @@ const Lesson = {
   },
 
   async loadLessonView(lessonId) {
+    const mockLesson = (window.LESDO_MOCK_DATA?.lessons || []).find(l => l.id === lessonId);
+    
     if (!window.supabaseClient) {
-      const mockLesson = (window.LESDO_MOCK_DATA?.lessons || []).find(l => l.id === lessonId) || window.LESDO_MOCK_DATA?.lessons[0];
       if (mockLesson) {
         this.currentLesson = mockLesson;
         this.category = (window.LESDO_MOCK_DATA?.categories || []).find(c => c.id === mockLesson.category_id) || { name: 'Módulo', slug: 'alfabeto' };
         this.quizzes = (window.LESDO_MOCK_DATA?.quizzes || []).filter(q => q.lesson_id === mockLesson.id);
         const local = JSON.parse(localStorage.getItem('lesdo_progress') || '[]');
         this.isCompleted = local.some(p => p.lesson_id === mockLesson.id);
+        this.enrichLessonGuide();
         this.renderLesson();
       }
       return;
@@ -155,6 +175,11 @@ const Lesson = {
       this.currentLesson = lessonData;
       this.category = lessonData.categories;
 
+      // Merge guide from mock data if empty in Supabase
+      if ((!this.currentLesson.guide || this.currentLesson.guide.length === 0) && mockLesson?.guide) {
+        this.currentLesson.guide = mockLesson.guide;
+      }
+
       // Load quizzes
       const { data: quizzesData } = await window.supabaseClient
         .from('quizzes')
@@ -162,7 +187,7 @@ const Lesson = {
         .eq('lesson_id', lessonId)
         .order('sort_order');
       
-      this.quizzes = quizzesData || [];
+      this.quizzes = (quizzesData && quizzesData.length > 0) ? quizzesData : (mockLesson ? (window.LESDO_MOCK_DATA?.quizzes || []).filter(q => q.lesson_id === mockLesson.id) : []);
       
       // Load progress
       const { data: progressData } = await window.supabaseClient
@@ -173,22 +198,31 @@ const Lesson = {
         .single();
         
       this.isCompleted = progressData?.completed || false;
-
+      this.enrichLessonGuide();
       this.renderLesson();
     } catch (error) {
       console.warn("Error loadLessonView, fallback to mock data:", error);
-      const mockLesson = (window.LESDO_MOCK_DATA?.lessons || []).find(l => l.id === lessonId) || window.LESDO_MOCK_DATA?.lessons[0];
       if (mockLesson) {
         this.currentLesson = mockLesson;
         this.category = (window.LESDO_MOCK_DATA?.categories || []).find(c => c.id === mockLesson.category_id) || { name: 'Módulo', slug: 'alfabeto' };
         this.quizzes = (window.LESDO_MOCK_DATA?.quizzes || []).filter(q => q.lesson_id === mockLesson.id);
         const local = JSON.parse(localStorage.getItem('lesdo_progress') || '[]');
         this.isCompleted = local.some(p => p.lesson_id === mockLesson.id);
+        this.enrichLessonGuide();
         this.renderLesson();
       } else {
         document.getElementById('contentArea').innerHTML = '<p>Error al cargar la lección.</p>';
       }
     }
+  },
+
+  enrichLessonGuide() {
+    if (!this.currentLesson?.guide) return;
+    this.currentLesson.guide.forEach(item => {
+      if (!item.image_url && item.sign && item.sign.length <= 2) {
+        item.image_url = `images/alphabet/${item.sign.toUpperCase()}.svg`;
+      }
+    });
   },
 
   webcamStream: null,
@@ -390,8 +424,10 @@ const Lesson = {
         if (stageHand) stageHand.textContent = data.hand;
         if (stageTip) stageTip.textContent = `💡 ${data.tip}`;
 
-        if (data.image_url && stageImg) {
-          stageImg.src = data.image_url;
+        const imgUrl = data.image_url || (data.sign && data.sign.length <= 2 ? `images/alphabet/${data.sign.toUpperCase()}.svg` : null);
+
+        if (imgUrl && stageImg) {
+          stageImg.src = imgUrl;
           stageImg.style.display = 'block';
           if (stageIcon) stageIcon.style.display = 'none';
           stageImg.style.animation = 'none';

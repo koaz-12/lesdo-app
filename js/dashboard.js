@@ -119,7 +119,11 @@ const Dashboard = {
       const card = document.createElement('div');
       card.className = 'card category-card cursor-pointer';
       card.style.borderTop = `4px solid ${category.color || '#ccc'}`;
-      card.onclick = () => window.location.href = `lesson.html?category=${category.slug}`;
+      if (category.slug === 'alfabeto') {
+        card.onclick = () => window.location.href = `alphabet.html`;
+      } else {
+        card.onclick = () => window.location.href = `lesson.html?category=${category.slug}`;
+      }
       
       card.innerHTML = `
         <div style="font-size: 2rem; margin-bottom: 0.5rem;">${category.icon || '📚'}</div>
