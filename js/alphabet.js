@@ -118,6 +118,7 @@ const AlphabetApp = {
     const btnPrev = document.getElementById('btnPrevLetter');
     const btnNext = document.getElementById('btnNextLetter');
     const btnAutoplay = document.getElementById('btnAutoplayAlphabet');
+    const btnVideo = document.getElementById('btnOpenVideoForLetter');
 
     btnPrev?.addEventListener('click', () => {
       if (this.isAutoplaying) this.stopAutoplay();
@@ -137,6 +138,16 @@ const AlphabetApp = {
       }
     });
 
+    btnVideo?.addEventListener('click', () => {
+      if (this.isAutoplaying) this.stopAutoplay();
+      const tabVideo = document.querySelector('.alpha-tab[data-tab="video-masterclass"]');
+      if (tabVideo) tabVideo.click();
+      const currentItem = this.activeList[this.currentIndex];
+      if (currentItem) {
+        this.showToast(`🎥 Abriendo video para la seña: ${currentItem.name}`, 'info');
+      }
+    });
+
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') {
@@ -147,6 +158,59 @@ const AlphabetApp = {
         this.nextLetter();
       }
     });
+  },
+
+  switchVideo(type) {
+    const video = document.getElementById('alphabetMasterVideo');
+    const badge = document.getElementById('videoTitleBadge');
+    const btnA = document.getElementById('btnVidAlphabet');
+    const btnV = document.getElementById('btnVidVowels');
+    const btnC = document.getElementById('btnVidConcepts');
+
+    [btnA, btnV, btnC].forEach(b => {
+      if (b) {
+        b.classList.remove('btn-primary');
+        b.classList.add('btn-secondary');
+      }
+    });
+
+    if (type === 'alphabet') {
+      if (btnA) { btnA.classList.remove('btn-secondary'); btnA.classList.add('btn-primary'); }
+      if (video) {
+        video.src = 'https://diccionariolsrd.cc/wp-content/uploads/2024/12/157.-158.-y-159.-alfabeto-abecedario-deletrear-y-deletreo-sena-1.mp4';
+        video.currentTime = 0;
+        video.play();
+      }
+      if (badge) badge.textContent = '🤟 1. Abecedario y Deletreo Oficial LSRD';
+      this.showToast('Cargando video oficial del abecedario...', 'info');
+    } else if (type === 'vowels') {
+      if (btnV) { btnV.classList.remove('btn-secondary'); btnV.classList.add('btn-primary'); }
+      if (video) {
+        video.src = 'https://diccionariolsrd.cc/wp-content/uploads/2024/12/157.-158.-y-159.-alfabeto-abecedario-deletrear-y-deletreo-sena-1.mp4';
+        video.currentTime = 0;
+        video.play();
+      }
+      if (badge) badge.textContent = '🅰️ 2. Las 5 Vocales Oficiales (A, E, I, O, U)';
+      this.showToast('Cargando video de las 5 vocales fundamentales...', 'info');
+    } else if (type === 'concepts') {
+      if (btnC) { btnC.classList.remove('btn-secondary'); btnC.classList.add('btn-primary'); }
+      if (video) {
+        video.src = 'https://diccionariolsrd.cc/wp-content/uploads/2024/11/651.-letra-sena-1.mp4';
+        video.currentTime = 0;
+        video.play();
+      }
+      if (badge) badge.textContent = '📖 3. Concepto de Letra y Seña en LSRD';
+      this.showToast('Cargando video explicativo...', 'info');
+    }
+  },
+
+  seekVideo(seconds) {
+    const video = document.getElementById('alphabetMasterVideo');
+    if (video) {
+      video.currentTime = seconds;
+      video.play();
+      this.showToast(`▶ Reproduciendo desde el segundo ${seconds}s`, 'info');
+    }
   },
 
   nextLetter() {

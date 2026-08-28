@@ -223,9 +223,14 @@
             <span id="detailTip" style="font-size: 0.9rem; color: var(--accent); font-weight: 600;">
               💡 La palma debe mirar siempre hacia el frente.
             </span>
-            <button id="btnAutoplayAlphabet" class="btn btn-sm btn-accent" style="padding: 4px 12px; font-size: 0.8rem; font-weight:700;">
-              ▶ Reproducir Secuencia
-            </button>
+            <div style="display:flex; gap:0.5rem;">
+              <button id="btnOpenVideoForLetter" class="btn btn-sm btn-ghost" style="color:white; border:1px solid rgba(255,255,255,0.35); padding: 4px 10px; font-size: 0.8rem; font-weight:700; border-radius:var(--radius-btn);">
+                🎥 Ver en Video
+              </button>
+              <button id="btnAutoplayAlphabet" class="btn btn-sm btn-accent" style="padding: 4px 12px; font-size: 0.8rem; font-weight:700;">
+                ▶ Reproducir Secuencia
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -252,21 +257,91 @@
 
       <!-- SECTION 3: VIDEO MASTERCLASS -->
       <section id="sectionVideoMasterclass" class="tab-section animate-fade-in" style="display:none;">
-        <div class="card" style="padding: 2rem; text-align:center; max-width: 800px; margin: 0 auto;">
-          <h2 style="color: var(--primary); margin-bottom: 0.5rem;">🎥 Demostración en Video Oficial: Abecedario y Deletreo (LSRD)</h2>
-          <p class="text-secondary" style="margin-bottom: 1.5rem;">
-            Video oficial grabado por instructores sordos dominicanos de CONADIS / ANSORDO mostrando la ejecución fluida del alfabeto y el deletreo dactilológico.
-          </p>
+        <div class="card" style="padding: 2rem; max-width: 860px; margin: 0 auto; box-shadow: var(--shadow-md);">
+          
+          <div style="text-align:center; margin-bottom: 1.5rem;">
+            <div style="display:inline-block; background:rgba(30,136,229,0.1); color:var(--primary); padding:4px 14px; border-radius:20px; font-size:0.85rem; font-weight:700; margin-bottom:0.5rem; text-transform:uppercase;">
+              🎥 Material Audiovisual Oficial de la República Dominicana
+            </div>
+            <h2 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.8rem;">Clases en Video: Abecedario, Vocales y Deletreo</h2>
+            <p class="text-secondary" style="max-width: 650px; margin: 0 auto;">
+              Videos grabados por instructores sordos dominicanos oficiales (CONADIS / ANSORDO) para dominar la dactilología y la correcta orientación de la mano.
+            </p>
+          </div>
 
-          <div style="background: #000; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-base); margin-bottom: 1.5rem;">
+          <!-- Sub-video Selector Buttons -->
+          <div style="display:flex; justify-content:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+            <button class="btn btn-primary btn-sm" id="btnVidAlphabet" onclick="AlphabetApp.switchVideo('alphabet')">
+              🤟 1. Abecedario y Deletreo
+            </button>
+            <button class="btn btn-secondary btn-sm" id="btnVidVowels" onclick="AlphabetApp.switchVideo('vowels')">
+              🅰️ 2. Las 5 Vocales
+            </button>
+            <button class="btn btn-secondary btn-sm" id="btnVidConcepts" onclick="AlphabetApp.switchVideo('concepts')">
+              📖 3. Concepto de Letra y Seña
+            </button>
+          </div>
+
+          <!-- Video Player Container -->
+          <div style="background: #000; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-base); margin-bottom: 1rem; position:relative;">
             <video id="alphabetMasterVideo" src="https://diccionariolsrd.cc/wp-content/uploads/2024/12/157.-158.-y-159.-alfabeto-abecedario-deletrear-y-deletreo-sena-1.mp4" controls playsinline style="width: 100%; max-height: 480px; display: block;"></video>
+            <div id="videoTitleBadge" style="position:absolute; top:12px; left:12px; background:rgba(0,0,0,0.7); color:white; padding:4px 12px; border-radius:8px; font-size:0.85rem; font-weight:700; pointer-events:none;">
+              🤟 Abecedario y Deletreo Oficial LSRD
+            </div>
           </div>
 
-          <div style="display:flex; justify-content:center; gap:0.75rem; flex-wrap:wrap;">
-            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('alphabetMasterVideo').playbackRate = 0.75;">0.75x (Lenta)</button>
-            <button class="btn btn-primary btn-sm" onclick="document.getElementById('alphabetMasterVideo').playbackRate = 1.0;">1.0x (Normal)</button>
-            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('alphabetMasterVideo').playbackRate = 1.25;">1.25x</button>
+          <!-- Playback Speed Controls -->
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; background:rgba(0,0,0,0.03); padding:0.75rem 1rem; border-radius:8px; margin-bottom:1.5rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span class="text-secondary" style="font-size:0.85rem; font-weight:700;">Velocidad:</span>
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('alphabetMasterVideo').playbackRate = 0.5;">0.5x</button>
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('alphabetMasterVideo').playbackRate = 0.75;">0.75x</button>
+              <button class="btn btn-secondary btn-sm" onclick="document.getElementById('alphabetMasterVideo').playbackRate = 1.0;">1.0x (Normal)</button>
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('alphabetMasterVideo').playbackRate = 1.25;">1.25x</button>
+            </div>
+            <div>
+              <button class="btn btn-ghost btn-sm" id="btnRestartVideo" onclick="const v=document.getElementById('alphabetMasterVideo'); v.currentTime=0; v.play();">
+                🔄 Repetir Video
+              </button>
+            </div>
           </div>
+
+          <!-- Quick Letter Jump Bar -->
+          <div style="border-top: 1px solid rgba(0,0,0,0.08); padding-top: 1rem; text-align:center;">
+            <h4 style="margin-bottom: 0.5rem; color:var(--text-secondary); font-size:0.9rem;">
+              ⚡ Salto Rápido de Letras en el Video:
+            </h4>
+            <div style="display:flex; gap:0.35rem; justify-content:center; flex-wrap:wrap;">
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(0)">A</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(2)">B</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(4)">C</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(6)">D</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(8)">E</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(10)">F</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(12)">G</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(14)">H</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(16)">I</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(18)">J</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(20)">K</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(22)">L</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(24)">M</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(26)">N</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(28)">Ñ</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(30)">O</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(32)">P</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(34)">Q</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(36)">R</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(38)">S</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(40)">T</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(42)">U</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(44)">V</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(46)">W</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(48)">X</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(50)">Y</button>
+              <button class="btn btn-sm btn-ghost" style="padding:4px 8px; font-weight:700; border:1px solid rgba(0,0,0,0.1);" onclick="AlphabetApp.seekVideo(52)">Z</button>
+            </div>
+          </div>
+
         </div>
       </section>
 
