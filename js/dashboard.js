@@ -166,7 +166,11 @@ const Dashboard = {
         const card = document.getElementById('continueCard');
         if (lessonData) {
             card.className = 'card continue-card cursor-pointer';
-            card.onclick = () => window.location.href = `lesson.html?category=${lessonData.categories.slug}`;
+            if (lessonData.categories?.slug === 'alfabeto') {
+              card.onclick = () => window.location.href = 'alphabet.html';
+            } else {
+              card.onclick = () => window.location.href = `lesson.html?category=${lessonData.categories.slug}`;
+            }
             card.innerHTML = `
                 <h4>Continuar en: ${lessonData.categories.name}</h4>
                 <p class="text-secondary">Haz clic para ir a la categoría.</p>

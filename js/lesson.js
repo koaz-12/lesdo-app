@@ -30,6 +30,12 @@ const Lesson = {
     this.categorySlug = urlParams.get('category');
     this.lessonId = urlParams.get('lesson');
 
+    // Automatic redirect for Alfabeto category to the dedicated interactive module
+    if (this.categorySlug === 'alfabeto') {
+      window.location.replace('alphabet.html');
+      return;
+    }
+
     if (this.lessonId) {
       await this.loadLessonView(this.lessonId);
     } else if (this.categorySlug) {
