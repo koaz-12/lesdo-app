@@ -1,4 +1,4 @@
-﻿// Controlador del Abecedario y Vocales LESDO
+// Controlador del Abecedario y Vocales LESDO
 
 const getLetterImg = (l) => `https://commons.wikimedia.org/wiki/Special:FilePath/Sign_language_${l.toUpperCase()}.svg`;
 
@@ -70,6 +70,7 @@ const AlphabetApp = {
     const sections = {
       vowels: document.getElementById('sectionVowels'),
       'full-alphabet': document.getElementById('sectionFullAlphabet'),
+      'video-masterclass': document.getElementById('sectionVideoMasterclass'),
       speller: document.getElementById('sectionSpeller')
     };
 

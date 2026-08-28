@@ -180,6 +180,7 @@
       <div class="alpha-tabs animate-slide-up">
         <button class="alpha-tab active" data-tab="vowels">🅰️ Las 5 Vocales</button>
         <button class="alpha-tab" data-tab="full-alphabet">🤟 Abecedario Completo (A - Z)</button>
+        <button class="alpha-tab" data-tab="video-masterclass">🎥 Video Oficial del Abecedario</button>
         <button class="alpha-tab" data-tab="speller">✍️ Deletreador de Palabras</button>
       </div>
 
@@ -233,7 +234,27 @@
         </div>
       </section>
 
-      <!-- SECTION 3: SPELLER TRANSLATOR -->
+      <!-- SECTION 3: VIDEO MASTERCLASS -->
+      <section id="sectionVideoMasterclass" class="tab-section animate-fade-in" style="display:none;">
+        <div class="card" style="padding: 2rem; text-align:center; max-width: 800px; margin: 0 auto;">
+          <h2 style="color: var(--primary); margin-bottom: 0.5rem;">🎥 Demostración en Video Oficial: Abecedario y Deletreo (LSRD)</h2>
+          <p class="text-secondary" style="margin-bottom: 1.5rem;">
+            Video oficial grabado por instructores sordos dominicanos de CONADIS / ANSORDO mostrando la ejecución fluida del alfabeto y el deletreo dactilológico.
+          </p>
+
+          <div style="background: #000; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-base); margin-bottom: 1.5rem;">
+            <video id="alphabetMasterVideo" src="https://diccionariolsrd.cc/wp-content/uploads/2024/12/157.-158.-y-159.-alfabeto-abecedario-deletrear-y-deletreo-sena-1.mp4" controls playsinline style="width: 100%; max-height: 480px; display: block;"></video>
+          </div>
+
+          <div style="display:flex; justify-content:center; gap:0.75rem; flex-wrap:wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('alphabetMasterVideo').playbackRate = 0.75;">0.75x (Lenta)</button>
+            <button class="btn btn-primary btn-sm" onclick="document.getElementById('alphabetMasterVideo').playbackRate = 1.0;">1.0x (Normal)</button>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('alphabetMasterVideo').playbackRate = 1.25;">1.25x</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: SPELLER TRANSLATOR -->
       <section id="sectionSpeller" class="tab-section animate-fade-in" style="display:none;">
         <div class="speller-box">
           <h2 style="color: var(--primary); margin-bottom: 0.5rem;">✍️ Deletreador de Palabras en Señas</h2>
