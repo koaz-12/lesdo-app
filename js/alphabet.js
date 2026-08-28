@@ -140,11 +140,11 @@ const AlphabetApp = {
 
     btnVideo?.addEventListener('click', () => {
       if (this.isAutoplaying) this.stopAutoplay();
-      const tabVideo = document.querySelector('.alpha-tab[data-tab="video-masterclass"]');
-      if (tabVideo) tabVideo.click();
       const currentItem = this.activeList[this.currentIndex];
-      if (currentItem) {
-        this.showToast(`🎥 Abriendo video para la seña: ${currentItem.name}`, 'info');
+      if (currentItem?.isVowel) {
+        this.openVideoTab('vowels');
+      } else {
+        this.openVideoTab('alphabet');
       }
     });
 
@@ -160,47 +160,70 @@ const AlphabetApp = {
     });
   },
 
-  switchVideo(type) {
-    const video = document.getElementById('alphabetMasterVideo');
-    const badge = document.getElementById('videoTitleBadge');
-    const btnA = document.getElementById('btnVidAlphabet');
-    const btnV = document.getElementById('btnVidVowels');
-    const btnC = document.getElementById('btnVidConcepts');
+  openVideoTab(type = 'vowels') {
+    const tabVideo = document.querySelector('.alpha-tab[data-tab="video-masterclass"]');
+    if (tabVideo) tabVideo.click();
+    this.switchVideo(type);
+  },
 
-    [btnA, btnV, btnC].forEach(b => {
+  switchVideo(type) {
+    const wrapper = document.getElementById('videoPlayerWrapper');
+    const btnV = document.getElementById('btnVidVowels');
+    const btnA = document.getElementById('btnVidAlphabet');
+    const btnC = document.getElementById('btnVidConadis');
+    const btnK = document.getElementById('btnVidKids');
+
+    [btnV, btnA, btnC, btnK].forEach(b => {
       if (b) {
         b.classList.remove('btn-primary');
         b.classList.add('btn-secondary');
       }
     });
 
-    if (type === 'alphabet') {
-      if (btnA) { btnA.classList.remove('btn-secondary'); btnA.classList.add('btn-primary'); }
-      if (video) {
-        video.src = 'https://diccionariolsrd.cc/wp-content/uploads/2024/12/157.-158.-y-159.-alfabeto-abecedario-deletrear-y-deletreo-sena-1.mp4';
-        video.currentTime = 0;
-        video.play();
-      }
-      if (badge) badge.textContent = '🤟 1. Abecedario y Deletreo Oficial LSRD';
-      this.showToast('Cargando video oficial del abecedario...', 'info');
-    } else if (type === 'vowels') {
+    if (type === 'vowels') {
       if (btnV) { btnV.classList.remove('btn-secondary'); btnV.classList.add('btn-primary'); }
-      if (video) {
-        video.src = 'https://diccionariolsrd.cc/wp-content/uploads/2024/12/157.-158.-y-159.-alfabeto-abecedario-deletrear-y-deletreo-sena-1.mp4';
-        video.currentTime = 0;
-        video.play();
+      if (wrapper) {
+        wrapper.innerHTML = `
+          <iframe id="youtubePlayer" src="https://www.youtube-nocookie.com/embed/iE-HSbr02jc?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:460px; border:none; display:block;"></iframe>
+          <div id="videoTitleBadge" style="position:absolute; top:12px; left:12px; background:rgba(0,0,0,0.85); color:white; padding:4px 12px; border-radius:8px; font-size:0.85rem; font-weight:700; pointer-events:none;">
+            🅰️ Las 5 Vocales | Lengua de Señas Dominicana (LSRD)
+          </div>
+        `;
       }
-      if (badge) badge.textContent = '🅰️ 2. Las 5 Vocales Oficiales (A, E, I, O, U)';
-      this.showToast('Cargando video de las 5 vocales fundamentales...', 'info');
-    } else if (type === 'concepts') {
+      this.showToast('🎥 Reproduciendo Video Oficial de las 5 Vocales (LSRD)...', 'info');
+    } else if (type === 'alphabet') {
+      if (btnA) { btnA.classList.remove('btn-secondary'); btnA.classList.add('btn-primary'); }
+      if (wrapper) {
+        wrapper.innerHTML = `
+          <iframe id="youtubePlayer" src="https://www.youtube-nocookie.com/embed/h7RGrub4q34?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:460px; border:none; display:block;"></iframe>
+          <div id="videoTitleBadge" style="position:absolute; top:12px; left:12px; background:rgba(0,0,0,0.85); color:white; padding:4px 12px; border-radius:8px; font-size:0.85rem; font-weight:700; pointer-events:none;">
+            🤟 Abecedario Completo A-Z | Lengua de Señas Dominicana (LSRD)
+          </div>
+        `;
+      }
+      this.showToast('🎥 Reproduciendo Video del Abecedario Completo (LSRD)...', 'info');
+    } else if (type === 'conadis') {
       if (btnC) { btnC.classList.remove('btn-secondary'); btnC.classList.add('btn-primary'); }
-      if (video) {
-        video.src = 'https://diccionariolsrd.cc/wp-content/uploads/2024/11/651.-letra-sena-1.mp4';
-        video.currentTime = 0;
-        video.play();
+      if (wrapper) {
+        wrapper.innerHTML = `
+          <video id="alphabetMasterVideo" src="https://diccionariolsrd.cc/wp-content/uploads/2024/12/157.-158.-y-159.-alfabeto-abecedario-deletrear-y-deletreo-sena-1.mp4" controls autoplay playsinline style="width: 100%; max-height: 480px; display: block;"></video>
+          <div id="videoTitleBadge" style="position:absolute; top:12px; left:12px; background:rgba(0,0,0,0.85); color:white; padding:4px 12px; border-radius:8px; font-size:0.85rem; font-weight:700; pointer-events:none;">
+            🇩🇴 Demostración Oficial CONADIS / ANSORDO
+          </div>
+        `;
       }
-      if (badge) badge.textContent = '📖 3. Concepto de Letra y Seña en LSRD';
-      this.showToast('Cargando video explicativo...', 'info');
+      this.showToast('🎥 Reproduciendo Video Oficial CONADIS / ANSORDO...', 'info');
+    } else if (type === 'alphabet_kids') {
+      if (btnK) { btnK.classList.remove('btn-secondary'); btnK.classList.add('btn-primary'); }
+      if (wrapper) {
+        wrapper.innerHTML = `
+          <iframe id="youtubePlayer" src="https://www.youtube-nocookie.com/embed/Kgj0DmtSczw?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:460px; border:none; display:block;"></iframe>
+          <div id="videoTitleBadge" style="position:absolute; top:12px; left:12px; background:rgba(0,0,0,0.85); color:white; padding:4px 12px; border-radius:8px; font-size:0.85rem; font-weight:700; pointer-events:none;">
+            📚 Abecedario Didáctico Infantil (LSRD)
+          </div>
+        `;
+      }
+      this.showToast('🎥 Reproduciendo Abecedario Didáctico Infantil...', 'info');
     }
   },
 
