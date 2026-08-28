@@ -49,7 +49,6 @@ const AlphabetApp = {
   },
 
   setupAuth() {
-    Auth.init();
     document.getElementById('btnLogout')?.addEventListener('click', () => Auth.signOut());
     document.getElementById('btnLogoutMobile')?.addEventListener('click', () => Auth.signOut());
   },
